@@ -1,0 +1,340 @@
+{include file="pubview/head" /}
+<style>
+    .con-top {
+        width: 100%;
+        background-color: white;
+        padding: 30px 25px;
+        box-sizing: border-box;
+        border-radius: 8px;
+    }
+
+    .success {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .success-inside {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .success-inside > h3 {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 15px 0px;
+        color: #52c41a;
+    }
+
+    .success-inside > p {
+        color: rgb(122, 124, 122);
+        font-size: 16px;
+    }
+
+    /* 下 */
+    .con-bottom {
+        width: 100%;
+        margin-top: 40px;
+        background-color: white;
+        border-radius: 8px;
+        padding: 25px 20px;
+        box-sizing: border-box;
+    }
+
+    /* 商品信息 */
+    .con-1 {
+        width: 100%;
+        height: 180px;
+        display: flex;
+        border: 1px solid #c8c8c8;
+        padding-bottom: 20px;
+    }
+
+    .con-1-child {
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .con-1-title {
+        width: 100%;
+        text-align: center;
+        font-size: 16px;
+        padding: 10px 0px;
+        background-color: #acacac;
+        color: white;
+    }
+
+    .con-1-child-info {
+        height: calc(100% - 41px);
+        width: 100%;
+        padding: 20px 20px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #838383;
+    }
+
+    .con-1-child:first-of-type .con-1-child-info {
+        justify-content: end;
+    }
+
+    .con-1-child-info img {
+        width: 200px;
+        height: 100%;
+        margin-right: 20px;
+    }
+
+    .goods-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .goods-info h4 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: black;
+    }
+
+    .goods-info .goods-data {
+        font-size: 15px;
+        color: #7a7a7a;
+        margin-bottom: 7px;
+    }
+
+    /* 订单详情 */
+    .con-2 {
+        width: 100%;
+        background-color: #f8f8f8;
+    }
+
+    .con-2::after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+
+    /* 订单详情左 */
+    .con-2-left {
+        float: left;
+        padding: 20px 25px;
+    }
+
+    .con-2-left .order-time {
+        margin-bottom: 15px;
+    }
+
+    .con-2-left .order-time p {
+        color: rgb(97, 97, 97);
+        line-height: 30px;
+    }
+
+    .con-2-left .order-info p {
+        color: black;
+        font-weight: 700;
+        font-size: 20px;
+        line-height: 28px;
+        margin-right: 40px;
+    }
+
+    .order-info-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .public-button {
+        border-color: red;
+        color: red;
+        font-weight: 700;
+    }
+
+    .public-button:hover {
+        color: white;
+        background-color: red;
+    }
+
+    .con-2-right {
+        width: 300px;
+        height: 195px;
+        float: right;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .con-3 {
+        display: flex;
+        margin-top: 15px;
+        justify-content: space-between;
+    }
+
+    .con-3 span {
+        color: #838383;
+    }
+
+    .con-3 strong {
+        color: red;
+    }
+</style>
+
+</head>
+<body>
+<div id="app">
+    <div class="layui-container" style="background: transparent;">
+        <!-- 上部分 -->
+        <div class="con-top">
+            <div class="success">
+                <div class="success-inside">
+                    <i class="layui-icon layui-icon-ok-circle" style="font-size: 107px;color: #52c41a;"></i>
+                    <h3>恭喜您，下单成功</h3>
+                    <p>恭喜您下单成功！请按照下面的流程进行上号体验！</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 下部分 -->
+        <div class="con-bottom">
+            <!-- —— 商品详情 -->
+            <div class="con-1">
+                <div class="con-1-child" style="width: 60%;">
+                    <div class="con-1-title">商品信息</div>
+                    <div class="con-1-child-info">
+                        <img src="{$data.goodsInfo.screenshotsone}"/>
+                        <div class="goods-info">
+                            <h4>{$data.goodsInfo.account_title}</h4>
+                            <div class="goods-data">
+                                <strong>区 服：</strong>{$data.goodsInfo.game_name}/{$data.goodsInfo.server_name}/{$data.goodsInfo.area_name}
+                            </div>
+                            <div class="goods-data">
+                                <strong>角色名：</strong>{$data.goodsInfo.game_nickname}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="con-1-child" style="width: 20%;">
+                    <div class="con-1-title">起租时长</div>
+                    <div class="con-1-child-info">
+                        {$data.goodsInfo.shortest_time}小时
+                    </div>
+                </div>
+                <div class="con-1-child" style="width: 20%;">
+                    <div class="con-1-title">单价</div>
+                    <div class="con-1-child-info">
+                        {$data.goodsInfo.price}元/小时
+                    </div>
+                </div>
+
+                <div class="con-1-child" style="width: 20%;">
+                    <div class="con-1-title">押金</div>
+                    <div class="con-1-child-info">
+                        {$data.goodsInfo.deposit}元
+                    </div>
+                </div>
+            </div>
+            <!-- 订单详情 -->
+            <div class="con-2">
+                <div class="con-2-left">
+                    <div class="order-time">
+                        <p>开始时间：{$data.startTime}</p>
+                        <p>结束时间：{$data.endTime}</p>
+                    </div>
+                    <div class="order-info">
+                        {if $regType == 2}
+                            <div class="order-info-item">
+                                <p><button class="layui-btn layui-btn-normal public-button" onclick="clickLogin()">点击远程上号</button></p>
+                            </div>
+                        {else}
+                            <div class="order-info-item">
+                                <p>账号：<span>{$data.goodsInfo.account}</span></p>
+                                <button class="layui-btn layui-btn-normal public-button layui-btn-sm">点我复制账号</button>
+                            </div>
+                            <div class="order-info-item">
+                                <p>密码：<span>{$data.goodsInfo.pwd}</span></p>
+                                <button class="layui-btn layui-btn-normal public-button layui-btn-sm">点我复制密码</button>
+                            </div>
+                        {/if}
+                    </div>
+                </div>
+                <!--<div class="con-2-right">-->
+                    <!--<button class="layui-btn layui-btn-normal public-button">订单详情</button>-->
+                <!--</div>-->
+            </div>
+            <div class="con-3">
+                <span>提示：您的押金会在订单完成后24小时内返回您的账户里</span>
+                <p>有问题？请联系<strong style="cursor: pointer"
+                                  onclick="window.open('http://mah.miketong.net/Web/im.aspx?_=t&accountid=121352','飞讯租号-咨询','width=665,height=515,top=100, left=100,menubar=no,toolbar=no,status=no,scrollbars=yes')">在线客服</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['layer','element'], function () {
+        let layer = layui.layer
+
+        //一键复制
+        $(".public-button").click(function () {
+            let txt = $(this).siblings("p").children("span")
+            const range = document.createRange();
+            range.selectNode(txt[0]);
+            // 移除剪切板中内容
+            window.getSelection().removeAllRanges();
+            // 添加新的内容到剪切板
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            layer.msg('复制成功')
+        })
+
+        window.clickLogin = function(){
+            layer.alert('请添加客服qq 3490654586 进行远程上号',{
+                title: '远程上号操作提示',
+                btn: ['联系在线客服','一键复制客服qq'], //按钮
+                yes: function(){
+                    window.open('http://mah.miketong.net/Web/im.aspx?_=t&accountid=121352','飞讯租号-咨询','width=665,height=515,top=100, left=100,menubar=no,toolbar=no,status=no,scrollbars=yes')
+                },
+                btn2: function(){
+                    copyText(3490654586)
+                    layer.msg('复制成功')
+                }
+            })
+        }
+
+        //复制方法
+        window.copyText = function (text) {
+            var textarea = document.createElement("textarea");
+            var currentFocus = document.activeElement;
+            document.body.appendChild(textarea);
+            textarea.value = text;
+            textarea.focus();
+            if (textarea.setSelectionRange)
+                textarea.setSelectionRange(0, textarea.value.length);
+            else
+                textarea.select();
+            try {
+                var flag = document.execCommand("copy");
+            } catch(eo){
+                var flag = false;
+            }
+            document.body.removeChild(textarea);
+            currentFocus.focus();
+            return flag;
+        }
+    })
+</script>
+
+
+{include file="pubview/footer" /}

@@ -1,0 +1,547 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+<style type="text/css">
+    /* 账号信息 */
+    .account {
+        width: 100%;
+        height: 170px;
+        background-color: white;
+    }
+
+    .acc-info {
+        width: 100%;
+        height: 110px;
+        padding: 25px 30px;
+        /* border-bottom: solid 1px #EFF0EF; */
+        display: flex;
+        align-items: center;
+    }
+
+    .acc-info-1 {
+        width: 110px;
+        height: 100%;
+        background-color: wheat;
+        border-radius: 50%;
+        overflow: hidden;
+        float: left;
+    }
+
+    .acc-info-1 img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .acc-info-2 {
+        width: 240px;
+        height: 80%;
+        float: left;
+        margin-left: 20px;
+        margin-top: 15px;
+    }
+
+    .acc-info-2 h4 {
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 7px;
+    }
+
+    .acc-info-2 h4 i {
+        font-size: 21px;
+        margin-left: 10px;
+        cursor: pointer;
+        color: var(--text-color);
+    }
+
+    .acc-info-2 p {
+        display: inline-block;
+        margin-bottom: 9px;
+        color: #424242;
+    }
+
+    .acc-info-3 {
+        width: 400px;
+        height: 100%;
+        float: left;
+        /* border-left: 1px solid  #e9eae9; */
+        /* border-right: 1px solid  #e9eae9; */
+        display: flex;
+    }
+
+    .acc-info-3-box {
+        flex: 1;
+        display: flex;
+        margin-top: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .acc-info-3-box span {
+        font-size: 20px;
+    }
+
+    .acc-info-3-box p {
+        margin-top: 10px;
+    }
+
+    .acc-info-3-box i {
+        font-style: normal;
+        font-size: 15px;
+    }
+
+    .acc-info-3-box strong {
+        color: red;
+        font-size: 20px;
+        margin-left: 5px;
+    }
+
+    .acc-info-4 {
+        width: 270px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .acc-info-4 a {
+        width: 100px;
+    }
+
+    /* 订单数据 */
+    .acc-statistics {
+        width: 100%;
+        height: 90px;
+        padding: 15px 30px;
+        box-sizing: border-box;
+        display: flex;
+    }
+
+    .acc-statistics li {
+        flex: 1;
+        /* border-right: 1px solid  #e9eae9; */
+    }
+
+    .acc-statistics li a {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .acc-statistics li a p {
+        font-size: 16px;
+        color: #999;
+    }
+
+    .acc-statistics li a strong {
+        color: red;
+        font-size: 20px;
+        margin-top: 5px;
+    }
+
+    /* 正在租的订单 */
+    .zu-goods {
+        width: 100%;
+        min-height: 300px;
+        background-color: white;
+        margin-top: 20px;
+        padding: 0px 20px;
+        box-sizing: border-box;
+    }
+
+    .zu-goods h3 {
+        padding: 15px 20px;
+        font-size: 20px;
+        color: #838383;
+    }
+
+    /* 弹窗 */
+    .art-box {
+        width: 100%;
+        height: 100%;
+        padding: 20px 40px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .art-box img {
+        width: 200px;
+        height: 200px;
+        display: flex;
+        object-fit: cover;
+        margin: 0 auto;
+    }
+
+    .layui-upload-choose {
+        display: none;
+    }
+
+    .moneyLine {
+        width: 1px;
+        height: 50px;
+        background: #f3f3f3;
+        margin: 27px 5px;
+        float: left;
+    }
+
+    .orderLine {
+        width: 1px;
+        height: 44px;
+        background: #f3f3f3;
+        margin: 8px 5px;
+        float: left;
+    }
+    .layui-table td, .layui-table th{
+        padding: 9px 8px;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="header"></div>
+
+    <div class="layui-container">
+        <!-- 侧栏 -->
+        <div id="aside"></div>
+        <!-- 内容 -->
+        <div id="con">
+            <!-- 上部分 -->
+            <div class="account">
+                <div class="acc-info">
+                    <div class="acc-info-1">
+                        <img src="{$data.avatar}"/>
+                    </div>
+                    <div class="acc-info-2">
+                        <h4>{$data.nickname}<i class="layui-icon layui-icon-edit"></i></h4>
+                        <p>上次登录时间：<span style="color: var(--text-color);">{$data.login_last_time}</span></p>
+                        <!-- <span class="layui-badge">
+                            商家认证
+                        </span> -->
+                    </div>
+                    <div class="acc-info-3">
+                        <div class="acc-info-3-box">
+                            <span>可用余额</span>
+                            <p>
+                                <i>￥</i>
+                                <strong>{$data.money}</strong>
+                            </p>
+                        </div>
+                        <div class="moneyLine"></div>
+                        <div class="acc-info-3-box">
+                            <span>不可用余额</span>
+                            <p>
+                                <i>￥</i>
+                                <strong>{$data.examine_money}</strong>
+                            </p>
+                        </div>
+                        <!-- <div class="acc-info-3-box">
+                            <span>红包</span>
+                            <p>
+                                <i>￥</i>
+                                <strong>0</strong>
+                            </p>
+                        </div> -->
+
+                    </div>
+                    <div class="acc-info-4">
+                        <a href="{:url('home/mycenter/recharge')}" class="layui-btn layui-btn-radius layui-btn-danger">充值</a>
+                        <a href="{:url('home/mycenter/withdrawal')}"
+                           class="layui-btn layui-btn-radius layui-btn-normal">提现</a>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="acc-statistics account" style="margin-top: 20px;">
+                <li>
+                    <a href="{:url('home/mycenter/rentGoodsList')}">
+                        <p>出租订单</p>
+                        <strong>{$rentOrderLength}</strong>
+                    </a>
+                </li>
+                <div class="orderLine"></div>
+
+                <li>
+                    <a href="{:url('home/mycenter/zuhao')}">
+                        <p>租号订单</p>
+                        <strong>{$orderLength}</strong>
+                    </a>
+                </li>
+                <div class="orderLine"></div>
+                <li>
+                    <a href="{:url('home/mycenter/accountList')}">
+                        <p>出租账号</p>
+                        <strong>{$pubgameAccountLength}</strong>
+                    </a>
+                </li>
+                <!-- <li>
+                    <a href="#">
+                        <p>我的关注</p>
+                        <strong>0</strong>
+                    </a>
+                </li>
+                <li style="border: none;">
+                    <a href="#">
+                        <p>邀请好友</p>
+                        <strong>0</strong>
+                    </a>
+                </li> -->
+            </ul>
+            <!-- 下部分 -->
+            <div class="zu-goods">
+                <h3>正在租的订单</h3>
+                <table class="layui-table con-inside">
+                    <!-- 表头 -->
+                    <thead>
+                    <tr>
+                        <th>订单信息</th>
+                        <th>付款时间</th>
+                        <th>商品价格</th>
+                        <th>租号时间</th>
+                        <th>总付金额</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <!-- 内容 -->
+                    <tbody>
+                    {if $order->toArray()['total'] > 0}
+                    {foreach name="order" key="k" item="v"}
+                    <tr>
+                        <td>
+                            <p>订单号：<em>{$v.orderNum}</em></p>
+                            <p><strong>{$v.games.account_title}</strong></p>
+                        </td>
+                        <td>
+                            <p>{$v.payTime}</p>
+                        </td>
+                        <td>
+                            <p>单价：<em>{$v.games.price}元/小时</em></p>
+                            <p>押金：<em>{$v.games.deposit}元</em></p>
+                        </td>
+                        <td>
+                            <p>{$v.startTime} ~ {$v.endTime}</p>
+                        </td>
+                        <td>
+                            {$v.amounts}元
+                        </td>
+                        <td style="width:105px">
+                            <button data-id="{$v.goodsId}" type="button" class="layui-btn layui-btn-danger renewal layui-btn-sm">续费
+                            </button>
+                            <button data-id="{$v.goodsId}" data-type="{$v.payType}" type="button" class="layui-btn layui-btn-danger layui-btn-sm del">投诉
+                            </button>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    {else}
+                    <tr>
+                        <td colspan="6" style="text-align: center">暂无数据</td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<script src="__HOMESTATIC__/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use(['form', 'upload', 'laytpl', 'element', 'layer'], function () {
+        var form = layui.form;
+        var upload = layui.upload;
+        var laytpl = layui.laytpl
+
+        var element = layui.element
+        var layer = layui.layer
+        var $ = layui.$;
+
+        let tokens = window.localStorage.getItem('tokens')
+        fetchPost({
+            url: "index/home/PersonalCenterInformationDataAcquisition",
+            data: {token: tokens}
+        }).then(res => {
+            let preson2 = preson.innerHTML
+            laytpl(preson2).render(res.data, function (html) {
+                $(".account").html(html)
+            })
+        })
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+            userIsActive()
+        })
+
+        //续费按钮
+        $(".renewal").click(function () {
+
+            StandardPost("{:url('home/order/index')}", {id: $(this).attr("data-id")})
+        })
+
+        // 修改名称
+        $("#con").on('click', '.acc-info-2 h4 i', function () {
+            let updateName2 = updateName.innerHTML
+            laytpl(updateName2).render({}, function (html) {
+                layer.open({
+                    type: 1,
+                    title: '修改昵称',
+                    skin: 'demo-class',
+                    area: ['330px', '250px'],
+                    content: html,
+                    success: function () {
+                        $("#update-text-button").click(function () {
+                            let text = $("#update-name input").val()
+                            let tokens = window.localStorage.getItem("tokens")
+                            if (text != '') {
+                                fetchPost({
+                                    url: "{:url('home/mycenter/ChangeNickname')}",
+                                    data: {nickname: text, token: tokens}
+                                }).then(res => {
+                                    let code = res.code
+                                    let msg = res.msg
+                                    if (code == 0) {
+                                        layer.msg(msg)
+                                        setTimeout(() => {
+                                            location.reload();
+                                        }, 1000)
+                                    }
+                                })
+                            }
+                        })
+                    }
+                })
+            })
+
+        })
+        // 修改头像
+        $("#con").on('click', '.acc-info-1 img', function () {
+            let nowImgSrc = {src: $(this).attr('src')}
+            let imgUpload2 = imgUpload.innerHTML
+            laytpl(imgUpload2).render(nowImgSrc, function (html) {
+                layer.open({
+                    type: 1,
+                    title: '修改头像',
+                    skin: 'demo-class',
+                    area: ['330px', '380px'],
+                    content: html
+                })
+                upload.render({
+                    elem: "#img-upload-image",
+                    url: httpStr + 'index/home/uploadImage',
+                    auto: false,
+                    bindAction: "#upload-img-button",
+                    choose: function (obj) {
+                        let item = this.item   //获取点击的对象
+                        obj.preview(function (index, file, result) {
+                            item[0].src = result
+                        })
+                    },
+                    done: function (res) {
+                        let avatar = res.url
+                        console.log(res)
+                        let tokens = window.localStorage.getItem("tokens")
+                        fetchPost({
+                            url: "{:url('home/mycenter/PortraitEditor')}",
+                            data: {avatar: avatar}
+                        }).then(res => {
+                            let msg = res.msg
+                            layer.msg(msg)
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000)
+
+                        })
+                    }
+                })
+            })
+        })
+    
+
+        $(".del").click(function () { 
+            let html = complaints.innerHTML
+            let id = $(this).attr('data-id')
+            let type = $(this).attr("data-type")
+            layer.open({
+                    type: 1,
+                    title: '投诉类型',
+                    skin: 'demo-class',
+                    area: ['500px', '320px'],
+                    content: html
+                })
+            form.render('select');
+            form.on('submit(complaints)', function (data2) {
+                    data2.field.id =id
+                    data2.field.payType = type
+                    fetchPost({
+                        url: "{:url('home/mycenter/cancelTheOrder')}",
+                        data: data2.field
+                    }).then(res => {
+                        console.log(res)
+
+                        if (res.status == 0) {
+                            layer.msg(res.msg)
+                            location.reload();
+                        }
+                    })
+                return false
+            })
+        })
+    })
+</script>
+
+<!-- 上传头像 -->
+<script type="text/html" id="imgUpload">
+    <div class="art-box" id="img-upload">
+        <img src="{{d.src}}" id="img-upload-image"/>
+        <button type="button" style="width: 120px;" class="layui-btn layui-btn-normal" id="upload-img-button">上传图片
+        </button>
+    </div>
+</script>
+
+<!-- 修改名称 -->
+<script type="text/html" id="updateName">
+    <div class="art-box" id="update-name" > 
+        <div style="display: flex;">
+            <label class="layui-form-label" style="padding:9px 0px;text-align: center;">昵称</label>
+            <input type="text" name="password" placeholder="请输入昵称" class="layui-input" maxlength="10">
+        </div>
+        <button type="button" style="width: 120px;" class="layui-btn layui-btn-normal" id="update-text-button">保存
+        </button>
+    </div>
+</script>
+<!-- 尾部 -->
+
+
+<script type="text/html" id="complaints">
+    <div class="art-box" style="align-items:inherit;padding:20px 0px;padding-right:20px">
+        <form class="layui-form" action="#" lay-filter="complaints">
+            <div class="layui-form-item">
+                <label class="layui-form-label">投诉选择</label>
+                <div class="layui-input-inline">
+                    <select name="type" lay-verify="required">
+                        <option value=""></option>
+                        <option value="1">账号密码不对</option>
+                        <option value="2">租错号了</option>
+                        <option value="3">没有时间玩</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">投诉理由</label>
+                <div class="layui-input-block">
+                    <textarea name="info" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="complaints">立即投诉</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+{include file="pubview/footer"}

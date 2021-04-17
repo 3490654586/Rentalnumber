@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>统计</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <script src="__STATIC__/common/common.js"></script>
+  <script>
+
+    var islogin = this.IsLogin(); // 未登录用户无法进入后台
+    if (islogin == 1) {
+      location.href = "{:url('login/index')}"
+    } else {
+
+    }
+  </script>
+</head>
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      
+      <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            注册用户量
+            <span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+            <p class="layuiadmin-big-font" id="week_user">0</p>
+            <p>
+              总计注册用户量
+              <span class="layuiadmin-span-color" id="all_user">0<i class="layui-inline layui-icon layui-icon-flag"></i></span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            租号量
+            <span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+            <p class="layuiadmin-big-font" id="weekOrderCount">0</p>
+            <p>
+              总计租号量
+              <span class="layuiadmin-span-color" id="allOrderCount">0<i class="layui-inline layui-icon layui-icon-flag"></i></span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            收入
+            <span class="layui-badge layui-bg-blue layuiadmin-badge">周</span>
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+
+            <p class="layuiadmin-big-font" id="weekMoney">0</p>
+            <p>
+              总收入 
+              <span class="layuiadmin-span-color" id="allMoney">0<i class="layui-inline layui-icon layui-icon-dollar"></i></span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-sm6 layui-col-md3">
+        <div class="layui-card">
+          <div class="layui-card-header">
+            活跃用户
+            <span class="layui-badge layui-bg-orange layuiadmin-badge">月</span>
+          </div>
+          <div class="layui-card-body layuiadmin-card-list">
+
+            <p class="layuiadmin-big-font" id="active_user"></p>
+            <p>
+              最近一个月 
+              <span class="layuiadmin-span-color" id="Percent_user"><i class="layui-inline layui-icon layui-icon-user"></i></span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-sm4">
+        <div class="layui-card">
+          <div class="layui-card-header">用户留言</div>
+          <div class="layui-card-body">
+            <ul class="layuiadmin-card-status layuiadmin-home2-usernote">
+              <li>
+                <h3>贤心</h3>
+                <p>作为 layui 官方推出的后台模板，从初版的饱受争议，到后续的埋头丰富，逐步占据了国内后台系统应用的主要市场。</p>
+                <span>5月30日 00:00</span>
+                <a href="javascript:;" layadmin-event="replyNote" data-id="7" class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
+              </li>
+              <li>
+                <h3>诸葛亮</h3>
+                <p>皓首匹夫！苍髯老贼！你枉活九十有六，一生未立寸功，只会摇唇鼓舌！助曹为虐！一条断脊之犬，还敢在我军阵前狺狺狂吠，我从未见过有如此厚颜无耻之人！</p>
+                <span>5月02日 00:00</span>
+                <a href="javascript:;" layadmin-event="replyNote" data-id="5" class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
+              </li>
+              <li>
+                <h3>胡歌</h3>
+                <p>你以为只要长得漂亮就有男生喜欢？你以为只要有了钱漂亮妹子就自己贴上来了？你以为学霸就能找到好工作？我告诉你吧，这些都是真的！</p>
+                <span>5月11日 00:00</span>
+                <a href="javascript:;" layadmin-event="replyNote" data-id="6" class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
+              </li>
+              <li>
+                <h3>杜甫</h3>
+                <p>人才虽高，不务学问，不能致圣。刘向十日画一水，五日画一石。</p>
+                <span>4月11日 00:00</span>
+                <a href="javascript:;" layadmin-event="replyNote" data-id="2" class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
+              </li>
+              <li>
+                <h3>鲁迅</h3>
+                <p>路本是无所谓有和无的，走的人多了，就没路了。。</p>
+                <span>4月28日 00:00</span>
+                <a href="javascript:;" layadmin-event="replyNote" data-id="4" class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
+              </li>
+              <li>
+                <h3>张爱玲</h3>
+                <p>于千万人之中遇到你所要遇到的人，于千万年之中，时间的无涯的荒野中，没有早一步，也没有晚一步，刚巧赶上了，那也没有别的话好说，唯有轻轻的问一声：“噢，原来你也在这里？”</p>
+                <span>4月11日 00:00</span>
+                <a href="javascript:;" layadmin-event="replyNote" data-id="1" class="layui-btn layui-btn-xs layuiadmin-reply">回复</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="layui-col-sm8">
+        <div class="layui-row layui-col-space15">
+          <div class="layui-col-sm6">
+            <div class="layui-card">
+              <div class="layui-card-header">本月活跃用户排行榜</div>
+              <div class="layui-card-body">
+                <table class="layui-table layuiadmin-page-table" lay-skin="line" style="height:50%">
+                  <thead>
+                    <tr>
+                      <th>用户名</th>
+                      <th>最后登录时间</th>
+                      <th>状态</th>
+                      <th>获得赞</th>
+                    </tr> 
+                  </thead>
+                  <tbody id="tbodyList">
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="layui-col-sm6">
+            <div class="layui-card">
+              <div class="layui-card-header">最新订单信息</div>
+              <div class="layui-card-body">
+                <div class="layui-tab-content">
+                  <div class="layui-tab-item layui-show">
+                    <table class="layui-table layuiadmin-page-table" lay-skin="line" style="height:50%">
+                      <thead>
+                      <tr>
+                        <th>订单号</th>
+                        <th>租用时间/小时</th>
+                        <th>租用情况</th>
+                      </tr>
+                      </thead>
+                      <tbody id="orderTbodyList">
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="layui-col-sm12">
+            <div class="layui-card">
+              <div class="layui-card-header">用户全国分布</div>
+              <div class="layui-card-body">
+                <div class="layui-row layui-col-space15">
+                  <div class="layui-col-sm4">
+                    <table class="layui-table layuiadmin-page-table" lay-skin="line">
+                      <thead>
+                        <tr>
+                          <th>排名</th>
+                          <th>地区</th>
+                          <th>人数</th>
+                        </tr> 
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>浙江</td>
+                          <td>62310</td>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>上海</td>
+                          <td>59190</td>
+                        </tr>
+                        <tr>
+                          <td>3</td>
+                          <td>广东</td>
+                          <td>55891</td>
+                        </tr>
+                        <tr>
+                          <td>4</td>
+                          <td>北京</td>
+                          <td>51919</td>
+                        </tr>  
+                        <tr>
+                          <td>5</td>
+                          <td>山东</td>
+                          <td>39231</td>
+                        </tr>
+                        <tr>
+                          <td>6</td>
+                          <td>湖北</td>
+                          <td>37109</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="layui-col-sm8">
+
+                    <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-pagethree">
+                      <div carousel-item id="LAY-index-pagethree">
+                        <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+                      </div>
+                    </div>
+      
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script>  
+  <script>
+
+  layui.config({
+    base: '__STATIC__/layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'sample','laytpl'],function(){
+  	var $ = layui.$
+  	var laytpl = layui.laytpl
+
+  	asynchronousAjax('index/index/BackgroundStatistics', 'post', 'json').done(function (data) {
+		
+        let reg_user = data.data.reg_user
+        let active_user = data.data.active_user
+        let orderCount = data.data.orderCount
+        let orderSum = data.data.orderSum
+    	DigitalLantern({
+    		'num' : 0,
+    		'maxnum' : reg_user.all_user,
+    		'thatId' : 'all_user'
+    	})// 总计注册用户量
+
+    	DigitalLantern({
+    		'num' : 0,
+    		'maxnum' : reg_user.week_user,
+    		'thatId' : 'week_user'
+    	})// 周注册用户量
+
+    	DigitalLantern({
+    		'num' : 0,
+    		'maxnum' : active_user.active_user,
+    		'thatId' : 'active_user'
+    	})// 活跃用户量
+
+    	DigitalLantern({
+    		'num' : 0,
+    		'maxnum' : active_user.Percent_user,
+    		'thatId' : 'Percent_user'
+    	})// 活跃用户量百分比    	
+
+        DigitalLantern({
+          'num' : 0,
+          'maxnum' : orderCount.allOrderCount,
+          'thatId' : 'allOrderCount'
+        })// 总计租号量
+
+        DigitalLantern({
+          'num' : 0,
+          'maxnum' : orderCount.weekOrderCount,
+          'thatId' : 'weekOrderCount'
+        })// 周租号量
+
+        DigitalLantern({
+          'num' : 0,
+          'maxnum' : orderSum.allMoney,
+          'thatId' : 'allMoney'
+        })// 总收入
+
+        DigitalLantern({
+          'num' : 0,
+          'maxnum' : orderSum.weekMoney,
+          'thatId' : 'weekMoney'
+        })// 周收入
+		var getTpl = activeList.innerHTML
+		,tbodyList = document.getElementById('tbodyList');
+		laytpl(getTpl).render(data.data.activeUserList, function(html){
+		  tbodyList.innerHTML = html;
+		});
+
+		var orderTpl = orderList.innerHTML
+        ,orderTbodyList = document.getElementById('orderTbodyList');
+        laytpl(orderTpl).render(data.data.newOrderList, function(html){
+          orderTbodyList.innerHTML = html;
+        });
+
+    }).fail(function (err) {
+  		layer.msg('异步错误', { icon: 5 });
+	})
+  });
+  </script>
+
+ <script id="activeList" type="text/html">
+  {{#  layui.each(d, function(index, item){ }}
+    <tr>
+      <td><span class="first">{{item.nickname}}</span></td>
+      <td><i class="layui-icon layui-icon-log">{{item.login_last_time}}</i></td>
+      <td><span>{{item.status}}</span></td>
+      <td>{{item.fabulous}} <i class="layui-icon layui-icon-praise"></i></td>
+    </tr>
+  {{#  }); }}
+</script>
+
+  <script id="orderList" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <tr>
+      <td><span class="first">{{item.orderNum}}</span></td>
+      <td><i class="layui-icon layui-icon-log">{{item.time}}小时</i></td>
+      {{# if (item.payType == 1) { }}
+      <td><span>未支付</span></td>
+      {{# } else if (item.payType == 2) { }}
+      <td><span>已支付</span></td>
+      {{# } else if (item.payType == 3) { }}
+      <td><span>已完成</span></td>
+      {{# } else if (item.payType == 4) { }}
+      <td><span>已撤单</span></td>
+      {{# } else if (item.payType == 5) { }}
+      <td><span>投诉中</span></td>
+      {{# } }}
+    </tr>
+    {{#  }); }}
+  </script>
+</body>
+</html>

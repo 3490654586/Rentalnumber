@@ -1,0 +1,56 @@
+
+/* 订单表格 */
+.con-inside{
+	width: 100%;
+	/* padding: 0px 30px; */
+	box-sizing: border-box;
+}
+.con-inside th{
+	background-color: var(--back-color);
+	color: white;
+}
+.con-inside td{
+	font-size: 14px;
+}
+.con-inside td p{
+	line-height: 25px;
+}
+.con-inside td p em{
+	font-style: normal;
+	color: red;
+}
+.con-inside td p strong{
+	color: chocolate;
+}
+
+/* 搜索栏 */
+.search{
+	width: 100%;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	padding: 0px 30px;
+	box-sizing: border-box;
+}
+.search p{
+	margin-right: 15px;
+	color: 16px;
+}
+.search input{
+	border: 1px solid #b4b4b4;
+	height: 35px;
+	width: 230px;
+	background-color: #fff;
+	padding-left: 10px;
+	border-radius: 5px;
+	margin-right: 30px;
+}
+/* 操作 */
+.operation{
+	display: flex;
+	flex-wrap: wrap;
+}
+.operation button{
+	margin-left: 5px !important;
+	margin-bottom: 8px !important;
+}

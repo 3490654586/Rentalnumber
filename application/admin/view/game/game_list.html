@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>游戏列表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <script src="__STATIC__/common/common.js"></script>
+  <script>
+    var islogin = this.IsLogin(); // 未登录用户无法进入后台
+    if (islogin == 1) {
+      location.href = "{:url('login/index')}"
+    } else {
+
+    }
+  </script>
+</head>
+
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <label class="layui-form-label">游戏名称</label>
+            <div class="layui-input-block">
+              <input type="text" name="game_name" placeholder="请输入游戏名称" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+          <div class="layui-inline">
+            <label class="layui-form-label">添加时间</label>
+            <div class="layui-input-block">
+              <input type="text" name="add_time" placeholder="请选择添加时间" autocomplete="off" class="layui-input"
+                id="test1">
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-user-back-search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="layui-card-body">
+        <div style="padding-bottom: 10px;">
+          <!-- <button class="layui-btn layuiadmin-btn-admin layui-btn-danger" data-type="batchdel">批量删除</button> -->
+          <button class="layui-btn layuiadmin-btn-admin" data-type="add">添加游戏</button>
+
+          <font color="red">目前支持区服的游戏有 (王者荣耀) (生死狙击)</font>
+        </div>
+
+        <table id="GameList" lay-filter="GameList"></table>
+        <script type="text/html" id="GameListBar">
+          <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="update">编辑</button>
+            <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete">删除</button>
+          </div>
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+  <script>
+    layui.config({
+      base: '__STATIC__/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['index', 'useradmin', 'table', 'laydate','form'], function () {
+      var $ = layui.$
+        , form = layui.form
+        , table = layui.table;
+      var laydate = layui.laydate;
+
+      //第一个实例
+      table.render({
+        elem: '#GameList'
+        , height: 'auto'
+        , url: url + 'index/index/gamelist' //数据接口
+        , page: true //开启分页
+        , limit: 10
+        , parseData: function (res) { //res 即为原始返回的数据
+          return {
+            "code": res.code, //解析接口状态
+            "msg": res.msg, //解析提示文本
+            "count": res.count, //解析数据长度
+            "data": res.list //解析数据列表
+          };
+        }
+        , cols: [[ //表头
+          { field: 'id', title: 'ID', width: '5%', fixed: 'left' }
+          , { field: 'game_name', title: '主分类/游戏名称', width: '15%' ,templet:function(d){
+            let name;
+            name = '<font color="red">'+d.cate_name+'</font>'+ '/' + d.game_name
+            return name
+          }}
+          , { field: 'thumb', title: '游戏封面图', width: '10%',templet:function(d){
+            return '<div onclick=show_img(this)><img src="'+d.thumb+'" style="width:30px; height:30px;"></div>' ;
+          }}
+          , { field: 'is_recom', title: '首页是否推荐', width: '10%' ,templet:function(d){
+
+            let is_recomHtml;
+
+            if(d.is_recom == 1){
+
+              is_recomHtml = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal">推荐</button>'
+             
+            }else{
+
+              is_recomHtml = '<button type="button" class="layui-btn layui-btn-xs layui-btn-warm">不推荐</button>'
+
+            }
+
+            return is_recomHtml
+          }}
+          , { field: 'hall_is_recom', title: '大厅是否推荐', width: '10%' ,templet:function(d){
+            
+            let hall_is_recomHtml;
+
+            if(d.hall_is_recom == 1){
+
+              hall_is_recomHtml = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal">推荐</button>'
+             
+            }else{
+
+              hall_is_recomHtml = '<button type="button" class="layui-btn layui-btn-xs layui-btn-warm">不推荐</button>'
+
+            }
+
+            return hall_is_recomHtml
+          }}
+          , { field: 'is_hot', title: '首页是否热门', width: '10%' ,templet:function(d){
+            
+            let is_hotHtml;
+
+            if(d.is_hot == 1){
+
+              is_hotHtml = '<button type="button" class="layui-btn layui-btn-xs layui-btn-normal">热门</button>'
+             
+            }else{
+
+              is_hotHtml = '<button type="button" class="layui-btn layui-btn-xs layui-btn-warm">不热门</button>'
+
+            }
+
+            return is_hotHtml
+          }}
+          , { field: 'descs', title: '描述简介', width: '10%' }
+          , { field: 'add_time', title: '添加时间', width: '10%' }
+          , { fixed: 'right', title: '操作', width: '20%', toolbar: '#GameListBar' }
+        ]]
+      });
+
+      // 监听事件
+      table.on('tool(GameList)', function (obj) {
+    
+        switch (obj.event) {
+          case 'delete':
+            layer.confirm('确认删除ID为'+obj.data.id+'的游戏?包括下面的游戏账号/服务器/区服会一键删除', { icon: 3, title: '提示' }, function (index) {
+              var data = {
+                'id': obj.data.id
+              };
+              let dologin = asynchronousAjax('index/index/gamedel', 'post', data, 'json')
+                .done(function (data) {
+                  var code = data.code,
+                    msg = data.msg;
+                  if (code == -1) {
+                    layer.msg(msg, { icon: 5 });
+                  } else {
+
+                    layer.msg(msg, { icon: 6 })
+                    table.reload('GameList'); //数据刷新
+                  }
+                })
+                .fail(function (err) {
+                  layer.msg('异步错误', { icon: 5 });
+                })
+              layer.close(index);
+            });
+
+            break;
+          case 'update':
+          
+          layer.open({
+            type: 2
+            , title: '编辑游戏'
+            , content: "{:url('admin/Game/gameadd')}"
+            , area: ['524px', '575px']
+            , btn: ['确定', '取消']
+            , end: function(){
+              $(".layui-laypage-btn").click(); // 刷新表格数据
+            }
+            , success: function(layero, index){
+           
+              if(obj.data.game_name != ''){ // 分类名称
+                layero.find('iframe').contents().find('#game_name').val(obj.data.game_name)
+              }
+
+              if(obj.data.descs != ''){ // 简介
+                layero.find('iframe').contents().find('#descs').val(obj.data.descs)
+              }  
+
+              if(obj.data.is_recom == 1){ // 是否推荐 首页
+                layero.find('iframe').contents().find('#is_recom').prop('checked',true)
+              }
+              
+              if(obj.data.cid != ''){
+               
+                layero.find('iframe').contents().find('#cids').val(obj.data.cid)
+
+              }
+              if(obj.data.hall_is_recom == 1){ // 是否推荐 大厅
+                layero.find('iframe').contents().find('#hall_is_recom').prop('checked',true)
+               
+              }
+
+              if(obj.data.is_hot == 1){ // 是否热门 首页
+                layero.find('iframe').contents().find('#is_hot').prop('checked',true)
+              }
+
+              if(obj.data.thumb != ''){ // 封面图
+                layero.find('iframe').contents().find('#thumb').val('/' + obj.data.thumb.split('/').slice(3).join('/'))
+              }
+            }
+            , yes: function (index, layero) {
+
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'LAY-user-back-submit'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+
+               
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                var field = data.field; //获取提交的字段
+                
+              
+                if (field.is_recom == 'on') { // 如果开启状态为1
+                  field.is_recom = 1
+                } else {
+                  field.is_recom = 2
+                }
+
+                if(field.hall_is_recom == 'on'){
+                  field.hall_is_recom = 1
+                }else{
+                  field.hall_is_recom = 2
+                }
+
+                if(field.is_hot == 'on'){
+                  field.is_hot = 1
+                }else{
+                  field.is_hot = 2
+                }
+                var data = {
+                  'id' : obj.data.id,
+                  'game_name': field.game_name,
+                  'is_recom': field.is_recom,
+                  'hall_is_recom': field.hall_is_recom,
+                  'thumb': field.thumb,
+                  'descs': field.descs,
+                  'is_hot' : field.is_hot,
+                  'cid' : field.cid
+                };
+                let dologin = asynchronousAjax('index/index/gameedit', 'post', data, 'json')
+                  .done(function (data) {
+                    var code = data.code,
+                      msg = data.msg;
+                    if (code == -1) {
+                      layer.msg(msg, { icon: 5 });
+                    } else {
+
+                      layer.msg(msg, { icon: 6 })
+                    }
+                  })
+                  .fail(function (err) {
+                    layer.msg('异步错误', { icon: 5 });
+                  })
+                layer.close(index); //关闭弹层
+              });
+
+              submit.trigger('click');
+            }
+          });
+            break;
+        };
+      });
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#test1' //指定元素
+      });
+      //监听搜索
+      form.on('submit(LAY-user-back-search)', function (data) {
+        var field = data.field;
+        console.log(field)
+        //执行重载
+        table.reload('GameList', {
+          where: field
+        });
+      });
+
+      //事件
+      var active = {
+        batchdel: function () {
+          var checkStatus = table.checkStatus('LAY-user-back-manage')
+            , checkData = checkStatus.data; //得到选中的数据
+
+          if (checkData.length === 0) {
+            return layer.msg('请选择数据');
+          }
+
+          layer.prompt({
+            formType: 1
+            , title: '敏感操作，请验证口令'
+          }, function (value, index) {
+            layer.close(index);
+
+            layer.confirm('确定删除吗？', function (index) {
+
+              //执行 Ajax 后重载
+              /*
+              admin.req({
+                url: 'xxx'
+                //,……
+              });
+              */
+              table.reload('LAY-user-back-manage');
+              layer.msg('已删除');
+            });
+          });
+        }
+        , add: function () {
+          layer.open({
+            type: 2
+            , title: '添加游戏'
+            , content: "{:url('admin/Game/gameadd')}"
+            , area: ['524px', '575px']
+            , btn: ['确定', '取消']
+            , end: function(){
+              $(".layui-laypage-btn").click(); // 刷新表格数据
+            }
+            , yes: function (index, layero) {
+
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'LAY-user-back-submit'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+           
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                var field = data.field; //获取提交的字段
+                console.log(field)
+                if (field.is_recom == 'on') { // 如果开启状态为1
+                  field.is_recom = 1
+                } else {
+                  field.is_recom = 2
+                }
+
+                if(field.hall_is_recom == 'on'){
+                  field.hall_is_recom = 1
+                }else{
+                  field.hall_is_recom = 2
+                }
+
+                if(field.is_hot == 'on'){
+                  field.is_hot = 1
+                }else{
+                  field.is_hot = 2
+                }
+                var data = {
+                  'game_name': field.game_name,
+                  'cid': field.cid,
+                  'thumb': field.thumb,
+                  'descs': field.descs,
+                  'is_recom' : field.is_recom,
+                  'is_hot' : field.is_hot,
+                  'hall_is_recom' : field.hall_is_recom
+                };
+                let dologin = asynchronousAjax('index/index/addgame', 'post', data, 'json')
+                  .done(function (data) {
+                    var code = data.code,
+                      msg = data.msg;
+                    if (code == -1) {
+                      layer.msg(msg, { icon: 5 });
+                    } else {
+
+                      layer.msg(msg, { icon: 6 })
+                      table.reload('GameList'); //数据刷新
+                    }
+                  })
+                  .fail(function (err) {
+                    layer.msg('异步错误', { icon: 5 });
+                  })
+
+                layer.close(index); //关闭弹层
+              });
+
+              submit.trigger('click');
+            }
+          });
+        }
+      }
+      $('.layui-btn.layuiadmin-btn-admin').on('click', function () {
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+      });
+
+    });
+  </script>
+
+  <!-- jquery -->
+  <script>
+    //显示大图片
+    function show_img(t) {
+        var t = $(t).find("img");
+        //页面层
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['80%', '80%'], //宽高
+            shadeClose: true, //开启遮罩关闭
+            title:'查看图片',
+            end: function (index, layero) {
+                return false;
+            },
+            content: '<div style="text-align:center"><img src="' + $(t).attr('src') + '" /></div>'
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>基础设置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+    <script src="__STATIC__/common/common.js"></script>
+    <script>
+        var islogin = this.IsLogin(); // 未登录用户无法进入后台
+        if (islogin == 1) {
+            location.href = "{:url('login/index')}"
+        } else {
+
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="layui-fluid">
+        <div class="layui-card">
+            <div class="layui-card-header">基础设置</div>
+            <div class="layui-card-body">
+                <form class="layui-form" action="">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">网站状态</label>
+                        <div class="layui-input-inline" style="width: 120px;">
+                            <input type="checkbox" name="status" lay-skin="switch" lay-text="开启|关闭" id="status">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">网站简称</label>
+                        <div class="layui-input-inline" style="width: 300px;">
+                            <input type="text" name="abbreviation" required lay-verify="required" placeholder="请输入网站简称"
+                                autocomplete="off" class="layui-input" id="abbreviation">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item" id="uploadLogo">
+                        <label class="layui-form-label">网站LOGO</label>
+
+                        <div class="layui-input-inline" style="width: 300px;display: flex;">
+                            <i class="layui-icon layui-icon-picture"
+                            style="line-height: 38px;padding-left: 5px;position: absolute;left: 5px;z-index: 1;"
+                            id="logo"></i>
+
+                            <input type="text" placeholder=""
+                                autocomplete="off" class="layui-input" disabled style="cursor: pointer;padding-left: 35px !important;" id="logos_val">
+                            <input type="button" value="选择上传" class="layui-btn layui-btn-primary">
+
+                        </div>
+                        <i class="layui-icon layui-icon-about" style="line-height: 38px;padding-left: 5px;"
+                            id="tips"></i>
+                    </div>
+                    <input type="hidden" name="logo" id="logos">
+                    <div class="layui-form-item" id="uploadIcon">
+                        <label class="layui-form-label">地址栏图标</label>
+                        
+
+                        <div class="layui-input-inline" style="width: 300px;display: flex;">
+                            <i class="layui-icon layui-icon-picture"
+                            style="line-height: 38px;padding-left: 5px;position: absolute;left: 5px;z-index: 1;"
+                            id="icons"></i>
+                            <input type="text" placeholder=""
+                                autocomplete="off" class="layui-input" disabled style="cursor: pointer;padding-left: 35px !important;" id="icon_val">
+                            <input type="button" value="选择上传" class="layui-btn layui-btn-primary">
+
+                        </div>
+                        <i class="layui-icon layui-icon-about" style="line-height: 38px;padding-left: 5px;"
+                            id="tipss"></i>
+                    </div>
+                    <input type="hidden" name="icon" id="icon">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">首页标题</label>
+                        <div class="layui-input-inline" style="width: 300px;">
+                            <input type="text" name="home_title" required lay-verify="required" placeholder="请输入首页标题"
+                                autocomplete="off" class="layui-input" id="home_title">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">首页关键词</label>
+                        <div class="layui-input-inline" style="width: 300px;">
+                            <input type="text" name="home_keyword" required lay-verify="required" placeholder="请输入首页关键词"
+                                autocomplete="off" class="layui-input" id="home_keyword">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">首页描述</label>
+                        <div class="layui-input-inline" style="width: 300px;">
+                            <input type="text" name="home_describe" required lay-verify="required" placeholder="请输入首页描述"
+                                autocomplete="off" class="layui-input" id="home_describe">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">备案号</label>
+                        <div class="layui-input-inline" style="width: 300px;">
+                            <input type="text" name="keep_on_record" required lay-verify="required" placeholder="请输入备案号"
+                                autocomplete="off" class="layui-input" id="keep_on_record">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">客服电话</label>
+                        <div class="layui-input-inline" style="width: 300px;">
+                            <input type="text" name="telephone" required lay-verify="required" placeholder="请输入客服电话"
+                                autocomplete="off" class="layui-input" id="telephone">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">主题背景色</label>
+                        <div class="layui-input-inline" style="width: 120px;">
+                            <input type="text" value="" placeholder="请选择背景颜色" class="layui-input" id="theme_bkg_color" name="theme_bkg_color">
+                        </div>
+                        <div class="layui-inline" style="left: -11px;">
+                            <div id="bkg-form"></div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">主题字体色</label>
+                        <div class="layui-input-inline" style="width: 120px;">
+                            <input type="text" value="" placeholder="请选择字体颜色" class="layui-input" id="theme_font_color" name="theme_font_color">
+                        </div>
+                        <div class="layui-inline" style="left: -11px;">
+                            <div id="font-form"></div>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn layui-btn-normal layui-btn-radius" lay-submit
+                                lay-filter="editWeb">立即修改</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+    <script>
+        let wz_logo = '' // 网站logo初始值
+        let wz_icon = '' // 地址栏图标初始值
+        layui.config({
+            base: '__STATIC__/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'useradmin', 'table', 'colorpicker', 'upload'], function () {
+            var $ = layui.$
+                , form = layui.form
+                , table = layui.table
+                , colorpicker = layui.colorpicker
+                , upload = layui.upload;
+            let color1 = '' // 背景色初始值
+            let color2 = '' // 字体色初始值
+
+            var uploadInst = upload.render({
+                elem: '#uploadLogo' //绑定元素
+                , url: url+'index/index/uploadImage' //上传接口
+                , done: function (res) {
+                    //上传完毕回调
+                    var url = res.url
+                    $('#logos').val(url)
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+
+            var uploadInst = upload.render({
+                elem: '#uploadIcon' //绑定元素
+                , url: url+'index/index/uploadImage' //上传接口
+                , exts: 'ico'
+                , done: function (res) {
+                    //上传完毕回调
+                    var url = res.url
+                    $('#icon').val(url)
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+
+            // 网站基本信息赋值
+            asynchronousAjax('index/index/BasicInformationOfWebsite','POST','','JSON',false).done(function(res){
+                $('#theme_bkg_color').val(res.data.theme_bkg_color) // 主题背景色
+                color1 = res.data.theme_bkg_color // 主题背景色赋值
+                $('#theme_font_color').val(res.data.theme_font_color) // 主题文字颜色
+                color2 = res.data.theme_font_color // 主题文字颜色赋值
+                $('#abbreviation').val(res.data.abbreviation) // 网站简称
+                $('#logos').val(res.data.logoshort) // 网站logo
+                $('#logos_val').val(res.data.logo) // 网站logo图标路径赋值
+                wz_logo = res.data.logo // 网站logo变量赋值
+                $('#icon').val(res.data.iconshort) // 网站图标
+                $('#icon_val').val(res.data.icon) // 网站图标路径赋值
+                wz_icon = res.data.icon // 网站图标变量赋值
+                $('#home_title').val(res.data.home_title) // 网站首页标题
+                $('#home_keyword').val(res.data.home_keyword) // 网站首页关键词
+                $('#home_describe').val(res.data.home_describe) // 网站首页描述
+                $('#keep_on_record').val(res.data.keep_on_record) // 备案号
+                $('#telephone').val(res.data.telephone) // 客服电话号码
+                // 网站状态
+                if(res.data.status == 1){
+                    $('#status').prop('checked',true)
+                }else{
+                    $('#status').prop('checked',false)
+                }
+
+                form.render();
+                
+            })
+
+            //主题背景色
+            colorpicker.render({
+                elem: '#bkg-form'
+                ,color:color1
+                , done: function (color) {
+                    $('#theme_bkg_color').val(color);
+                }
+            });
+
+            //主题文字颜色
+            colorpicker.render({
+                elem: '#font-form'
+                ,color:color2
+                , done: function (color) {
+                    $('#theme_font_color').val(color);
+                }
+            });
+
+            form.on('submit(editWeb)', function(data){
+                // console.log(data.elem) //被执行事件的元素DOM对象，一般为button对象
+                // console.log(data.form) //被执行提交的form对象，一般在存在form标签时才会返回
+                // console.log(data.field) //当前容器的全部表单字段，名值对形式：{name: value}
+                var fields = data.field
+
+                if(fields.status == 'on'){
+                    fields.status = 1
+                }else{
+                    fields.status = 2
+                }
+                var data = {
+                    'theme_bkg_color' : fields.theme_bkg_color,
+                    'theme_font_color' : fields.theme_font_color,
+                    'abbreviation' : fields.abbreviation,
+                    'logo' : fields.logo,
+                    'icon' : fields.icon,
+                    'home_title' : fields.home_title,
+                    'home_keyword' : fields.home_keyword,
+                    'home_describe' : fields.home_describe,
+                    'keep_on_record' : fields.keep_on_record,
+                    'telephone' : fields.telephone,
+                    'status' : fields.status
+                };
+
+                asynchronousAjax('index/index/ModifyTheBasicInformationOfTheWebsite','POST',data,'JSON').done(function(res){
+                    console.log(res)
+                    if(res.code == 0){
+                        layer.msg('修改成功')
+                        setTimeout(()=>{
+                            location.reload()
+                        },1500)
+                    }else{
+                        layer.msg('未做任何更改')
+                        setTimeout(()=>{
+                            location.reload()
+                        },1500)
+                    }
+                })
+                return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            });
+        });
+    </script>
+
+    <!-- jquery -->
+    <script>
+
+        $("#tips").hover(function () {
+            openMsg();
+        }, function () {
+            layer.close(subtips);
+        });
+        function openMsg() {
+            subtips = layer.tips('默认网站LOGO，通用头部显示，显示尺寸以模板设计为主', '#tips', { tips: [1, '#ff6700'], time: 30000 });
+        }
+
+        $("#tipss").hover(function () {
+            openMsgs();
+        }, function () {
+            layer.close(subtips);
+        });
+        function openMsgs() {
+            subtips = layer.tips('建议尺寸 32 * 32 (像素) 的.ico文件', '#tipss', { tips: [1, '#ff6700'], time: 30000 });
+        }
+
+        $("#logo").hover(function () {
+            openlogoMsg();
+        }, function () {
+            layer.close(subtips);
+        });
+        function openlogoMsg() {
+            subtips = layer.tips('<img src="'+wz_logo+'" style="width:100%;height:100%">', '#logo', { tips: [1, '#fff'],area: ['300px', '150px'], time: 30000 });
+        }
+
+        $("#icons").hover(function () {
+            openiconsMsgs();
+        }, function () {
+            layer.close(subtips);
+        });
+        function openiconsMsgs() {
+            subtips = layer.tips('<img src="'+wz_icon+'" style="width:100%;height:100%">', '#icons', { tips: [1, '#fff'],area: ['300px', '150px'], time: 30000 });
+        }
+    </script>
+</body>
+
+</html>

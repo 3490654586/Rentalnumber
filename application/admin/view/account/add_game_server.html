@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>添加游戏服务器</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <script src="__STATIC__/common/common.js"></script>
+  <script>
+    var islogin = this.IsLogin(); // 未登录用户无法进入后台
+    if (islogin == 1) {
+      location.href = "{:url('login/index')}"
+    } else {
+
+    }
+  </script>
+  <style>
+    body {
+      background-color: #fff;
+    }
+
+    .layui-input-block {
+      max-width: 500px !important;
+    }
+
+    .uploadImg {
+      margin-right: 5px;
+      width: 80px;
+      height: 80px;
+      border: 1px dashed rgb(197, 195, 195);
+      cursor: pointer;
+    }
+
+    .absFont {
+      position: absolute;
+      left: 465px;
+      top: 7px;
+      right: 0;
+      bottom: 0px;
+    }
+
+    .absFontTwo {
+      position: absolute;
+      left: 434px;
+      top: 7px;
+      right: 0;
+      bottom: 0px;
+    }
+
+    .absFontThree {
+      position: absolute;
+      left: 451px;
+      top: 7px;
+      right: 0;
+      bottom: 0px;
+    }
+
+    .mr {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <input type="hidden" name="" id="account_id">
+  <div class="layui-form" lay-filter="layuiadmin-form-useradmin" id="layuiadmin-form-useradmin"
+    style="padding: 20px 0 0 0;">
+    <div class="layui-col-md12" style="padding: 20px;">
+      <div class="layui-card">
+        <div class="layui-card-header">添加游戏区服</div>
+        <div class="layui-card-body">
+          <div class="layui-form-item">
+            <label class="layui-form-label">
+              <font color="red" style="line-height: 5px;">* </font>选择分类
+            </label>
+            <div class="layui-input-block">
+              <select name="cid" lay-verify="required" lay-search id="cid" lay-filter="cid">
+                <option value="">选择游戏分类</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">
+              <font color="red" style="line-height: 5px;">* </font>选择游戏
+            </label>
+            <div class="layui-input-block">
+              <select name="game_id" lay-verify="required" lay-search id="game_id" lay-filter="game_id">
+                <option value="">选择游戏</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">
+              <font color="red" style="line-height: 5px;">* </font>选择服务器
+            </label>
+            <div class="layui-input-block">
+              <select name="server" lay-verify="required" lay-search id="server" lay-filter="server">
+                <option value="">选择服务器</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-form-item">
+            <label class="layui-form-label">
+              <font color="red" style="line-height: 5px;">* </font>区服
+            </label>
+            <div class="layui-input-block" id="about">
+              <div class="layui-input-block" style="display: flex;margin-bottom: 5px">
+                <input type="text" class="layui-input" placeholder="请填写区服名" lay-verify="required" name="area_name">
+                <button class="layui-btn layui-btn-danger" onclick="$(this).parent().remove()">删除</button>
+              </div>
+              <div class="layui-input-block" style="display: flex;margin-bottom: 5px">
+                <input type="text" class="layui-input" placeholder="请填写区服名" lay-verify="required" name="area_name">
+                <button class="layui-btn layui-btn-danger" onclick="$(this).parent().remove()">删除</button>
+              </div>
+              <div class="layui-input-block" style="display: flex;margin-bottom: 5px">
+                <input type="text" class="layui-input" placeholder="请填写区服名" lay-verify="required" name="area_name">
+                <button class="layui-btn layui-btn-danger" onclick="$(this).parent().remove()">删除</button>
+              </div>
+              <div class="layui-input-block" style="display: flex;margin-bottom: 5px">
+                <input type="text" class="layui-input" placeholder="请填写区服名" lay-verify="required" name="area_name">
+                <button class="layui-btn layui-btn-danger" onclick="$(this).parent().remove()">删除</button>
+              </div>
+              <div class="layui-input-block" style="display: flex;margin-bottom: 5px">
+                <input type="text" class="layui-input" placeholder="请填写区服名" lay-verify="required" name="area_name">
+                <button class="layui-btn layui-btn-danger" onclick="$(this).parent().remove()">删除</button>
+              </div>
+              <button type="button" class="layui-btn" id="add">
+               追加
+              </button>
+              <button class="layui-btn layui-btn-normal" onclick="lookAt()">查看已有区服</button>
+              <table id="demo" lay-filter="test"></table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="layui-form-item" style="padding: 20px;">
+      <button class="layui-btn layui-btn-normal" lay-submit="" lay-filter="AddAcount">立即导入</button>
+    </div>
+  </div>
+  <script type="text/html" id="delivery-table-operate">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+  </script>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+  <script>
+    layui.config({
+      base: '__STATIC__/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['index', 'form' ,'table'], function () {
+      var $ = layui.$
+        , form = layui.form
+        , table  = layui.table
+      //第一个实例
+      table.render({
+        elem: '#demo'
+        ,url: "{:url('index/index/thatAllArea')}" //数据接口
+        ,parseData: function(res){ //res 即为原始返回的数据
+          return {
+            "code": res.code, //解析接口状态
+            "msg": res.msg, //解析提示文本
+            "count": res.data.total, //解析数据长度
+            "data": res.data.data //解析数据列表
+          };
+        }
+        ,page: true //开启分页
+        ,cols: [[ //表头
+          {field: 'id', title: 'ID', width:'10%', fixed: 'left'}
+          ,{field: 'area_name', title: '区名', width:'50%'}
+          ,{ align: 'center', title: '操作', width: '40%', toolbar: '#delivery-table-operate' }
+        ]]
+      });
+      window.lookAt = function(){
+        let rid = $('#server').find('option:selected').val()
+        if(!rid){
+          return layer.alert('请选择对应的服务器')
+        }
+        //第一个实例
+        table.render({
+          elem: '#demo'
+          ,url: "{:url('index/index/thatAllArea')}?rid="+rid //数据接口
+          ,parseData: function(res){ //res 即为原始返回的数据
+            return {
+              "code": res.code, //解析接口状态
+              "msg": res.msg, //解析提示文本
+              "count": res.data.total, //解析数据长度
+              "data": res.data.data //解析数据列表
+            };
+          }
+          ,page: true //开启分页
+          ,cols: [[ //表头
+            {field: 'id', title: 'ID', width:'10%', fixed: 'left'}
+            ,{field: 'area_name', title: '区名', width:'50%'}
+            ,{ align: 'center', title: '操作', width: '40%', toolbar: '#delivery-table-operate' }
+          ]]
+        });
+      }
+
+
+      table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+        if(layEvent === 'detail'){ //查看
+          //do somehing
+        } else if(layEvent === 'del'){ //删除
+          layer.confirm('真的删除行么', function(index){
+            $.ajax({
+              url:"{:url('index/index/delArea')}",
+              data:{
+                "id":data.id
+              },
+              success:function (res) {
+                  if(res.code == 0){
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    layer.close(index);
+                  }
+              }
+            })
+
+            //向服务端发送删除指令
+          });
+        } else if(layEvent === 'edit'){ //编辑
+          let divHtml = "<div style='padding: 10px'><input type='text' id='area_name' class='layui-input'value="+data.area_name+" style='max-width:300px'></div>"
+          //do something
+          layer.open({
+            title:'修改区服名',
+            type: 1,
+            area: ['500px', '180px'],
+            content: divHtml, //这里content是一个普通的String
+            btn: ['修改', '取消'], //可以无限个按钮
+            btn1:function(index, layero){
+              $.ajax({
+                url:"{:url('index/index/editArea')}",
+                data:{
+                  "id":data.id,
+                  "area_name":$('#area_name').val()
+                },
+                success:function(res){
+                  if(res.code == 0){
+                    //同步更新缓存对应的值
+                    obj.update({
+                      area_name:$('#area_name').val()
+                    });
+                    layer.close(index);
+                  }
+                }
+              })
+            }
+            ,btn2:function(index, layero){
+              layer.close(index)
+            }
+          });
+
+        } else if(layEvent === 'LAYTABLE_TIPS'){
+          layer.alert('Hi，头部工具栏扩展的右侧图标。');
+        }
+      });
+      let gameCate;
+      let game;
+      let server;
+      asynchronousAjax('index/index/gameServer', 'post', {}, 'json',false)
+              .done(function (data) {
+                gameCate = data.gameCate
+                game = data.game
+                server = data.server
+              })
+      // 游戏分类
+      $.each(gameCate,function(index,item){
+        let cidHtml = "<option value="+item.id+">"+item.cate_name+"</option>"
+        $('#cid').append(cidHtml)
+        form.render('select')
+      })
+      // 游戏
+      form.on('select(cid)',function(el){
+        let cid = el.value
+        cid == ''? $('#game_id').empty() : $('#game_id').empty()
+        $('#server').empty()
+        let gameInitHtml = "<option value=''>请选择游戏</option>"
+        $('#game_id').append(gameInitHtml)
+        $.each(game,function(index,item){
+          if(item.cid == parseInt(cid)){
+            let gameHtml = "<option value="+item.id+">"+item.game_name+"</option>"
+            $('#game_id').append(gameHtml)
+          }
+        })
+        form.render('select')
+      })
+      // 大区
+      form.on('select(game_id)',function(el){
+        let game_id = el.value
+        game_id == ''? $('#server').empty() : $('#server').empty()
+        $.each(server,function(index,item){
+          if(item.game_id == parseInt(game_id)){
+            let serverHtml = "<option value="+item.id+">"+item.server_name+"</option>"
+            $('#server').append(serverHtml)
+          }
+        })
+        form.render('select')
+      })
+
+      form.on('submit(AddAcount)', function (data) {
+        var field = data.field;
+        // var fields=$(data.form).serialize();
+
+        let areaNameArr = []
+        $('input[name="area_name"]').each(function(){
+          areaNameArr.push($(this).val())
+        })
+
+        let allData = {
+          'rid' : field.server,
+          'area_name' : areaNameArr
+        };
+        asynchronousAjax('index/index/importGameServer', 'post', allData, 'json')
+          .done(function (data) {
+            let code = data.code
+            if(code == 0){
+              layer.msg(data.msg)
+              setTimeout(()=>{
+                location.reload()
+              },1500)
+            }
+          })
+          .fail(function (err) {
+            layer.msg('异步错误', { icon: 5 });
+          })
+        return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+      });
+    })
+  </script>
+
+  <!-- jquery -->
+  <script>
+    $('#add').click(function(){
+      let inputHtml = "<div class=\"layui-input-block\" style=\"display: flex;margin-bottom: 5px\">\n" +
+              "                <input type=\"text\" class=\"layui-input\" placeholder=\"请填写区服名\" lay-verify=\"required\" name=\"area_name\">\n" +
+              "                <button class=\"layui-btn layui-btn-danger\" onclick=\"$(this).parent().remove()\">删除</button>\n" +
+              "              </div>"
+      $('#about').prepend(inputHtml)
+    })
+  </script>
+</body>
+
+</html>

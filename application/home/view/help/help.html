@@ -1,0 +1,301 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/icon/icon.css"/>
+<style type="text/css">
+    .main-cnt {
+        width: 100%;
+        height: 170px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .main-cnt-item {
+        width: 20%;
+        height: 100%;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: all 1.5s;
+    }
+
+    /* 特效 */
+    .main-cnt-item:nth-of-type(1):hover {
+        background-color: red !important;
+    }
+
+    .main-cnt-item:nth-of-type(2):hover {
+        background-color: rgb(120, 140, 207) !important;
+    }
+
+    .main-cnt-item:nth-of-type(3):hover {
+        background-color: rgb(192, 243, 98) !important;
+    }
+
+    .main-cnt-item:nth-of-type(4):hover {
+        background-color: rgb(102, 250, 73) !important;
+    }
+
+    .main-cnt-item > a {
+        display: block;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .main-cnt-item .iconfont {
+        font-size: 50px;
+        margin-right: 10px;
+    }
+
+    .main-cnt-info {
+        font-size: 18px;
+        color: white;
+        line-height: 24px;
+        height: 40px;
+    }
+
+    /* 搜索栏 */
+    .help-search {
+        display: flex;
+        padding: 0px 15px;
+        box-sizing: border-box;
+        margin-top: 40px;
+        position: relative;
+    }
+
+    .help-search > i {
+        font-size: 30px;
+        position: absolute;
+        top: 10px;
+        left: 22px;
+        color: rgb(206, 204, 204);
+    }
+
+    /* 内容 */
+    .faq {
+        width: 100%;
+        margin-top: 50px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .faq-left {
+        width: 17%;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .faq-left > li {
+        width: 100%;
+
+        margin-bottom: 15px;
+        background-color: rgb(238, 236, 236);
+        border-radius: 10px;
+    }
+
+    .faq-left > li div:nth-of-type(1) {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        height: 50px;
+        padding: 0px 20px;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    .faq-left > li div i {
+        font-size: 30px;
+        margin-right: 15px;
+    }
+
+    .faq-child {
+        width: 100%;
+        display: none;
+        background-color: white;
+        padding-top: 10px;
+        padding-bottom: 20px;
+
+    }
+
+    .faq-child > a {
+        width: 100%;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        white-space: nowrap;
+        color: #787a7a;
+        padding: 0px 15px;
+        box-sizing: border-box;
+    }
+
+    .faq-child > a:hover {
+        color: var(--text-color) !important;
+    }
+
+    .faq-child > a::before {
+        content: '▶';
+        margin-right: 10px;
+    }
+
+    /* 帮助内容 */
+    .faq-right {
+        width: 80%;
+        padding: 20px 30px;
+        padding-bottom: 40px;
+        box-sizing: border-box;
+        background-color: white;
+    }
+
+    .faq-right > h3 {
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .faq-info {
+        text-align: center;
+        width: 100%;
+        border-bottom: 1px dashed #262c30;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+    }
+
+    .faq-info span {
+        margin-left: 20px;
+        color: #00b3fe
+    }
+
+    /* 内容 */
+    .faq-con p {
+        font-size: 16px;
+        line-height: 30px;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="main">
+        <div class="layui-container">
+            <!-- 最上方四个 -->
+            <ul class="main-cnt">
+                <li class="main-cnt-item" style=" background: #00b3fe;">
+                    <a onclick="window.open('http://mah.miketong.net/Web/im.aspx?_=t&accountid=121352','飞讯租号-咨询','width=665,height=515,top=100, left=100,menubar=no,toolbar=no,status=no,scrollbars=yes')">
+                        <i class="iconfont icon-kefu"></i>
+                        <div class="main-cnt-info">
+                            <p style="font-size: 20px;">资讯客服</p>
+                            <p style="font-size: 14px;">Consulting service</p>
+                        </div>
+                    </a>
+                </li>
+                <li class="main-cnt-item" style="background: rgb(31, 231, 188);">
+                    <a>
+                        <i class="iconfont icon-info"></i>
+                        <div class="main-cnt-info">
+                            <p style="font-size: 20px;">投诉/建议</p>
+                            <p style="font-size: 14px;">complaints or advice</p>
+                        </div>
+                    </a>
+                </li>
+                <li class="main-cnt-item" style="background: rgb(247, 45, 95);">
+                    <a>
+                        <i class="iconfont icon-bug"></i>
+                        <div class="main-cnt-info">
+                            <p style="font-size: 20px;">BUG提交</p>
+                            <p style="font-size: 14px;">Bug the submission</p>
+                        </div>
+                    </a>
+                </li>
+                <li class="main-cnt-item" style="background: rgb(149, 78, 230);">
+                    <a>
+                        <i class="iconfont icon-upload"></i>
+                        <div class="main-cnt-info">
+                            <p style="font-size: 20px;">下载上号器</p>
+                            <p style="font-size: 14px;">Download number</p>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+            <!-- 搜索栏 -->
+            <div class="help-search">
+                <input type="text" placeholder="请输入关键词" class="layui-input" style="height: 50px;padding-left: 45px;">
+                <i class="layui-icon layui-icon-search"></i>
+                <button type="button" class="layui-btn layui-btn-normal" style="height:50px;width:170px">搜索</button>
+            </div>
+            <!-- 内容 -->
+            <div class="faq">
+                <ul class="faq-left">
+                    <li>
+                        <div>
+                            <i class="iconfont icon-game"></i>
+                            <span>常见问题</span>
+                        </div>
+                        <div class="faq-child">
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="iconfont icon-game"></i>
+                            <span>常见问题</span>
+                        </div>
+                        <div class="faq-child">
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <i class="iconfont icon-game"></i>
+                            <span>常见问题</span>
+                        </div>
+                        <div class="faq-child">
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                            <a href="#">上号提示密码错误、QQ帐好</a>
+                        </div>
+                    </li>
+                </ul>
+                <div class="faq-right">
+                    <h3>如何关闭QQ网页登录保护</h3>
+                    <div class="faq-info">
+                        <time>发布时间：2019-01-22 09:32:22</time>
+                        <span>浏览量：17218次</span>
+                    </div>
+                    <div class="faq-con">
+                        <p>由于采用了新的手游上号机制，提升了上号体验，需要号主在QQ安全中心APP中 - QQ保护 -进行关闭 网页QQ登录保护。
+                            QQ安全中心APP下载地址：</p>
+                        <p>由于采用了新的手游上号机制，提升了上号体验，需要号主在QQ安全中心APP中 - QQ保护 -进行关闭 网页QQ登录保护。
+                            QQ安全中心APP下载地址：</p>
+                        <p>由于采用了新的手游上号机制，提升了上号体验，需要号主在QQ安全中心APP中 - QQ保护 -进行关闭 网页QQ登录保护。
+                            QQ安全中心APP下载地址：</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 收缩
+    layui.use(['element'], function () {
+        var element = layui.element
+        $(".faq-left>li").click(function () {
+            $(".faq-child").slideUp("fast")
+            let obj = $(this).children(".faq-child")
+            if (obj.css('display') == 'none') {
+                obj.slideToggle("fast")
+            }
+        })
+    })
+</script>
+{include file="pubview/footer" /}

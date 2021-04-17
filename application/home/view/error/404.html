@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>404</title>
+    <style>
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        #app {
+            width: 100%;
+            height: 100vh;
+            background-image: url("/static/homeStatic/img/404.png");
+            /* background-size: cover; */
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+
+        .error {
+            width: 30%;
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            margin: 0 auto;
+            bottom: 27%;
+        }
+
+        .error p {
+            text-align: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        /* 按钮 */
+        .button-list {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .error-button {
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            background-color: #6388b0;
+            color: white;
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .error-button:hover {
+            box-shadow: 0px 0px 5px rgb(177, 175, 175);
+        }
+
+        /* 头部 */
+        .header {
+            width: 100%;
+            height: 80px;
+            /* background-color: rgba(45, 116, 158, 0.7); */
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="error">
+        <p>对不起，您要找的页面去外星了~~</p>
+        <div class="button-list">
+            <a class="error-button" href="/">点击返回首页</a>
+        </div>
+    </div>
+</div>
+
+<script>
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+<style type="text/css">
+    #con {
+        background-color: white;
+        margin-top: 0px !important;
+    }
+
+</style>
+</head>
+<body>
+<div id="app">
+    <!-- 头部 -->
+    <div id="header"></div>
+    <!-- 内容 -->
+    <div class="layui-container">
+        <!-- 侧栏 -->
+        <div id="aside"></div>
+        <!-- 内容 -->
+        <div id="con">
+            <!-- 标题 -->
+            <h3>我的收藏</h3>
+            <!-- 搜索框 -->
+            <div class="search">
+                <p>关键词/编号</p>
+                <input name="search" placeholder="编号" id="serialNumber" value="{if $serialNumber}{$serialNumber}{/if}"/>
+                <button type="button" class="layui-btn" onclick="search()">搜索</button>
+            </div>
+            <!-- 列表 -->
+            <div class="con-inside" style="padding: 0px 30px;">
+                <table class="layui-table ">
+                    <thead>
+                    <tr>
+                        <th>账号信息</th>
+                        <th>角色名</th>
+                        <th>账号价格</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {if $goods->total() != 0}
+                    {foreach name="goods" key="k" item="v"}
+                    <tr>
+                        <td>
+                            <p>编号：<em>{$v.id}</em></p>
+                            <p><strong>{$v.account_title}</strong></p>
+                            <p>服务器：<em>{$v.gameName}-{$v.gameServers}-{$v.gameArea}</em></p>
+                        </td>
+                        <td>
+                            <p>{$v.game_nickname}</p>
+                        </td>
+                        <td>
+                            <p><strong>{$v.price}</strong>元/小时</p>
+                        </td>
+                        <td>
+                            <p>{$v.lease_type == 1 ? "出租中" : "待租"}</p>
+                        </td>
+                        <td>
+                            <button type="button" class="layui-btn layui-btn-sm layui-btn-danger"
+                                    onclick="deleteCollection(this,'{$v.id}')">删除收藏
+                            </button>
+                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal"
+                                    onclick="immediatelyRent('{$v.id}')">立即租用
+                            </button>
+                        </td>
+                    </tr>
+                    {/foreach}
+                    {else}
+                    <tr>
+                        <td colspan="5" style="text-align: center">暂无数据</td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+                <!-- 分页 -->
+                {$goods->render()}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    layui.use(['laytpl', 'layer'], function () {
+        var laytpl = layui.laytpl
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+            userIsActive()
+        })
+    })
+
+    function immediatelyRent(id) {
+        StandardPost("{:url('home/renthall/lookaccount')}", {"id": id})
+    }
+
+    function deleteCollection(theElement, id) {
+        layer.confirm('确定删除吗？删除后不可恢复\n', {
+            title: '温馨提示',
+            btn1: function (index) {
+                layer.close(index)
+                $.ajax({
+                    url: "{:url('home/renthall/collectAccount')}",
+                    data: {
+                        "goodsId": id
+                    },
+                    type: "POST",
+                    dataType: "JSON",
+                    success: function (res) {
+                        let code = res.code
+                        if (code == 2) {
+                            $(theElement).parent().parent().remove()
+                            layer.alert('删除收藏成功\n', {
+                                'title': '温馨提示',
+                                'icon': 1,
+                                btn1: function (index) {
+                                    layer.close(index)
+                                    setTimeout(() => {
+                                        location.reload()
+                                    }, 1000)
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    }
+
+    function search() {
+        let serialNumber = $('#serialNumber').val()
+        StandardPost("{:url('home/mycenter/like')}", {"serialNumber": serialNumber})
+    }
+</script>
+{include file="pubview/footer" /}

@@ -1,0 +1,118 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+<style type="text/css">
+    #con {
+        background-color: white;
+        margin-top: 0px !important;
+    }
+
+    .top {
+        width: 100%;
+        height: 70px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e7ecf1;
+        padding-bottom: 8px;
+    }
+
+    .top > div {
+        display: flex;
+        font-size: 18px;
+        align-items: center;
+    }
+
+    .top > div > p {
+        color: #6f6f6f;
+        margin-right: 15px;
+    }
+
+    .top > div > p > strong {
+        color: var(--text-color);
+        font-size: 40px;
+        margin-right: 5px;
+    }
+
+    .top div:last-of-type a {
+        width: 120px;
+        margin-right: 20px;
+    }
+
+    /* 下部分 */
+    .bottom {
+        width: 100%;
+        height: 30px;
+        margin-top: 20px;
+        display: flex;
+    }
+
+    .bottom > div {
+        display: flex;
+        margin-right: 50px;
+        align-items: center;
+        color: #383838;
+    }
+
+    .bottom > div strong {
+        font-size: 25px;
+        margin-right: 5px;
+        color: #000000;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <!-- 头部 -->
+    <div id="header"></div>
+    <!-- 内容 -->
+    <div class="layui-container">
+        <!-- 侧栏 -->
+        <div id="aside"></div>
+        <!-- 内容 -->
+        <div id="con">
+            <h3>账务明细</h3>
+            <div class="con-inside" style="padding: 0px 30px;">
+                <div class="top">
+                    <div>
+                        <p>账户余额：</p>
+                        <p><strong>0</strong>元</p>
+                    </div>
+                    <div>
+                        <a href="{:url('home/mycenter/recharge')}"
+                           class="layui-btn layui-btn-radius layui-btn-warm">充值</a>
+                        <a href="{:url('home/mycenter/withdrawal')}"
+                           class="layui-btn layui-btn-radius layui-btn-danger">提现</a>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div>
+                        <p>可用金额：</p>
+                        <span><strong>0</strong>元</span>
+                    </div>
+                    <div>
+                        <p>不可用金额：</p>
+                        <span><strong>0</strong>元</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 尾部 -->
+    <div id="footer"></div>
+</div>
+
+<script type="text/javascript">
+    layui.use(['laytpl', 'element', 'layer'], function () {
+        var laytpl = layui.laytpl;
+        var element = layui.element;
+        var layer = layui.layer
+
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+            userIsActive()
+        })
+    })
+</script>
+</body>
+</html>

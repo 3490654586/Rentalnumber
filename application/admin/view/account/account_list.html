@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>账号列表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <script src="__STATIC__/common/common.js"></script>
+  <script>
+    var islogin = this.IsLogin(); // 未登录用户无法进入后台
+    if (islogin == 1) {
+      location.href = "{:url('login/index')}"
+    } else {
+
+    }
+  </script>
+</head>
+
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+        <div class="layui-form-item">
+          <div class="layui-inline">
+            <label class="layui-form-label">游戏账号</label>
+            <div class="layui-input-block">
+              <input type="text" name="account" placeholder="请输入游戏账号" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <label class="layui-form-label">账号标题</label>
+            <div class="layui-input-block">
+              <input type="text" name="account_title" placeholder="请输入账号标题" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <label class="layui-form-label">角色昵称</label>
+            <div class="layui-input-block">
+              <input type="text" name="game_nickname" placeholder="请输入角色游戏昵称" autocomplete="off" class="layui-input">
+            </div>
+          </div>
+
+          <div class="layui-inline">
+            <label class="layui-form-label">出租状态</label>
+            <div class="layui-input-block">
+              <select name="lease_type" lay-search id="lease_type" lay-filter="lease_type">
+                <option value="">选择出租状态</option>
+                <option value="1">出租中</option>
+                <option value="2">未出租</option>
+              </select>
+            </div>
+          </div>
+          <div class="layui-inline">
+            <button class="layui-btn layuiadmin-btn-admin" lay-submit lay-filter="LAY-user-back-search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="layui-card-body">
+        <div style="padding-bottom: 10px;">
+          <!-- <button class="layui-btn layuiadmin-btn-admin layui-btn-danger" data-type="batchdel">批量删除</button> -->
+          <!-- <button class="layui-btn layuiadmin-btn-admin" data-type="add">添加游戏</button> -->
+        </div>
+
+        <table id="AccountList" lay-filter="AccountList"></table>
+        <script type="text/html" id="AccountListBar">
+          <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="look" style="background-color: #333333;">查看</button>
+            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="update" style="background-color: #770000">编辑</button>
+            <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delete" style="background-color: #993300">删除</button>
+          </div>
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+
+  <script>
+    layui.config({
+      base: '__STATIC__/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['index', 'useradmin', 'table', 'laydate', 'form'], function () {
+      var $ = layui.$
+        , form = layui.form
+        , table = layui.table;
+      var laydate = layui.laydate;
+
+      //第一个实例
+      table.render({
+        elem: '#AccountList'
+        , height: 'auto'
+        , url: url + 'index/index/FindAccountList' //数据接口
+        , page: true //开启分页
+        , limit: 10
+        , parseData: function (res) { //res 即为原始返回的数据
+          return {
+            "code": res.code, //解析接口状态
+            "msg": res.msg, //解析提示文本
+            "count": res.count, //解析数据长度
+            "data": res.list //解析数据列表
+          };
+        }
+        , cols: [[ //表头
+          { title: '操作', width: 205, toolbar: '#AccountListBar' }
+          , { field: 'id', title: 'ID', width: 50,templet: function(d){
+
+            return '<font color="#005500">'+d.id+'</font>'
+
+          }}
+          , {
+            field: 'is_grounding', title: '是否上架', width: 100, templet: function (d) {
+              if(d.is_grounding == '下架'){
+                return '<button type="button" style="background-color:#DC143C !important" class="layui-btn layui-btn-sm layui-btn-normal" onclick="Grounding(this)" data-id="'+d.id+'" data-status="'+d.is_grounding+'">' + d.is_grounding + '</button>'
+              }else{
+                return '<button type="button" style="background-color:#FF0000 !important" class="layui-btn layui-btn-sm" onclick="Grounding(this)" data-id="'+d.id+'" data-status="'+d.is_grounding+'">' + d.is_grounding + '</button>'
+              }
+            }
+          }
+          , {
+            field: 'is_recommend', title: '是否推荐', width: 100, templet: function (d) {
+              if(d.is_recommend == '不推荐'){
+                return '<button type="button" style="background-color:#C71585 !important" class="layui-btn layui-btn-sm layui-btn-normal" onclick="Recoms(this)" data-id="'+d.id+'" data-status="'+d.is_recommend+'">' + d.is_recommend + '</button>'
+              }else{
+                return '<button type="button" style="background-color:#D87093 !important" class="layui-btn layui-btn-sm" onclick="Recoms(this)" data-id="'+d.id+'" data-status="'+d.is_recommend+'">' + d.is_recommend + '</button>'
+              }
+            }
+          }
+          , {
+            field: 'audit', title: '审核状态', width: 100, templet: function (d) {
+              if(d.audit == '待审核'){
+
+                return '<button type="button" style="background-color:#4B0082 !important" class="layui-btn layui-btn-sm layui-btn-normal">' + d.audit + '</button>'
+
+              }else if(d.audit == '审核成功'){
+
+                return '<button type="button" style="background-color:#9932CC !important" class="layui-btn layui-btn-sm layui-btn-normal">' + d.audit + '</button>'
+
+              }else{
+
+                return '<button type="button" style="background-color:#EE82EE !important" class="layui-btn layui-btn-sm layui-btn-normal">' + d.audit + '</button>'
+
+              }
+              
+            }
+          }
+          , {
+            field: 'lease_type', title: '出租状态', width: 100, templet: function (d) {
+              if(d.audit == '未出租'){
+
+                return '<button type="button" class="layui-btn layui-btn-sm" style="background-color:#8B4513">' + d.lease_type + '</button>'
+
+              }else{
+
+                return '<button type="button" class="layui-btn layui-btn-sm" style="background-color:#CD853F">' + d.lease_type + '</button>'
+
+              }
+              
+            }
+          }
+          , {
+            field: 'account', title: '账号', width: 120, templet: function (d) {
+              return '<font color="red">' + d.account + '</font>'
+            }
+          }
+          , {
+            field: 'pwd', title: '密码', width: 100, templet: function (d) {
+              return '<font color="blue">' + d.pwd + '</font>'
+            }
+          }
+          , {
+            field: 'dis_service', title: '游戏/服务器/大区', width: 300, templet: function (d) {
+              return '<font color="#CC0000">' + d.GameName + '</font>' + '/' + '<font color="#3300CC">' + d.ServerName + '</font>' + '/' + '<font color="#888800">' + d.areaName + '</font>'
+            }
+          }
+          , {
+            field: 'price', title: '价格', width: 100, templet: function (d) {
+              return '<font color="red">' + d.price + '</font>'
+            }
+          }
+          , {
+            field: 'lease_num', title: '出租次数', width: 100, templet: function (d) {
+              return '<font color="red">' + d.lease_num + '</font>'
+            }
+          }
+          , {
+            field: 'deposit', title: '押金', width: 100, templet: function (d) {
+              return '<font color="red">' + d.deposit + '</font>'
+            }
+          }
+          , {
+            field: 'nickname', title: '发布人', width: 150, templet: function (d) {
+              return '<font color="#7B68EE">' + d.nickname + '</font>'
+            }
+          }
+          , {
+            field: 'account_title', title: '账号标题', width: 250, templet: function (d) {
+              return '<font color="green">' + d.account_title + '</font>'
+            }
+          }
+          , { field: 'game_nickname', title: '角色昵称', width: 250 , templet: function (d) {
+              return '<font color="#BDB76B">' + d.game_nickname + '</font>'
+            }}
+        ]]
+      });
+
+      window.Recoms = function (that) {
+ 
+        var id = $(that).attr('data-id')
+        var status = $(that).attr('data-status')
+        if(status == '不推荐'){
+          status = 2
+        }else{
+          status = 1
+        }
+        layer.confirm('确认推荐/取消推荐ID为' + id + '的账号?', { icon: 3, title: '提示' }, function (index) {
+          var data = {
+            'id': id,
+            'status' : status
+          };
+          asynchronousAjax('index/index/recommendAccount', 'post', data, 'json')
+            .done(function (data) {
+              var code = data.code,
+                msg = data.msg;
+              if (code == -1) {
+                layer.msg(msg, { icon: 5 });
+              } else {
+
+                layer.msg(msg, { icon: 6 })
+                table.reload('AccountList'); //数据刷新
+              }
+            })
+            .fail(function (err) {
+              layer.msg('异步错误', { icon: 5 });
+            })
+        })
+
+      }
+
+      window.Grounding = function(that){
+        var id = $(that).attr('data-id')
+        var status = $(that).attr('data-status')
+        if(status == '下架'){
+          status = 2
+        }else{
+          status = 1
+        }
+        layer.confirm('确认上架/下架ID为' + id + '的账号?', { icon: 3, title: '提示' }, function (index) {
+          var data = {
+            'id': id,
+            'status' : status
+          };
+          asynchronousAjax('index/index/GroundingAccount', 'post', data, 'json')
+            .done(function (data) {
+              var code = data.code,
+                msg = data.msg;
+              if (code == -1) {
+                layer.msg(msg, { icon: 5 });
+              } else {
+
+                layer.msg(msg, { icon: 6 })
+                table.reload('AccountList'); //数据刷新
+              }
+            })
+            .fail(function (err) {
+              layer.msg('异步错误', { icon: 5 });
+            })
+        })
+      }
+      // 监听事件
+      table.on('tool(AccountList)', function (obj) {
+
+        switch (obj.event) {
+          case 'delete':
+            layer.confirm('确认删除ID为' + obj.data.id + '的游戏?', { icon: 3, title: '提示' }, function (index) {
+              var data = {
+                'id': obj.data.id
+              };
+              let dologin = asynchronousAjax('index/index/delGameAccount', 'post', data, 'json')
+                .done(function (data) {
+                  var code = data.code,
+                    msg = data.msg;
+                  if (code == -1) {
+                    layer.msg(msg, { icon: 5 });
+                  } else {
+
+                    layer.msg(msg, { icon: 6 })
+                    table.reload('AccountList'); //数据刷新
+                  }
+                })
+                .fail(function (err) {
+                  layer.msg('异步错误', { icon: 5 });
+                })
+              layer.close(index);
+            });
+
+            break;
+          case 'update':
+
+            layer.open({
+              type: 2
+              , title: '编辑账号'
+              , content: "{:url('admin/account/index')}"
+              , area: ['100%', '100%']
+              , end: function () {
+                $(".layui-laypage-btn").click(); // 刷新表格数据
+              }
+              , success: function (layero, index) {
+                if (obj.data.game_id != '') { // 游戏
+                  layero.find('iframe').contents().find('#game_ids').val(obj.data.game_id)
+                }
+
+                if (obj.data.servers != '') { // 服务器
+                  layero.find('iframe').contents().find('#serverss').val(obj.data.servers)
+                }
+
+                if (obj.data.area != '') { // 大区
+                  layero.find('iframe').contents().find('#areas').val(obj.data.area)
+                }
+
+                if (obj.data.account != '') { // 游戏账号
+                  layero.find('iframe').contents().find('#account').val(obj.data.account)
+                }
+
+                if (obj.data.pwd != '') { // 游戏密码
+                  layero.find('iframe').contents().find('#pwd').val(obj.data.pwd)
+                }
+
+                if (obj.data.game_nickname != '') { // 角色名称
+                  layero.find('iframe').contents().find('#game_nickname').val(obj.data.game_nickname)
+                }
+
+                if (obj.data.level != '') { // 账号等级
+                  layero.find('iframe').contents().find('#level').val(obj.data.level)
+                }
+
+                if (obj.data.vip_level != '') { // VIP等级
+                  layero.find('iframe').contents().find('#vip_level').val(obj.data.vip_level)
+                }
+
+                if (obj.data.account_title != '') { // 账号标题
+                  layero.find('iframe').contents().find('#account_title').val(obj.data.account_title)
+                }
+
+                if (obj.data.account_intro != '') { // 账号描述
+                  layero.find('iframe').contents().find('#account_intro').val(obj.data.account_intro)
+                }
+
+                if (obj.data.screenshotsone != '') { // 账号封面1
+                  layero.find('iframe').contents().find('#uploadOne').html('<img src="' + obj.data.screenshotsone + '" style="width:80px;height:80px">')
+                  layero.find('iframe').contents().find('#screenshotsone').val('/' + obj.data.screenshotsone.split('/').slice(3).join('/'))
+                }
+
+                if (obj.data.screenshotstwo != '') { // 账号封面2
+                  layero.find('iframe').contents().find('#uploadTwo').html('<img src="' + obj.data.screenshotstwo + '" style="width:80px;height:80px">')
+                  layero.find('iframe').contents().find('#screenshotstwo').val('/' + obj.data.screenshotsone.split('/').slice(3).join('/'))
+                }
+
+                if (obj.data.screenshotsthree != '') { // 账号封面3
+                  layero.find('iframe').contents().find('#uploadThree').html('<img src="' + obj.data.screenshotsthree + '" style="width:80px;height:80px">')
+                  layero.find('iframe').contents().find('#screenshotsthree').val('/' + obj.data.screenshotsone.split('/').slice(3).join('/'))
+                }
+
+                if (obj.data.screenshotsfour != '') { // 账号封面4
+                  layero.find('iframe').contents().find('#uploadFour').html('<img src="' + obj.data.screenshotsfour + '" style="width:80px;height:80px">')
+                  layero.find('iframe').contents().find('#screenshotsfour').val('/' + obj.data.screenshotsone.split('/').slice(3).join('/'))
+                }
+
+                if (obj.data.screenshotsfive != '') { // 账号封面5
+                  layero.find('iframe').contents().find('#uploadFive').html('<img src="' + obj.data.screenshotsfive + '" style="width:80px;height:80px">')
+                  layero.find('iframe').contents().find('#screenshotsfive').val('/' + obj.data.screenshotsone.split('/').slice(3).join('/'))
+                }
+
+                if (obj.data.experience != '') { // 0元体验
+                  layero.find('iframe').contents().find('input[name="experience"]').each(function () {
+                    if ($(this).attr('title') == obj.data.experience) {
+                      $(this).prop('checked', true)
+                    }
+                  })
+                }
+
+                if (obj.data.rank != '') { // 排位
+                  layero.find('iframe').contents().find('input[name="rank"]').each(function () {
+                    if ($(this).attr('title') == obj.data.rank) {
+                      $(this).prop('checked', true)
+                    }
+                  })
+                }
+
+                if (obj.data.reg_type != '') { // 登录方式
+                  layero.find('iframe').contents().find('input[name="reg_type"]').each(function () {
+                    if ($(this).attr('title') == obj.data.reg_type) {
+                      $(this).prop('checked', true)
+                    }
+                  })
+                }
+
+                if (obj.data.deposit != '') { // 押金
+                  layero.find('iframe').contents().find('#deposit').val(obj.data.deposit)
+                }
+
+                if (obj.data.price != '') { // 出租单价
+                  layero.find('iframe').contents().find('#price').val(obj.data.price)
+                }
+
+                if (obj.data.day_price != '') { // 日租价
+                  layero.find('iframe').contents().find('#day_price').val(obj.data.day_price)
+                }
+
+                if (obj.data.pack_night_price != '') { // 包夜价
+                  layero.find('iframe').contents().find('#pack_night_price').val(obj.data.pack_night_price)
+                }
+
+                if (obj.data.shortest_time != '') { // 最短租时
+                  layero.find('iframe').contents().find('#shortest_time').val(obj.data.shortest_time)
+                }
+
+                if (obj.data.labelone != '') { // 标签1
+                  layero.find('iframe').contents().find('#labelone').val(obj.data.labelone)
+                }
+
+                if (obj.data.labeltwo != '') { // 标签2
+                  layero.find('iframe').contents().find('#labeltwo').val(obj.data.labeltwo)
+                }
+
+                if (obj.data.labelthree != '') { // 标签3
+                  layero.find('iframe').contents().find('#labelthree').val(obj.data.labelthree)
+                }
+
+                if (obj.data.labelfour != '') { // 标签4
+                  layero.find('iframe').contents().find('#labelfour').val(obj.data.labelfour)
+                }
+
+                if (obj.data.id != '') { // ID
+                  layero.find('iframe').contents().find('#account_id').val(obj.data.id)
+                }
+
+              }
+              , yes: function (index, layero) {
+
+                var iframeWindow = window['layui-layer-iframe' + index]
+                  , submitID = 'LAY-user-back-submit'
+                  , submit = layero.find('iframe').contents().find('#' + submitID);
+
+
+                //监听提交
+                iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                  var field = data.field; //获取提交的字段
+
+
+                  if (field.is_recom == 'on') { // 如果开启状态为1
+                    field.is_recom = 1
+                  } else {
+                    field.is_recom = 2
+                  }
+
+                  if(field.hall_is_recom == 'on'){
+                    field.hall_is_recom = 1
+                  }else{
+                    field.hall_is_recom = 2
+                  }
+
+                  if(field.is_hot == 'on'){
+                    field.is_hot = 1
+                  }else{
+                    field.is_hot = 2
+                  }
+                  var data = {
+                    'id': obj.data.id,
+                    'game_name': field.game_name,
+                    'is_recom': field.is_recom,
+                    'hall_is_recom': field.hall_is_recom,
+                    'thumb': field.thumb,
+                    'descs': field.descs,
+                    'is_hot': field.is_hot,
+                    'cid': field.cid
+                  };
+                  let dologin = asynchronousAjax('index/index/gameedit', 'post', data, 'json')
+                    .done(function (data) {
+                      var code = data.code,
+                        msg = data.msg;
+                      if (code == -1) {
+                        layer.msg(msg, { icon: 5 });
+                      } else {
+
+                        layer.msg(msg, { icon: 6 })
+                      }
+                    })
+                    .fail(function (err) {
+                      layer.msg('异步错误', { icon: 5 });
+                    })
+                  layer.close(index); //关闭弹层
+                });
+
+                submit.trigger('click');
+              }
+            });
+            break;
+          case 'look':
+            layer.open({
+              type: 2
+              , title: '查看账号'
+              , content: "{:url('admin/account/lookAccount')}"
+              , area: ['100%', '100%']
+              , end: function () {
+                $(".layui-laypage-btn").click(); // 刷新表格数据
+              }
+              , success: function (layero, index) {
+                if (obj.data.audit != '') { // 审核状态
+                  layero.find('iframe').contents().find('#auditHide').text(obj.data.audit)
+                }else{
+                  layero.find('iframe').contents().find('#auditHide').text('加载失败')
+                }
+                if (obj.data.id != '') { // 账号ID
+                  layero.find('iframe').contents().find('#id').val(obj.data.id)
+                }else{
+                  layero.find('iframe').contents().find('#id').val('加载失败')
+                }
+
+
+                layero.find('iframe').contents().find('font>button').text('加载中...')
+                var loading = layer.load(2,{shade:0.3,time:1500})
+                
+                setTimeout(()=>{
+                    layer.close(loading)
+                    if (obj.data.add_time != '') { // 发布时间
+                      layero.find('iframe').contents().find('#add_time').text(obj.data.add_time)
+                    }
+                    if (obj.data.audit != '') { // 审核状态
+                      layero.find('iframe').contents().find('#audit').text(obj.data.audit)
+                    }
+
+                    layero.find('iframe').contents().find('#lease_num').text(obj.data.lease_num) // 出租次数
+
+                    if (obj.data.lease_type != '') { // 出租状态
+                      layero.find('iframe').contents().find('#lease_type').text(obj.data.lease_type)
+                    }
+
+                    if (obj.data.is_grounding != '') { // 是否上架
+                      layero.find('iframe').contents().find('#is_grounding').text(obj.data.is_grounding)
+                    }
+
+                    if (obj.data.is_recommend != '') { // 是否推荐
+                      layero.find('iframe').contents().find('#is_recommend').text(obj.data.is_recommend)
+                    }
+
+                    if (obj.data.nickname != '') { // 发布人
+                      layero.find('iframe').contents().find('#nickname').text(obj.data.nickname)
+                    }
+
+                    if (obj.data.GameName != '') { // 游戏
+                      layero.find('iframe').contents().find('#GameName').text(obj.data.GameName)
+                    }
+
+                    if (obj.data.ServerName != '') { // 服务器
+                      layero.find('iframe').contents().find('#servers').text(obj.data.ServerName)
+                    }
+
+                    if (obj.data.areaName != '') { // 大区
+                      layero.find('iframe').contents().find('#area').text(obj.data.areaName)
+                    }
+
+                    if (obj.data.account != '') { // 游戏账号
+                      layero.find('iframe').contents().find('#account').text(obj.data.account)
+                    }
+
+                    if (obj.data.pwd != '') { // 游戏密码
+                      layero.find('iframe').contents().find('#pwd').text(obj.data.pwd)
+                    }
+
+                    if (obj.data.game_nickname != '') { // 角色名称
+                      layero.find('iframe').contents().find('#game_nickname').text(obj.data.game_nickname)
+                    }
+
+                    if (obj.data.level != '') { // 账号等级
+                      layero.find('iframe').contents().find('#level').text(obj.data.level)
+                    }
+
+                    if (obj.data.vip_level != '') { // VIP等级
+                      layero.find('iframe').contents().find('#vip_level').text(obj.data.vip_level)
+                    }
+
+                    if (obj.data.account_title != '') { // 账号标题
+                      layero.find('iframe').contents().find('#account_title').text(obj.data.account_title)
+                    }
+
+                    if (obj.data.account_intro != '') { // 账号描述
+                      layero.find('iframe').contents().find('#account_intro').text(obj.data.account_intro)
+                    }
+
+                    if (obj.data.screenshotsone != '') { // 账号封面1
+                      layero.find('iframe').contents().find('#uploadOne').html('<img src="' + obj.data.screenshotsone + '" style="width:80px;height:80px;">')
+                    }
+
+                    if (obj.data.screenshotstwo != '') { // 账号封面2
+                      layero.find('iframe').contents().find('#uploadTwo').html('<img src="' + obj.data.screenshotstwo + '" style="width:80px;height:80px;">')
+                    }
+
+                    if (obj.data.screenshotsthree != '') { // 账号封面3
+                      layero.find('iframe').contents().find('#uploadThree').html('<img src="' + obj.data.screenshotsthree + '" style="width:80px;height:80px;">')
+                    }
+
+                    if (obj.data.screenshotsfour != '') { // 账号封面4
+                      layero.find('iframe').contents().find('#uploadFour').html('<img src="' + obj.data.screenshotsfour + '" style="width:80px;height:80px;">')
+                    }
+
+                    if (obj.data.screenshotsfive != '') { // 账号封面5
+                      layero.find('iframe').contents().find('#uploadFive').html('<img src="' + obj.data.screenshotsfive + '" style="width:80px;height:80px;">')
+                    }
+
+                    if (obj.data.labelone != '') { // 标签1
+                      layero.find('iframe').contents().find('#labelone').text(obj.data.labelone)
+                    } else {
+                      layero.find('iframe').contents().find('#labelone').css('display', 'none')
+                    }
+
+                    if (obj.data.labeltwo != '') { // 标签2
+                      layero.find('iframe').contents().find('#labeltwo').text(obj.data.labeltwo)
+                    } else {
+                      layero.find('iframe').contents().find('#labeltwo').css('display', 'none')
+                    }
+
+                    if (obj.data.labelthree != '') { // 标签3
+                      layero.find('iframe').contents().find('#labelthree').text(obj.data.labelthree)
+                    } else {
+                      layero.find('iframe').contents().find('#labelthree').css('display', 'none')
+                    }
+
+                    if (obj.data.labelfour != '') { // 标签4
+                      layero.find('iframe').contents().find('#labelfour').text(obj.data.labelfour)
+                    } else {
+                      layero.find('iframe').contents().find('#labelfour').css('display', 'none')
+                    }
+
+                    if (obj.data.experience != '') { // 0元体验
+                      layero.find('iframe').contents().find('#experience').text(obj.data.experience)
+                    }
+
+                    if (obj.data.reg_type != '') { // 登录方式
+                      layero.find('iframe').contents().find('#reg_type').text(obj.data.reg_type)
+                    }
+
+                    if (obj.data.price != '') { // 单价
+                      layero.find('iframe').contents().find('#price').text(obj.data.price + '元/小时')
+                    }
+
+                    if (obj.data.pack_night_price != '') { // 包夜价
+                      layero.find('iframe').contents().find('#pack_night_price').text(obj.data.pack_night_price + '元')
+                    }
+
+                    if (obj.data.rank != '') { // 排位
+                      layero.find('iframe').contents().find('#rank').text(obj.data.rank)
+                    }
+
+                    if (obj.data.deposit != '') { // 押金
+                      layero.find('iframe').contents().find('#deposit').text(obj.data.deposit + '元')
+                    }
+
+                    if (obj.data.day_price != '') { // 日租价
+                      layero.find('iframe').contents().find('#day_price').text(obj.data.day_price + '元')
+                    }
+
+                    if (obj.data.shortest_time != '') { // 最短租时
+                      layero.find('iframe').contents().find('#shortest_time').text(obj.data.shortest_time + '小时')
+                    }
+
+                    if(obj.data.uid != '0'){
+                      if(obj.data.audit == '待审核'){
+                        layero.find('iframe').contents().find('#layuiadmin-form-admins').css('display','block');
+                      }
+                    }                  
+                },1500)
+
+
+              }
+              , yes: function (index, layero) {
+
+                var iframeWindow = window['layui-layer-iframe' + index]
+                  , submitID = 'LAY-user-back-submit'
+                  , submit = layero.find('iframe').contents().find('#' + submitID);
+
+
+                //监听提交
+                iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                  var field = data.field; //获取提交的字段
+
+
+                  if (field.is_recom == 'on') { // 如果开启状态为1
+                    field.is_recom = 1
+                  } else {
+                    field.is_recom = 2
+                  }
+
+                  if(field.hall_is_recom == 'on'){
+                    field.hall_is_recom = 1
+                  }else{
+                    field.hall_is_recom = 2
+                  }
+
+                  if(field.is_hot == 'on'){
+                    field.is_hot = 1
+                  }else{
+                    field.is_hot = 2
+                  }
+                  var data = {
+                    'id': obj.data.id,
+                    'game_name': field.game_name,
+                    'is_recom': field.is_recom,
+                    'hall_is_recom': field.hall_is_recom,
+                    'thumb': field.thumb,
+                    'descs': field.descs,
+                    'is_hot': field.is_hot,
+                    'cid': field.cid
+                  };
+                  let dologin = asynchronousAjax('index/index/gameedit', 'post', data, 'json')
+                    .done(function (data) {
+                      var code = data.code,
+                        msg = data.msg;
+                      if (code == -1) {
+                        layer.msg(msg, { icon: 5 });
+                      } else {
+
+                        layer.msg(msg, { icon: 6 })
+                      }
+                    })
+                    .fail(function (err) {
+                      layer.msg('异步错误', { icon: 5 });
+                    })
+                  layer.close(index); //关闭弹层
+                });
+
+                submit.trigger('click');
+              }
+            });
+            break;
+        };
+      });
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#test1' //指定元素
+      });
+      //监听搜索
+      form.on('submit(LAY-user-back-search)', function (data) {
+        var field = data.field;
+        console.log(field)
+        //执行重载
+        table.reload('AccountList', {
+          where: field
+        });
+      });
+
+      //事件
+      var active = {
+        batchdel: function () {
+          var checkStatus = table.checkStatus('LAY-user-back-manage')
+            , checkData = checkStatus.data; //得到选中的数据
+
+          if (checkData.length === 0) {
+            return layer.msg('请选择数据');
+          }
+
+          layer.prompt({
+            formType: 1
+            , title: '敏感操作，请验证口令'
+          }, function (value, index) {
+            layer.close(index);
+
+            layer.confirm('确定删除吗？', function (index) {
+
+              //执行 Ajax 后重载
+              /*
+              admin.req({
+                url: 'xxx'
+                //,……
+              });
+              */
+              table.reload('LAY-user-back-manage');
+              layer.msg('已删除');
+            });
+          });
+        }
+        , add: function () {
+          layer.open({
+            type: 2
+            , title: '添加游戏'
+            , content: 'game_add.html'
+            , area: ['524px', '575px']
+            , btn: ['确定', '取消']
+            , end: function () {
+              $(".layui-laypage-btn").click(); // 刷新表格数据
+            }
+            , yes: function (index, layero) {
+
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'LAY-user-back-submit'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                var field = data.field; //获取提交的字段
+                console.log(field)
+                if (field.is_recom == 'on') { // 如果开启状态为1
+                  field.is_recom = 1
+                } else {
+                  field.is_recom = 2
+                }
+
+                if(field.hall_is_recom == 'on'){
+                  field.hall_is_recom = 1
+                }else{
+                  field.hall_is_recom = 2
+                }
+
+                if(field.is_hot == 'on'){
+                  field.is_hot = 1
+                }else{
+                  field.is_hot = 2
+                }
+
+                var data = {
+                  'game_name': field.game_name,
+                  'cid': field.cid,
+                  'thumb': field.thumb,
+                  'descs': field.descs,
+                  'is_recom': field.is_recom,
+                  'is_hot': field.is_hot,
+                  'hall_is_recom': field.hall_is_recom
+                };
+                let dologin = asynchronousAjax('index/index/addgame', 'post', data, 'json')
+                  .done(function (data) {
+                    var code = data.code,
+                      msg = data.msg;
+                    if (code == -1) {
+                      layer.msg(msg, { icon: 5 });
+                    } else {
+
+                      layer.msg(msg, { icon: 6 })
+                    }
+                  })
+                  .fail(function (err) {
+                    layer.msg('异步错误', { icon: 5 });
+                  })
+
+                layer.close(index); //关闭弹层
+              });
+
+              submit.trigger('click');
+            }
+          });
+        }
+      }
+      $('.layui-btn.layuiadmin-btn-admin').on('click', function () {
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+      });
+
+    });
+  </script>
+
+  <!-- jquery -->
+  <script>
+    //显示大图片
+    function show_img(t) {
+      var t = $(t).find("img");
+      //页面层
+      layer.open({
+        type: 1,
+        skin: 'layui-layer-rim', //加上边框
+        area: ['80%', '80%'], //宽高
+        shadeClose: true, //开启遮罩关闭
+        title: '查看图片',
+        end: function (index, layero) {
+          return false;
+        },
+        content: '<div style="text-align:center"><img src="' + $(t).attr('src') + '" /></div>'
+      });
+    }
+  </script>
+</body>
+
+</html>

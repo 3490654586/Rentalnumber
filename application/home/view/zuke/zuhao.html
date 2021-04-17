@@ -1,0 +1,223 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+<style type="text/css">
+    #con {
+        background-color: white;
+        margin-top: 0px !important;
+    }
+
+    .layui-table-cell {
+        height: auto;
+    }
+
+    .layui-table-fixed-r table {
+        height: 100%;
+    }
+
+    /* 弹窗 */
+    .art-box {
+        width: 100%;
+        height: 100%;
+        padding: 20px 0px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        padding-right: 20px;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <!-- 头部 -->
+    <div id="header"></div>
+    <!-- 内容 -->
+    <div class="layui-container">
+        <!-- 侧栏 -->
+        <div id="aside"></div>
+        <!-- 内容 -->
+        <div id="con">
+            <h3>我的租号订单</h3>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">全部订单</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <!-- 全部订单 -->
+                    <div class="layui-tab-item layui-show con-inside">
+                        <table id="demo" lay-filter="test"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.use(['form', 'upload', 'laytpl', 'element', 'laypage', 'table'], function () {
+        var form = layui.form;
+        var upload = layui.upload;
+        var laytpl = layui.laytpl
+        var element = layui.element
+        var table = layui.table;
+        var $ = layui.$;
+
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+        })
+
+        //渲染表格
+        table.render({
+            elem: "#demo",
+            height: "auto",
+            url: "{:url('index/home/MyAccountList')}", //数据接口
+
+            parseData: function (res) {
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.total, //解析数据长度
+                    "data": res.data.data //解析数据列表
+                };
+            },
+            page: true, //开启分页
+            cols: [[ //表头
+                {
+                    field: 'id', title: '订单信息', width: '30%', templet: function (d) {
+                        return '<p>订单号：<em>' + d.orderNum + '</em></p>' +
+                            '<p><strong>' + d.goodsInfo.account_title + '</strong></p>' +
+                            '<p>服务器：<em>' + d.goodsInfo.game_name +
+                            '-' + d.goodsInfo.server_name + '-' + d.goodsInfo.area_name
+                        '</em></p>'
+                    }
+                },
+                {
+                    field: 'shortest_time', title: '租用时长', width: "25.3%", templet: function (d) {
+                        return '<p>开始时间：' + d.startTime + '</p>' +
+                            '<p>结束时间：' + d.endTime + '</p>'
+                    }
+                },
+                {
+                    field: 'price', title: '价格', width: "17%", templet: function (d) {
+                        return "<p>押金：<strong>" + d.goodsInfo.deposit + "</strong>元</p>" +
+                            "<p>时租：<strong>" + d.goodsInfo.price + "</strong>元/小时</p>"
+                    }
+                },
+                {
+                    field: 'payType', title: '状态', width: "13%", templet: function (d) {
+                        if (d.payType == 1) {
+                            return '未支付'
+                        }
+                        if (d.payType == 2) {
+                            return '已支付'
+                        }
+                        if (d.payType == 3) {
+                            return '已完成'
+                        }
+                        if (d.payType == 4) {
+                            return '已撤单'
+                        }
+                        if (d.payType == 5) {
+                            return '投诉中'
+                        }
+                    }
+                },
+                {title: '操作', width: "15%", toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+            ]]
+        })
+
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            if (layEvent === 'delete') { //删除
+                layer.confirm('确定删除吗？', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    let id = data.id
+                    fetchPost({
+                        url: "{:url('home/mycenter/deleteOrder')}",
+                        data: {id: id}
+                    }).then(res => {
+                        layer.msg(res.msg)
+                        location.reload();
+                    })
+                })
+            } else if (layEvent === 'del') { //投诉
+                let html = complaints.innerHTML
+                layer.open({
+                    type: 1,
+                    title: '投诉类型',
+                    skin: 'demo-class',
+                    area: ['500px', '320px'],
+                    content: html
+                })
+                form.render('select');
+                form.on('submit(complaints)', function (data2) {
+                    data2.field.id = data.id
+                    data2.field.payType = data.payType
+                    fetchPost({
+                        url: "{:url('home/mycenter/cancelTheOrder')}",
+                        data: data2.field
+                    }).then(res => {
+                        console.log(res)
+
+                        if (res.status == 0) {
+                            layer.msg(res.msg)
+                            location.reload();
+                        }
+                    })
+                    return false
+                })
+            } else if (layEvent === 'renew') { //编辑
+                StandardPost("{:url('home/order/index')}", {id: data.games.id})
+            }
+        });
+
+    })
+</script>
+
+
+<!-- 表格模板 -->
+<script type="text/html" id="barDemo">
+    <div class="operation">
+        {{# if(d.payType == 2){ }}
+        <button type="button" class="layui-btn layui-btn-warm layui-btn-sm" lay-event="renew">续费</button>
+        <button type="button" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="del">投诉</button>
+        {{# }else{ }}
+        <!--已完成-->
+        <button type="button" class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delete">删除</button>
+        {{# } }}
+    </div>
+</script>
+
+
+<script type="text/html" id="complaints">
+    <div class="art-box">
+        <form class="layui-form" action="#" lay-filter="complaints">
+            <div class="layui-form-item">
+                <label class="layui-form-label">投诉选择</label>
+                <div class="layui-input-inline">
+                    <select name="type" lay-verify="required">
+                        <option value=""></option>
+                        <option value="1">账号密码不对</option>
+                        <option value="2">租错号了</option>
+                        <option value="3">没有时间玩</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label class="layui-form-label">投诉理由</label>
+                <div class="layui-input-block">
+                    <textarea name="info" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="complaints">立即投诉</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+{include file="pubview/footer" /}

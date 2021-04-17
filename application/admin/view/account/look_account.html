@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>添加分类</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+    <script src="__STATIC__/common/common.js"></script>
+    <script>
+        var islogin = this.IsLogin(); // 未登录用户无法进入后台
+        if (islogin == 1) {
+            location.href = "{:url('login/index')}"
+        } else {
+
+        }
+    </script>
+
+    <style>
+        body{
+            background-color: #555;
+        }
+        font {  
+            line-height: 38px;
+        }
+
+        button {
+            color: chocolate !important;
+        }
+
+        .layui-card {
+            box-shadow: 10px 10px 5px #888888;
+        }
+
+        .uploadImg {
+            margin-right: 5px;
+            width: 80px;
+            height: 80px;
+            border: 1px dashed rgb(197, 195, 195);
+            cursor: pointer;
+        }
+
+        .layui-form-item {
+            display: flex;
+        }
+
+        .tipImages img{
+            width: 200px;
+            position: absolute;
+            top: 0;
+            right: 31px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admins" style="margin: 20px;position: fixed;z-index: 999999;bottom: 0;display: none;">
+        <div class="layui-col-xs12">
+            <button type="button" class="layui-btn layui-btn-radius"
+                style="color:#fff !important;cursor: pointer;" onclick="adopt()">审核通过</button>
+            <button type="button" class="layui-btn layui-btn-danger layui-btn-radius"
+                style="color:#fff !important;cursor: pointer;" onclick="Failed()">审核不通过</button>
+            <button type="button" class="layui-btn layui-btn-primary layui-btn-radius"
+                style="color:#555 !important;cursor: pointer;" onclick="besides()">再说吧</button>
+        </div>
+    </div>
+
+    <!-- 审核状态加载隐藏域 -->
+    <input type="hidden" id="auditHide" value="加载中...">
+    <input type="hidden" id="id" value="加载中...">
+    <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin"
+        style="padding: 20px 30px 0 20px;">
+        <div class="layui-card" style="padding: 20px;">
+            <div class="layui-card-header">基本状态信息</div>
+            <div class="layui-card-body">
+                <div class="layui-row">
+                    <div class="layui-col-xs3">
+                        <div class="grid-demo grid-demo-bg1">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">发布日期</label>
+                                <div class="layui-input-inline">
+                                    <font><button type="button" class="layui-btn layui-btn-primary"
+                                            id="add_time"></button></font>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-xs3">
+                        <div class="grid-demo grid-demo-bg1">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">审核状态</label>
+                                <div class="layui-input-inline">
+                                    <font><button type="button" class="layui-btn layui-btn-primary" id="audit"></button>
+                                    </font>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-xs3">
+                        <div class="grid-demo grid-demo-bg1">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">出租次数</label>
+                                <div class="layui-input-inline">
+                                    <font><button type="button" class="layui-btn layui-btn-primary"
+                                            id="lease_num"></button></font>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-xs3">
+                        <div class="grid-demo grid-demo-bg1">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">出租状态</label>
+                                <div class="layui-input-inline">
+                                    <font><button type="button" class="layui-btn layui-btn-primary"
+                                            id="lease_type"></button></font>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-xs3">
+                        <div class="grid-demo grid-demo-bg1">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">是否上架</label>
+                                <div class="layui-input-inline">
+                                    <font><button type="button" class="layui-btn layui-btn-primary"
+                                            id="is_grounding"></button></font>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-xs3">
+                        <div class="grid-demo grid-demo-bg1">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">是否推荐</label>
+                                <div class="layui-input-inline">
+                                    <font><button type="button" class="layui-btn layui-btn-primary"
+                                            id="is_recommend"></button></font>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="layui-col-xs3">
+                        <div class="grid-demo grid-demo-bg1">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">发布人</label>
+                                <div class="layui-input-inline">
+                                    <font><button type="button" class="layui-btn layui-btn-primary"
+                                            id="nickname"></button></font>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6" style="padding: 20px;">
+            <div class="layui-card">
+                <div class="layui-card-header">游戏区服</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">游戏</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="GameName"> </button>
+                            </font>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">服务器</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="servers"> </button>
+                            </font>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">大区</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="area"> </button>
+                            </font>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6" style="padding: 20px;">
+            <div class="layui-card">
+                <div class="layui-card-header">账号信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">游戏账号</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="account"> </button>
+                            </font>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">游戏密码</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="pwd"> </button>
+                            </font>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">角色名称</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="game_nickname">
+                                </button></font>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号等级</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="level"> </button>
+                            </font>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">VIP等级</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="vip_level"> </button>
+                            </font>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6" style="padding: 20px;">
+            <div class="layui-card">
+                <div class="layui-card-header">账号详情</div>
+                <div class="layui-card-body">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号标题</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="account_title">
+                                </button></font>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号描述</label>
+                        <div class="layui-input-inline">
+                            <font><button type="button" class="layui-btn layui-btn-primary" id="account_intro">
+                                </button></font>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号封面</label>
+                        <div class="layui-input-block" style="display: flex;margin-left: unset;">
+
+                            <div class="uploadImg" id="uploadOne" onclick="show_img(this)">
+                                <i class="layui-icon layui-icon-picture-fine"
+                                    style="font-size: 50px;line-height: 80px;padding-left: 15px;"></i>
+                            </div>
+
+                            <div class="uploadImg" id="uploadTwo" onclick="show_img(this)">
+                                <i class="layui-icon layui-icon-picture-fine"
+                                    style="font-size: 50px;line-height: 80px;padding-left: 15px;"></i>
+                            </div>
+
+                            <div class="uploadImg" id="uploadThree" onclick="show_img(this)">
+                                <i class="layui-icon layui-icon-picture-fine"
+                                    style="font-size: 50px;line-height: 80px;padding-left: 15px;"></i>
+                            </div>
+
+                            <div class="uploadImg" id="uploadFour" onclick="show_img(this)">
+                                <i class="layui-icon layui-icon-picture-fine"
+                                    style="font-size: 50px;line-height: 80px;padding-left: 15px;"></i>
+                            </div>
+
+                            <div class="uploadImg" id="uploadFive" onclick="show_img(this)">
+                                <i class="layui-icon layui-icon-picture-fine"
+                                    style="font-size: 50px;line-height: 80px;padding-left: 15px;"></i>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号标签</label>
+                        <div class="layui-input-inline">
+                            <font><span class="layui-badge layui-bg-orange" id="labelone"></span></font>
+                            <font><span class="layui-badge layui-bg-green" id="labeltwo"></span></font>
+                            <font><span class="layui-badge layui-bg-cyan" id="labelthree"></span></font>
+                            <font><span class="layui-badge layui-bg-blue" id="labelfour"></span></font>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-md6" style="padding: 20px;">
+            <div class="layui-card">
+                <div class="layui-card-header">出租信息</div>
+                <div class="layui-card-body">
+                    <div class="layui-row">
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">0元体验</label>
+                                    <div class="layui-input-inline">
+                                        <font><button type="button" class="layui-btn layui-btn-primary" id="experience">
+                                            </button></font>
+                                        <div class="layui-form-mid layui-word-aux">
+                                            参与0元免费体验，起租时长须为1小时。参与后能极快的提升账号出租时长、出租次数</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">排位</label>
+                                    <div class="layui-input-inline">
+                                        <font><button type="button" class="layui-btn layui-btn-primary" id="rank">
+                                            </button></font>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">登录方式</label>
+                                    <div class="layui-input-inline">
+                                        <font><button type="button" class="layui-btn layui-btn-primary" id="reg_type">
+                                            </button></font>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">押金</label>
+                                    <div class="layui-input-inline">
+                                        <font><button type="button" class="layui-btn layui-btn-primary" id="deposit">
+                                            </button></font>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">单价</label>
+                                    <div class="layui-input-inline">
+                                        <font><button type="button" class="layui-btn layui-btn-primary" id="price">
+                                            </button></font>
+                                        <div class="layui-form-mid layui-word-aux">出租按小时计算</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">日租价</label>
+                                    <div class="layui-input-inline">
+                                        <font><button type="button" class="layui-btn layui-btn-primary" id="day_price">
+                                            </button></font>
+                                        <div class="layui-form-mid layui-word-aux">日租时长为24小时</div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">包夜价</label>
+                                    <div class="layui-input-inline">
+                                        <font><button type="button" class="layui-btn layui-btn-primary"
+                                                id="pack_night_price"> </button></font>
+                                        <div class="layui-form-mid layui-word-aux">包夜时长为每日的22:00-08:00,单位支持到分</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="layui-col-xs6">
+                            <div class="grid-demo grid-demo-bg1">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">最短租时</label>
+                                    <div class="layui-input-inline">
+                                        <font><button type="button" class="layui-btn layui-btn-primary"
+                                                id="shortest_time"> </button></font>
+                                        <div class="layui-form-mid layui-word-aux">用户进行租用时，最少的租用时长，只可设置整数（不包含日租、包夜）
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="LAY-user-back-submit" id="LAY-user-back-submit" value="审核">
+        </div>
+    </div>
+
+    <!-- 审核水印 -->
+    <div id="fontBackGrounds" ></div>
+    
+    <script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+
+    <script src="__STATIC__/common/account/js/fontBackgrounds.js"></script>
+    <script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'form', 'upload'], function () {
+            var $ = layui.$
+                , form = layui.form;
+            var upload = layui.upload;
+
+            var uploadInst = upload.render({
+                elem: '#IconUpload' //绑定元素
+                , url: url + 'index/index/uploadImage' //上传接口
+                , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(1, { shade: 0.8 }); //上传loading
+                }
+                , done: function (res) {
+                    //上传完毕回调
+                    $('#cate_icon').val(res.url)
+                    layer.msg('上传成功', { icon: 6 })
+                    layer.closeAll('loading'); //关闭loading
+                }
+                , error: function () {
+                    //请求异常回调
+                    layer.msg('上传失败', { icon: 6 })
+                    layer.closeAll('loading'); //关闭loading
+                }
+            });
+        })
+    </script>
+
+    <!-- jquery -->
+    <script>
+        //显示大图片
+        function show_img(t) {
+            var t = $(t).find("img");
+            //页面层
+            layer.open({
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                area: ['80%', '80%'], //宽高
+                shadeClose: true, //开启遮罩关闭
+                title: '查看图片',
+                end: function (index, layero) {
+                    return false;
+                },
+                content: '<div style="text-align:center"><img src="' + $(t).attr('src') + '" /></div>'
+            });
+        }
+       setTimeout(()=>{
+        var audit = $('#auditHide').text()
+        waterMark({
+            waterMarkContent:audit,
+            waterMarkId:'fontBackGrounds'//需要做水印的元素的id
+        });
+    
+       },1500)
+
+       
+        // 通过
+        function adopt(){
+            var id = $('#id').val()
+            asynchronousAjax('index/index/AccountApproved','POST',{id:id},'JSON').done(function(res){
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭
+                setTimeOut(()=>{
+                    parent.location.reload();
+                },1500)
+            })
+        }
+        // 不通过
+        function Failed(){
+            var id = $('#id').val()
+            asynchronousAjax('index/index/AccountNumberAuditRejected','POST',{id:id},'JSON').done(function(res){
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                parent.layer.close(index); //再执行关闭
+                setTimeOut(()=>{
+                    parent.location.reload();
+                },1500)
+            })
+        }
+        // 再说吧
+        function besides(){
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            parent.layer.close(index); //再执行关闭
+        }
+    </script>
+</body>
+
+
+</html>

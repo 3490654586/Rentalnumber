@@ -1,0 +1,293 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+
+<style type="text/css">
+    #con {
+        background-color: white;
+    }
+
+    .input {
+        width: 100%;
+        margin-bottom: 35px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+    }
+
+    .input p {
+        color: #666666;
+        margin-right: 10px;
+    }
+
+    .input > strong {
+        color: red;
+    }
+
+    /* 充值金额 */
+    .recharge, .recharge-mon, .recharge-type {
+        display: flex;
+        align-items: center;
+    }
+
+    .recharge-mon li {
+        cursor: pointer;
+        width: 80px;
+        height: 43px;
+        border: solid 1px #E7E8E9;
+        margin-right: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+    }
+
+    .recharge .recharge-custom input {
+        width: 120px;
+        height: 43px;
+        box-sizing: border-box;
+        padding: 10px 20px;
+        color: var(--text-color);
+        font-weight: 700;
+        border: solid 1px #E7E8E9;
+        font-size: 15px;
+        box-sizing: border-box;
+    }
+
+    .recharge-custom::after {
+        content: '元';
+    }
+
+    /* 金额选中 */
+    .money-active {
+        position: relative;
+        border: 2px solid #19be6b !important;
+    }
+
+    .money-active::after {
+        content: '';
+        display: block;
+        background-image: url(/static/homeStatic/img/inco/gou.png);
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        bottom: -3px;
+        right: -3px;
+        z-index: 5;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    /* 支付方式 */
+    .recharge-type li {
+        width: 163px;
+        height: 50px;
+        margin-right: 20px;
+        border: solid 2px #E7E8E9;
+        box-sizing: border-box;
+    }
+
+    .recharge-type li img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    #zf {
+        width: 70%;
+        height: 100%;
+        display: flex;
+        margin: 0 auto;
+        padding: 30px 0px;
+        box-sizing: border-box;
+        flex-direction: column;
+    }
+
+    #zf h2 {
+        font-size: 18px;
+        color: #5b5b5b;
+        text-align: center;
+    }
+
+    #zf span {
+        font-weight: 700;
+        color: red;
+    }
+
+    #zf img {
+        width: 250px;
+        height: 250px;
+        margin: 0 auto;
+    }
+
+    #zf p {
+        margin: 0 auto;
+    }
+
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="header"></div>
+    <!-- 内容 -->
+    <div class="layui-container">
+        <!-- 侧栏 -->
+        <div id="aside"></div>
+        <!-- 内容 -->
+        <div id="con">
+            <h3>账户充值</h3>
+            <div class="con-inside" style="padding: 0px 30px;">
+                <div class="input">
+                    <p>当前余额：</p>
+                    <strong>￥{$userMoney}</strong>
+                </div>
+                <!-- 充值金额 -->
+                <div class="input">
+                    <p>充值金额：</p>
+                    <div class="recharge">
+                        <ul class="recharge-mon">
+                            <li data-num="10">10元</li>
+                            <li data-num="15">15元</li>
+                            <li data-num="20">20元</li>
+                            <li data-num="30">30元</li>
+                            <li data-num="50">50元</li>
+                        </ul>
+                        <div class="recharge-custom">
+                            <input name="money" placeholder="自定义金额" type="text" onkeyup="inputIntRegEx(this)"/>
+                        </div>
+                    </div>
+                </div>
+                <!-- 支付方式 -->
+                <div class="input">
+                    <p>支付方式：</p>
+                    <ul class="recharge-type">
+                        <li data-type="0">
+                            <img src="__HOMESTATIC__/img/inco/zfb.png"/>
+                        </li>
+                        <li data-type="1">
+                            <img src="__HOMESTATIC__/img/inco/wx.png"/>
+                        </li>
+                    </ul>
+                </div>
+                <button id="submit" class="layui-btn layui-btn-warm" style="width: 150px;">确认支付</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="zfs">
+    <div id="zf">
+        <h2>应付金额：<span>￥{{d.money}}</span></h2>
+        <img src="{{d.ewmCode}}"/>
+        {{# if(d.reType == 0){ }}
+        <p>请使用“ <span>支付宝</span>” 扫一扫完成支付</p>
+        {{# }else{ }}
+        <p>请使用“ <span>微信</span>” 扫一扫完成支付</p>
+        {{# } }}
+
+        <a href="javascript:void(0)" style="text-align: center;color:var(--text-color);margin-top: 10px"
+           onclick="kefu()">我已付款</a>
+    </div>
+</script>
+
+<script type="text/javascript">
+    var money = 0   //充值金额
+    var reType = null //支付方式
+    var ewmCode = '' // 支付二维码
+    layui.use(['laytpl', 'element', 'layer'], function () {
+        var laytpl = layui.laytpl;
+        var element = layui.element;
+        var layer = layui.layer
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+            userIsActive()
+        })
+        //为充值金额绑定事件
+        $(".recharge-mon li").click(function () {
+            let selectMoney = $(this).attr("data-num")
+            money = selectMoney
+            console.log(money)
+            $(".recharge-mon li").removeClass('money-active')
+            $(this).addClass("money-active")
+        })
+        // 自定义金额获取/失去焦点事件
+        $(".recharge-custom input").focus(function () {
+            money = $(this).val()
+            $(".recharge-mon li").removeClass('money-active')
+            $(this).css('border', '2px solid #19be6b');
+        })
+        $(".recharge-custom input").keyup(function () {
+            let value = $(this).val()
+            let value2 = value.replace(/[\D]/g, '')
+            $(this).val(value2)
+            money = value2
+            console.log(value2)
+        })
+        $(".recharge-custom input").blur(function () {
+            $(this).css('border', 'solid 1px #E7E8E9');
+        })
+
+        //选中支付方式
+        $(".recharge-type li").click(function () {
+            let type = $(this).attr('data-type')
+            reType = type
+            console.log(reType)
+            $(".recharge-type li").removeClass('money-active')
+            $(this).addClass("money-active")
+        })
+
+        //确认支付
+        $("#submit").click(function () {
+            if ((money > 0) && (reType != null)) {
+                let zf2 = zfs.innerHTML
+                if (reType == 0) {
+                    ewmCode = '__HOMESTATIC__/img/inco/zfb_code.png'
+                } else {
+
+                }
+                let data = {money: money, reType: reType, ewmCode: ewmCode}
+                laytpl(zf2).render(data, function (html) {
+                    var index = layer.open({
+                        type: 1,
+                        title: '确认支付',
+                        skin: 'demo-class',
+                        area: ['450px', '450px'],
+                        content: html,
+                        success: function () {
+                            let token = localStorage.getItem("tokens")
+                            fetchPost({
+                                url: "{:url('home/mycenter/doPayMoney')}",
+                                data: {
+                                    'token': token,
+                                    'money': money,
+                                    'payType': reType
+                                }
+                            }).then(res => {
+                                if (res.code == 101) {
+                                    layer.close(index)
+                                    layer.alert('<p>您有一笔充值订单未完成,请联系客服</p>', {
+                                        icon: 2,
+                                        skin: 'layer-ext-moon demo-class',
+                                        title: '温馨提示',
+                                        btn1: function () {
+                                            window.open('http://mah.miketong.net/Web/im.aspx?_=t&accountid=121352', '飞讯租号-充值余额咨询', 'width=665,height=515,top=100, left=100,menubar=no,toolbar=no,status=no,scrollbars=yes')
+                                        }
+                                    })
+                                }
+                            })
+                        }
+                    })
+                })
+            }
+        })
+
+        window.kefu = function () {
+            window.open('http://mah.miketong.net/Web/im.aspx?_=t&accountid=121352', '飞讯租号-充值余额咨询', 'width=665,height=515,top=100, left=100,menubar=no,toolbar=no,status=no,scrollbars=yes')
+        }
+    })
+</script>
+
+
+<!-- 尾部 -->
+{include file="pubview/footer"}
+

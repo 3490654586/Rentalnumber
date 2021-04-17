@@ -1,0 +1,317 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/cardhover/hover-effects.css" />
+<link rel="stylesheet" href="__HOMESTATIC__/css/swiper/css/swiper.min.css">
+<link rel="stylesheet" href="__HOMESTATIC__/viewcss/index/index.css">
+<script src="__HOMESTATIC__/css/swiper/js/swiper.min.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <!-- 轮播图 -->
+        <div id="banner" style="transform: translateY(-70px);">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {foreach $banner as $k => $v}
+                    <div class="swiper-slide rightDownBig" onclick="window.open('{$v.link}')" style="cursor: pointer">
+                        <img src="{$v.thumb}" />
+                        <div class="detail">
+                            <h3>{$v.banner_name}</h3>
+                            <p><span>{$v.desc}</span></p>
+                        </div>
+                    </div>
+                    {/foreach}
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+
+        <!-- 内容 -->
+        <div class="layui-container" style="padding-top: 0px;">
+            <!-- 推荐分类 -->
+            <section>
+                <ul id="area">
+                    {foreach $recomeGameCate as $k => $v}
+                    <li class="GameType">
+                        <div class="port-4 effect-3">
+                            <div class="image-box">
+                                <img src='{$v.cate_backdrop}' alt="Image-1" class="oneImage">
+                            </div>
+                            <div class="text-desc">
+                                <h3>{$v.cate_name}</h3>
+                                <p>{$v.descs}</p>
+                                <a href="javascript:StandardPost('{:url('home/renthall/index')}',{'Cateid':'{$v.id}'})"
+                                    class="layui-btn layui-btn-normal public-button">进入{$v.cate_name}</a>
+                            </div>
+                        </div>
+                    </li>
+                    {/foreach}
+                </ul>
+            </section>
+            <!-- 热门游戏 -->
+            <section>
+                <div class="title">
+                    <h3>热门游戏</h3>
+                </div>
+                <div class="swiper-container2" id="swiper_container2">
+                    <div class="swiper-wrapper">
+                        {foreach name="hotGame" key="k" item="v"}
+                        <div class="swiper-slide" data-history="1">
+                            <li class="hot-games-item">
+                                <img src="{$v.thumb}" />
+                                <div class="hot-games-item-title">
+                                    <h4>{$v.game_name}</h4>
+                                    <button class="layui-btn layui-btn-normal  layui-btn-sm public-button"
+                                        onclick="goGame('{$v.id}')">进入{$v.game_name}
+                                    </button>
+                                </div>
+
+                                <div class="hot-games-info-list">
+                                    <ul class="infoList">
+                                        {foreach name="v.userOrderInfo.phone" key="k2" item="v2"}
+                                        <li class="hot-games-item-info">
+                                            <p>
+                                                <strong>{$v2}</strong>
+                                                成功购买{$v.userOrderInfo.hour[$k2]}小时租号
+                                            </p>
+                                            <em>{$v.userOrderInfo.money[$k2]}元</em>
+                                        </li>
+                                        {/foreach}
+                                    </ul>
+                                </div>
+                            </li>
+                        </div>
+                        {/foreach}
+                    </div>
+                </div>
+            </section>
+            <style>
+                .swiper-container2 {
+                    width: auto;
+                    overflow: hidden;
+                }
+            </style>
+            <script>
+                var mySwiper = new Swiper('.swiper-container2', {
+                    autoplay: 1500,//可选选项，自动滑动A
+                    initialSlide: 5,
+                    effect: 'coverflow',
+                    slidesPerView: 5,
+                    centeredSlides: true,
+                    coverflow: {
+                        rotate: 30,
+                        stretch: 10,
+                        depth: 60,
+                        modifier: 2,
+                        slideShadows: true
+                    }
+                })
+
+                //条数开始滚动
+
+                let infoList = document.querySelectorAll(".hot-games-item>div>ul")
+                let infoMoveSteps = 1
+                let isMove = true
+
+                function moveScroll() {
+                    infoList.forEach(value => {
+                        let moveTop = 0;
+                        setInterval(() => {
+                            if (isMove) {
+                                moveTop = -32 * 5 * infoMoveSteps
+                                $(value).animate({
+                                    top: moveTop
+                                }, 1000, () => {
+                                    if (moveTop == -32 * 5) {
+                                        infoMoveSteps = 2
+                                        for (let i = 0; i < 5; i++) {
+                                            $(value).children("li").eq(i).css("transform", "translateY(320px)")
+                                        }
+                                    }
+                                    if (moveTop >= -32 * 5 * 2) {
+                                        moveTop = 0
+                                        infoMoveSteps = 1
+                                        $(value).css("top", '0px')
+                                        for (let i = 0; i < 5; i++) {
+                                            $(value).children("li").eq(i).css("transform", "translateY(0px)")
+                                        }
+                                    }
+                                })
+                            }
+                        }, 2000);
+                    })
+
+                }
+
+                moveScroll()
+
+                /*鼠标移入停止轮播，鼠标离开 继续轮播*/
+                $(".swiper-container2").mousemove(function () {
+                    isMove = false
+                    mySwiper.stopAutoplay();
+                }).mouseleave(function () {
+                    isMove = true
+                    mySwiper.startAutoplay();
+                })
+
+
+            </script>
+            <!-- 推荐游戏 -->
+            <section>
+                <div class="title">
+                    <h3>推荐游戏</h3>
+                </div>
+                <ul class="grid" id="recom-game">
+                    {foreach $recomGame as $k => $v}
+                    <li class="grid-item hot-game-list">
+                        <a>
+                            <div class="cover">
+                                <img src="{$v.thumb}">
+                            </div>
+                            <div class="game-info">
+                                <h3>{$v.game_name}</h3>
+                                <p>{$v.descs}</p>
+                                <div onclick="goGame('{$v.id}')">
+                                    <button class="layui-btn layui-btn-normal public-button">进入{$v.game_name}</button>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {/foreach}
+                </ul>
+            </section>
+            <!-- 推荐账号 -->
+            <section>
+                <div class="title">
+                    <h3>推荐账号</h3>
+                    <u style="cursor: pointer;" onclick="moreAccount()">更多账号<i
+                            class="layui-icon layui-icon-right"></i></u>
+                </div>
+                <ul id="recom-account">
+                    {foreach $recomAccount as $k => $v}
+                    <li class="GameType">
+                        <div class="port-7 effect-3">
+                            <div class="image-box">
+                                <img src="{$v.screenshotsone}" alt="Image-1" class="oneImage">
+                            </div>
+                            <div class="text-desc">
+                                <h3>{$v.account_title}</h3>
+                                <p>{$v.account_intro}</p>
+                                <a href="javascript:StandardPost('{:url('home/renthall/lookaccount')}',{'id':'{$v.id}'})"
+                                    class="layui-btn layui-btn-normal public-button">立即租号</a>
+                            </div>
+                        </div>
+                    </li>
+                    {/foreach}
+                </ul>
+            </section>
+            <!-- 新闻快报 -->
+            <section>
+                <div class="title">
+                    <h3>新闻快报</h3>
+                    <u style="cursor: pointer;" onclick="moreNews()">更多新闻<i class="layui-icon layui-icon-right"></i></u>
+                </div>
+                <ul id="news">
+                    {foreach $news as $k => $v}
+                    <li class="news-list">
+                        <div class="left-on"></div>
+                        <div class="right-on">
+                            <p>{$v.title}</p>
+                        </div>
+                        <div class="news-list-con">
+                            <h4>{$v.title}</h4>
+                            <p>{$v.descs}</p>
+                            <time>{$v.add_time}</time>
+                            <a href="javascript:StandardPost('{:url('home/news/detail')}',{'DetailId':'{$v.id}'})"
+                                class="layui-btn layui-btn-normal public-button">立即阅读</a>
+                        </div>
+                    </li>
+                    {/foreach}
+                </ul>
+            </section>
+        </div>
+
+
+    </div>
+    <script>
+        window.onload = function () {
+            var b = 1920 / 460;//我的图片比例
+            //获取浏览器宽度
+            var W = $(window).width();
+            var H = '650px'
+            layui.use(['laytpl', 'layer', 'element', 'carousel'], function () {
+                var laytpl = layui.laytpl;
+                var $ = layui.$;
+                var layer = layui.layer;
+                var element = layui.element
+                var carousel = layui.carousel
+                var $ = layui.$
+
+                //自动展开推荐账号
+                $(".hot-game-list").eq(0).css({ 'width': '76%' })
+                $(".hot-game-list:eq(0) .game-info").css('left', '250px')
+                $(".hot-game-list").hover(function () {
+                    $(".hot-game-list").css({ 'width': '500px' })
+                    $(".hot-game-list .game-info").css('left', '0px')
+                    $(this).css({ 'width': '76%' })
+                    $(this).find('.game-info').css('left', '250px')
+                })
+
+            });
+            //窗口变化是重新加载
+            $(window).resize(function () {
+                // setBanner();
+                window.location.reload()
+            })
+
+        }
+
+
+        // swiper
+        trList = ['leftUp', 'moveRight', 'moveDown', 'centerBig', 'rightDownBig'];
+        var swiper = new Swiper('.swiper-container', {
+            speed: 500,
+            autoplay: 4400,
+            autoplayDisableOnInteraction: false,
+            effect: 'fade',
+            pagination: '.swiper-pagination',
+            paginationClickable: true,
+            onSlideChangeStart: function (swiper) {
+                nextSlide = swiper.slides.eq(swiper.activeIndex);
+                nextSlide.addClass(trList[Math.floor(Math.random() * 5)]);
+            },
+            onSlideChangeEnd: function (swiper) {
+                prevSlide = swiper.slides[swiper.previousIndex];
+                prevSlide.className = "swiper-slide";
+            },
+        });
+    </script>
+
+    <script>
+        /*
+         * 进入游戏
+        */
+        function goGame(gameId) {
+            let gameUrl = "{:url('home/renthall/index')}"
+            StandardPost(gameUrl, { 'Gameid': gameId })
+        }
+
+        /*
+         * 更多账号
+        */
+        function moreAccount() {
+            let rentHallUrl = "{:url('home/renthall/index')}"
+            location.href = rentHallUrl
+        }
+
+        /*
+         * 更多新闻
+        */
+        function moreNews() {
+            let newsUrl = "{:url('home/news/detail')}"
+            location.href = newsUrl
+        }
+
+
+    </script>
+    {include file="pubview/footer"}

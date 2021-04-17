@@ -1,0 +1,330 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+<style type="text/css">
+    #con {
+        background-color: white;
+        margin-top: 0px !important;
+    }
+
+    .select-time {
+        display: flex;
+        align-items: center;
+        color: #717171;
+    }
+
+    .select-time input {
+        width: 200px;
+        padding-left: 41px;
+    }
+
+    .select-time div {
+        position: relative;
+        margin-right: 50px;
+    }
+
+    .select-time i {
+        font-size: 20px;
+        position: absolute;
+        left: 15px;
+        top: 8px;
+    }
+
+    table td strong {
+        color: var(--text-color);
+        font-size: 16px;
+        padding: 0 3px;
+    }
+</style>
+</head>
+
+<body>
+<div id="app">
+    <div id="header"></div>
+    <div class="layui-container">
+        <!-- 侧栏 -->
+        <div id="aside"></div>
+        <div id="con" class="">
+            <h3>交易记录</h3>
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li {if $type=='cons' || $type=='' }class="layui-this" {/if} onclick="cons()">消费记录</li>
+                    <li {if $type=='recharge' }class="layui-this" {/if} onclick="recharge()">充值记录</li>
+                    <li {if $type=='withdrawal' }class="layui-this" {/if} onclick="withdrawal()">提现记录</li>
+                </ul>
+                <!-- 消费记录 -->
+                <div class="layui-tab-content">
+                    {if $type == 'cons' || $type == ''}
+                    <div class="layui-tab-item {if $type == 'cons' || $type == ''}layui-show{/if}">
+                        <!-- 时间选择 -->
+                        <div class="select-time">
+                            <p>消费时间：</p>
+                            <div>
+                                <input type="text" class="layui-input" id="x-time1">
+                                <i class="layui-icon layui-icon-date"></i>
+                            </div>
+                            <div>
+                                <input type="text" class="layui-input" id="x-time2">
+                                <i class="layui-icon layui-icon-date"></i>
+                            </div>
+                            <div>
+                                <button type="button" class="layui-btn" onclick="consSearch()">查询</button>
+                            </div>
+                        </div>
+                        <!-- 表格 -->
+                        <table class="layui-table con-inside">
+                            <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>商品</th>
+                                <th>支付金额</th>
+                                <th>支付渠道</th>
+                                <th>支付时间</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {if $allArray->total() != 0}
+                            {foreach name="allArray" key="k" item="v"}
+                            <tr>
+                                <td>编号：{$v.orderNum}</td>
+                                <td>
+                                    <p>货架号 : {$v.games.id}</p>
+                                    <p>{$v.games.account_title}</p>
+                                </td>
+                                <td>￥<strong>{$v.amounts}</strong>元</td>
+                                <td>余额</td>
+                                <td>{$v.payTime}</td>
+                                {if $v.payType == 2}
+                                <td>已支付</td>
+                                {elseif $v.payType == 3}
+                                <td>已完成</td>
+                                {elseif $v.payType == 4}
+                                <td>已撤单</td>
+                                {/if}
+                            </tr>
+                            {/foreach}
+                            {else}
+                            <tr>
+                                <td colspan="6" style="text-align: center">暂无数据</td>
+                            </tr>
+                            {/if}
+                            </tbody>
+                        </table>
+                        <div>总计消费 : {$sumMoney}</div>
+                        <!-- 分页 -->
+                        <div>{$allArray->render()}</div>
+                    </div>
+                    {/if}
+                    <!-- 充值记录 -->
+                    {if $type == 'recharge'}
+                    <div class="layui-tab-item {if $type == 'recharge'}layui-show{/if}">
+                        <!-- 时间选择 -->
+                        <div class="select-time">
+                            <p>充值时间：</p>
+                            <div>
+                                <input type="text" class="layui-input" id="x-time1"
+                                       value="{if $startTime}{$startTime}{/if}">
+                                <i class="layui-icon layui-icon-date"></i>
+                            </div>
+                            <div>
+                                <input type="text" class="layui-input" id="x-time2"
+                                       value="{if $endTime}{$endTime}{/if}">
+                                <i class="layui-icon layui-icon-date"></i>
+                            </div>
+                            <div>
+                                <button type="button" class="layui-btn" onclick="rentSearch()">查询</button>
+                            </div>
+                        </div>
+                        <!-- 表格 -->
+                        <table class="layui-table con-inside">
+                            <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>充值金额</th>
+                                <th>支付渠道</th>
+                                <th>充值时间</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {if $allArray->total() != 0}
+                            {foreach name="allArray" key="k" item="v"}
+                            <tr>
+                                <td>编号：{$v.id}</td>
+                                <td>￥<strong>{$v.money}</strong>元</td>
+                                <td>{$v.payType == 1 ? "微信" : "支付宝"}</td>
+                                <td>{:date('Y-m-d H:i:s',$v.add_time)}</td>
+                                {if $v.status == 1}
+                                <td>申请中</td>
+                                {elseif $v.status == 2}
+                                <td>被拒绝</td>
+                                {else}
+                                <td>已充值</td>
+                                {/if}
+                            </tr>
+                            {/foreach}
+                            {else}
+                            <tr>
+                                <td colspan="5" style="text-align: center">暂无数据</td>
+                            </tr>
+                            {/if}
+                            </tbody>
+                        </table>
+                        <!-- 分页 -->
+                        <div>{$allArray->render()}</div>
+                    </div>
+                    {/if}
+                    <!-- 提现记录 -->
+
+                    {if $type == 'withdrawal'}
+                    <div class="layui-tab-item {if $type == 'withdrawal'}layui-show{/if}">
+                        <!-- 时间选择 -->
+                        <div class="select-time">
+                            <p>充值时间：</p>
+                            <div>
+                                <input type="text" class="layui-input" id="x-time1"
+                                       value="{if $startTime}{$startTime}{/if}">
+                                <i class="layui-icon layui-icon-date"></i>
+                            </div>
+                            <div>
+                                <input type="text" class="layui-input" id="x-time2"
+                                       value="{if $endTime}{$endTime}{/if}">
+                                <i class="layui-icon layui-icon-date"></i>
+                            </div>
+                            <div>
+                                <button type="button" class="layui-btn" onclick="withsSearch()">查询</button>
+                            </div>
+                        </div>
+                        <!-- 表格 -->
+                        <table class="layui-table con-inside">
+                            <thead>
+                            <tr>
+                                <th>订单号</th>
+                                <th>提现金额</th>
+                                <th>提现方式</th>
+                                <th>提现账号</th>
+                                <th>提现时间</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {if $allArray->total() != 0}
+                            {foreach name="allArray" key="k" item="v"}
+                            <tr>
+                                <td>编号：{$v.id}</td>
+                                <td>￥<strong>{$v.amount}</strong>元</td>
+                                <td>{$v.payType == 1 ? "支付宝" : "微信"}</td>
+                                <td>{$v.account}</td>
+                                <td>{$v.add_time}</td>
+                                {if $v.status == 1}
+                                <td>申请中</td>
+                                {elseif $v.status == 2}
+                                <td>提现成功</td>
+                                {else}
+                                <td>提现失败</td>
+                                {/if}
+                            </tr>
+                            {/foreach}
+                            {else}
+                            <tr>
+                                <td colspan="5" style="text-align: center">暂无数据</td>
+                            </tr>
+                            {/if}
+                            </tbody>
+                        </table>
+                        <!-- 分页 -->
+                        <div>{$allArray->render()}</div>
+                    </div>
+                    {/if}
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="footer"></div>
+</div>
+
+<script type="text/javascript">
+    let oldTime;  //定义时间范围
+    let oldTime2;
+    layui.use(['laytpl', 'element', 'layer', 'laydate', 'laypage'], function () {
+        var laytpl = layui.laytpl;
+        var element = layui.element;
+        var layer = layui.layer
+        var laydate = layui.laydate
+        var laypage = layui.laypage
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+            userIsActive()
+        })
+        let startTime = "{if $startTime}{$startTime}{/if}"
+        let endTime = "{if $endTime}{$endTime}{/if}"
+        // 实例化时间
+        laydate.render({
+            elem: '#x-time1',
+            value: startTime ? startTime : '',
+            done: function (value) {
+            }
+        })
+        laydate.render({
+            elem: '#x-time2',
+            value: endTime ? endTime : '',
+            done: function (value) {
+            }
+        })
+        laypage.render({
+            elem: 'page',
+            count: 100,
+            layout: ['count', 'prev', 'page', 'next', 'refresh', 'skip'],
+            jump: function (obj) {
+                console.log(obj)
+            }
+        });
+    })
+
+    function rentSearch() {
+        let url = "{:url('home/mycenter/tranrec')}"
+        let startTime = $('#x-time1').val()
+        let endTime = $('#x-time2').val()
+        StandardPost(url, {'startTime': startTime, 'endTime': endTime, 'type': 'recharge'})
+    }
+
+    function consSearch() {
+        let url = "{:url('home/mycenter/tranrec')}"
+        let startTime = $('#x-time1').val()
+        let endTime = $('#x-time2').val()
+        StandardPost(url, {'startTime': startTime, 'endTime': endTime, 'type': 'cons'})
+    }
+
+    function withsSearch() {
+        let url = "{:url('home/mycenter/tranrec')}"
+        let startTime = $('#x-time1').val()
+        let endTime = $('#x-time2').val()
+        StandardPost(url, {'startTime': startTime, 'endTime': endTime, 'type': 'withdrawal'})
+    }
+
+    function recharge() {
+        let url = "{:url('home/mycenter/tranrec')}"
+        StandardPost(url, {'type': 'recharge'})
+    }
+
+    function cons() {
+        let url = "{:url('home/mycenter/tranrec')}"
+        StandardPost(url, {'type': 'cons'})
+    }
+
+    function withdrawal() {
+        console.log('x')
+        let url = "{:url('home/mycenter/tranrec')}"
+        StandardPost(url, {'type': 'withdrawal'})
+    }
+</script>
+
+<!-- 表格的模板 -->
+<script type="text/html" id="table">
+
+	</script>
+</body>
+
+</html>

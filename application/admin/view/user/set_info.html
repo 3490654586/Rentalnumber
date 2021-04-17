@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>设置我的资料</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <script src="__STATIC__/common/common.js"></script>
+  <script>
+    var islogin = this.IsLogin(); // 未登录用户无法进入后台
+    if (islogin == 1) {
+      location.href = "{:url('login/index')}"
+    } else {
+
+    }
+  </script>
+</head>
+
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+      <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">设置我的资料</div>
+          <div class="layui-card-body" pad15>
+
+            <div class="layui-form" lay-filter="">
+              <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="account_num" value="" readonly class="layui-input" id="account_num">
+                </div>
+                <div class="layui-form-mid layui-word-aux">不可修改。一般用于后台登入名</div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">昵称</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="nickname" value="" lay-verify="nickname" autocomplete="off"
+                    placeholder="请输入昵称" class="layui-input" id="nickname">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">密码</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="password" value="" lay-verify="password" autocomplete="off"
+                    placeholder="请输入密码" class="layui-input" id="password">
+                </div>
+                <div class="layui-form-mid layui-word-aux">不填默认不修改</div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">头像</label>
+                <div class="layui-input-inline">
+                  <input name="head_sculpture" lay-verify="required" id="head_sculpture" placeholder="图片地址" value=""
+                    class="layui-input" id="head_sculpture" disabled>
+                </div>
+                <div class="layui-input-inline layui-btn-container" style="width: auto;">
+                  <button type="button" class="layui-btn layui-btn-primary" id="LAY_head_sculpture">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                  </button>
+                  <!-- <button class="layui-btn layui-btn-primary" layadmin-event="avartatPreview">查看图片</button > -->
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">手机</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="mobile_number" value="" lay-verify="phone" autocomplete="off"
+                    class="layui-input" id="mobile_number">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <label class="layui-form-label">邮箱</label>
+                <div class="layui-input-inline">
+                  <input type="text" name="mailbox" value="" lay-verify="email" autocomplete="off" class="layui-input"
+                    id="mailbox">
+                </div>
+              </div>
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <button class="layui-btn layui-btn-normal" lay-submit lay-filter="setmyinfos">确认修改</button>
+                  <!-- <button type="reset" class="layui-btn layui-btn-primary">重新填写</button> -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+
+  <script>
+
+
+    layui.config({
+      base: '__STATIC__/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['index', 'set', 'form', 'upload'], function () {
+      var $ = layui.$
+
+        , form = layui.form
+
+      form.render();
+      var upload = layui.upload;
+
+      //执行实例
+      var uploadInst = upload.render({
+        elem: '#LAY_head_sculpture' //绑定元素
+        , url: url + 'index/index/uploadImage' //上传接口
+        , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+          layer.load(1, { shade: 0.8 }); //上传loading
+        }
+        , done: function (res) {
+          //上传完毕回调
+          $('#head_sculpture').val(res.url)
+          layer.msg('上传成功', { icon: 6 })
+          layer.closeAll('loading'); //关闭loading
+        }
+        , error: function () {
+          //请求异常回调
+          layer.msg('上传失败', { icon: 6 })
+          layer.closeAll('loading'); //关闭loading
+        }
+      });
+      form.on('submit(setmyinfos)', function (obj) {
+        var token = window.localStorage.getItem('token')
+        var data = {
+          'token': token,
+          'password': obj.field.password,
+          'nickname': obj.field.nickname,
+          'head_sculpture': obj.field.head_sculpture,
+          'mobile_number': obj.field.mobile_number,
+          'mailbox': obj.field.mailbox,
+          'account_num': obj.field.account_num
+        };
+        let dologin = asynchronousAjax('index/index/editpersonaldata', 'post', data, 'json')
+          .done(function (data) {
+            var code = data.code,
+              msg = data.msg;
+            if (code == -1) {
+              layer.msg(msg, { icon: 5 });
+            } else {
+              // if()
+              // window.localStorage.setItem('token', data.token);
+              layer.msg(msg, { icon: 6 })
+              setTimeout(() => {
+                parent.location.reload()
+              }, 1000)
+            }
+          })
+          .fail(function (err) {
+            layer.msg('异步错误', { icon: 5 });
+          })
+      })
+    });
+
+  </script>
+
+  <!-- jquery -->
+  <script>
+    var token = window.localStorage.getItem('token')
+    // 渲染个人中心数据
+    this.asynchronousAjax('index/index/PersonalCenter', 'post', { 'token': token }, 'json')
+      .done(function (data) {
+        $('#account_num').val(data.data.account_num)
+        $('#nickname').val(data.data.nickname)
+        $('#head_sculpture').val(data.data.head_sculpture)
+        $('#mobile_number').val(data.data.mobile_number)
+        $('#mailbox').val(data.data.mailbox)
+      })
+  </script>
+</body>
+
+</html>

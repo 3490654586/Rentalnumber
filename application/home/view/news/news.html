@@ -1,0 +1,250 @@
+{include file="pubview/head" /}
+<style type="text/css">
+    #news {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* 侧栏 */
+    .news-aside {
+        width: 200px;
+        height: 100%;
+        background-color: white;
+    }
+
+    .news-aside .news-menu {
+        display: flex;
+        width: 100%;
+        height: 760px;
+        flex-direction: column;
+        box-sizing: border-box;
+        margin-top: 30px;
+    }
+
+    .news-menu-item {
+        width: 100%;
+        height: 70px;
+    }
+
+    .news-menu-item > a {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 20px;
+        padding: 0px 20px;
+        box-sizing: border-box;
+    }
+
+    .news-menu-item > a:hover {
+        color: red;
+    }
+
+    .news-menu-item > a > i {
+        width: 35px;
+        height: 33px;
+        /* background-color: #009688; */
+        background: url('/static/homeStatic/img/news.png') no-repeat;
+        margin-right: 15px;
+    }
+
+    /* 内容 */
+    .news-con {
+        width: 1130px;
+        margin-left: 20px;
+        background-color: white;
+        box-sizing: border-box;
+        padding: 30px 50px;
+    }
+
+    /* 分类 */
+    .news-kind-con > h2 {
+        font-size: 32px;
+        text-align: center;
+        margin-bottom: 40px;
+        font-weight: 700;
+        color: rgb(117, 117, 117);
+    }
+
+    .news-kind-con .news-list {
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+    }
+
+    .news-kind-con .news-list li {
+        border-bottom: 1px dotted #c5c5c5;
+        padding-bottom: 15px;
+        margin-bottom: 8px;
+    }
+
+    .news-kind-con .news-list li > a {
+        height: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 0px 20px;
+        color: #4b4b4b;
+        display: block;
+    }
+
+    .news-kind-con .news-list li > a:hover {
+        color: rgba(0, 206, 116, 1);
+    }
+
+    .news-kind-con .news-list li i {
+        margin-right: 20px;
+        font-size: 28px;
+        vertical-align: sub;
+    }
+
+    .news-kind-con .news-list li h3 span {
+        font-size: 21px;
+        text-shadow: 4px 0px 5px rgb(225, 191, 219);
+    }
+
+    .news-kind-con .news-list li h3 time {
+        font-size: 15px;
+        float: right;
+        color: rgb(128, 126, 126);
+    }
+
+    .news-kind-con .news-list li p {
+        font-size: 15px;
+        margin-top: 15px;
+        color: rgb(185, 184, 184);
+        padding-left: 52px;
+        box-sizing: border-box;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+    }
+
+    #page {
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+    }
+
+    /* 文章内容 */
+    .news-write {
+        display: flex;
+        flex-direction: column;
+        padding: 0px 20px;
+        box-sizing: border-box;
+    }
+
+    .news-write > h3 {
+        font-size: 27px;
+        color: var(--text-color);
+        text-align: center;
+        margin-bottom: 27px;
+    }
+
+    .write-info {
+        display: flex;
+        justify-content: center;
+        border-bottom: 1px dashed #767676;
+        padding-bottom: 15px;
+    }
+
+    .write-info p {
+        margin-right: 12px;
+        color: #707070;
+    }
+
+    .write-con {
+        margin-top: 30px;
+    }
+
+    .write-con p {
+        font-size: 16px;
+        line-height: 30px;
+    }
+
+    .write-con img {
+        margin: 17px auto;
+        width: 60%;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="header"></div>
+    <div id="main">
+        <div class="layui-container">
+            <div id="news">
+                <!-- 侧栏 -->
+                <aside class="news-aside">
+                    <ul class="news-menu">
+                        <li class="news-menu-item">
+                            <a href="{:url('home/news/detail')}">
+                                <i></i>
+                                <span>最新公告</span>
+                            </a>
+                        </li>
+                        <!-- <li class="news-menu-item">
+                            <a href="javascript:void(0)">
+                                <i></i>
+                                <span>最新公告</span>
+                            </a>
+                        </li> -->
+                    </ul>
+                </aside>
+                <!-- 内容 -->
+                <div class="news-con">
+                    {if !isset($_POST['DetailId'])}
+                    <div class="news-kind-con">
+                        <h2>最新公告</h2>
+                        <ul class="news-list">
+                            {foreach name="newsList" key="k" item="v"}
+                            <li>
+                                <a href="javascript:StandardPost('{:url('home/news/detail')}',{'DetailId':'{$v.id}'})">
+                                    <div>
+                                        <h3>
+                                            <i class="layui-icon layui-icon-list"></i>
+                                            <span>{$v.title}</span>
+                                            <time>发布时间：{$v.add_time}</time>
+                                        </h3>
+                                        <p>{$v.descs}</p>
+
+                                    </div>
+                                </a>
+                            </li>
+                            {/foreach}
+                        </ul>
+                        <div id="page"></div>
+                    </div>
+                    <!-- 新闻内容 -->
+                    {else /}
+                    <div class="news-write">
+                        <h3>{$news -> title}</h3>
+                        <div class="write-info">
+                            <p>发布时间：{$news -> add_time} </p>
+                        </div>
+                        <div class="write-con">
+                            {$news -> content}
+                        </div>
+                    </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    let newList = []  //新闻数组
+    layui.use(['laytpl', 'element', 'laypage', 'layer'], function () {
+        var laytpl = layui.laytpl
+        var element = layui.element
+        var laypage = layui.laypage
+        var layer = layui.layer
+
+    })
+</script>
+<!-- 尾部 -->
+{include file="pubview/footer"}

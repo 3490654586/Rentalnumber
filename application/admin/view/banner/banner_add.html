@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>添加轮播图</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+    <script src="__STATIC__/common/common.js"></script>
+    <script>
+      var islogin = this.IsLogin(); // 未登录用户无法进入后台
+      if (islogin == 1) {
+        location.href = "{:url('login/index')}"
+      } else {
+  
+      }
+    </script>
+</head>
+
+<body>
+
+    <div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin"
+        style="padding: 20px 30px 0 0;">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <font color="red"> * </font>名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="banner_name" placeholder="请输入轮播图名称" autocomplete="off" class="layui-input"
+                    id="banner_name">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <font color="red"> * </font>描述
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="desc" placeholder="请输入轮播图描述" autocomplete="off" class="layui-input"
+                       id="desc">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <font color="red"> * </font>图
+            </label>
+            <div class="layui-input-inline">
+                <input type="hidden" name="thumb" id="thumb">
+                <button type="button" class="layui-btn" id="ThumbUpload">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                </button>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <font color="red"> * </font>路径
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" name="link" placeholder="请输入跳转路径" autocomplete="off" class="layui-input" id="link">
+            </div>
+        </div>
+
+
+
+
+        <div class="layui-form-item layui-hide">
+            <input type="button" lay-submit lay-filter="LAY-user-back-submit" id="LAY-user-back-submit" value="确认">
+        </div>
+    </div>
+
+    <script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: '__STATIC__/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'form', 'upload'], function () {
+            var $ = layui.$
+                , form = layui.form;
+            var upload = layui.upload;
+
+            let AllgameCate = asynchronousAjax('index/index/addgameAllgameCate', 'post', '', 'json')
+                .done(function (data) {
+                    console.log(data)
+                    $.each(data.list, function (key, val) {
+                        //通过LayUI.jQuery添加列表项
+                        $("#cid").append(new Option(val.cate_name, val.id));
+                        if ($('#cids').val() != '') {
+                            $("#cid").val($('#cids').val())
+                        }
+                    });
+
+                    layui.form.render('select');
+                })
+                .fail(function (err) {
+                    layer.msg('异步错误', { icon: 5 });
+                })
+            var uploadInst = upload.render({
+                elem: '#ThumbUpload' //绑定元素
+                , url: url + 'index/index/uploadImage' //上传接口
+                , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(1, { shade: 0.8 }); //上传loading
+                }
+                , done: function (res) {
+                    //上传完毕回调
+                    $('#thumb').val(res.url)
+                    layer.msg('上传成功', { icon: 6 })
+                    layer.closeAll('loading'); //关闭loading
+                }
+                , error: function () {
+                    //请求异常回调
+                    layer.msg('上传失败', { icon: 6 })
+                    layer.closeAll('loading'); //关闭loading
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>

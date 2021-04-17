@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'iconfont';  /* project id 2179092 */
+  src: url('//at.alicdn.com/t/font_2179092_e1r2tvtwsbh.eot');
+  src: url('//at.alicdn.com/t/font_2179092_e1r2tvtwsbh.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_2179092_e1r2tvtwsbh.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_2179092_e1r2tvtwsbh.woff') format('woff'),
+  url('//at.alicdn.com/t/font_2179092_e1r2tvtwsbh.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_2179092_e1r2tvtwsbh.svg#iconfont') format('svg');
+}
+
+  .iconfont {
+    font-family: "iconfont" !important;
+    font-size: 20px;
+    color: white;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .icon-kefu::before {content: "\e603"}
+  .icon-upload::before {content: '\e723'}
+  .icon-bug::before {content: '\e692'}
+  .icon-info::before {content: '\e6f0'}
+  .icon-game::before{content: '\e64b'}

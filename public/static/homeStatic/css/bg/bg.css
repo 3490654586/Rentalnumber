@@ -1,0 +1,329 @@
+:root{
+	--text-color:white;
+	--back-color:white;
+}
+.layui-nav .layui-nav-item a{
+    color: white;
+}
+.right_bot_img{
+    position: fixed;
+    left: 0px;
+    bottom: 50px;
+    width: 300px;
+}
+.layui-nav-img{
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
+#app{
+	width: 100%;
+	height: 100%;
+	background-color: #f8f8f8;
+	padding-bottom: 50px;
+}
+#main{
+	padding-top: 20px;
+}
+.layui-carousel img{
+	width: 100%;
+	height: 100%;
+}
+.layui-container{
+	padding-top: 30px;
+}
+@media screen and (min-width:1200px) {
+	.layui-container{
+		width: 1350px;
+	}
+}
+
+/* 导航栏 */
+.header{
+    background-color: rgba(4, 4, 4, 0.7);
+	color: white;
+	height: 70px;
+}
+.layui-row a img{
+	display: block;
+	/* width: 61%; */
+	width: 155px;
+    height: 100%;
+    margin-left: 40px;
+}
+.grid-demo{
+	margin-left: 0px !important;
+	min-height: 70px;
+	display: flex;
+	align-items: center;
+	min-width: 390px;
+}
+/* 分类 */
+.game-list{
+	width: 100px;
+	height: 70px;
+	background-color: #fff;
+	color: #000000;
+	margin-left: 50px;
+	
+}
+.game-list .game_1{
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
+	padding: 10px;
+	box-sizing: border-box;
+	width: 100%;
+	cursor: pointer;
+}
+.game-list .game_2{
+	position: absolute;
+	height: 300px;
+	background-color: rgba(4, 4, 4, 0.8);
+	/* width: 100vw; */
+	width: calc(100vw - 17px);
+	left: -15px;
+	top: 100%;
+	display: none;
+}
+.game-list .game_2:hover{
+	display: block;
+}
+.game-list .game_2 ul{
+	width: 75%;
+	height: 100%;
+	padding: 20px 0px;
+	margin: 0 auto;
+	display: flex;
+}
+.game-list .game_2 ul li{
+	display: flex;
+	flex-direction: column;
+	margin-right:80px;
+	font-size: 18px;
+	align-items: center;
+}
+.game-list .game_2 ul li span{
+	color: var(--text-color);
+	padding-bottom: 15px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #9e9e9e;
+	width: 80px;
+	text-align: center;
+}
+.game-list .game_2 ul li a{
+	color: white;
+	margin-bottom: 10px;
+}
+.game-list .game_2 ul li a:hover{
+	color: #009F95 !important;
+}
+/* .game-list .game_1:hover +  .game_2  {
+	display: block;
+} */
+.layui-nav *{
+	font-size:18px !important;
+}
+.layui-nav .layui-nav-item a{
+	display: flex;
+	align-items: center;
+	height: 60px;
+}
+.layui-nav .layui-this:after, .layui-nav-bar, .layui-nav-tree .layui-nav-itemed:after{
+	background-color:white !important;
+}
+.nav{
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+	background-color: inherit;
+}
+.login{
+	width: 100%;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	font-size: 18px;
+}
+.login .nav li>a{
+	height: 60px;
+	display: flex;
+
+}
+.login .nav li>a span{
+	max-width: 90px;
+	font-size: 14px !important;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+.login .nav li>a img{
+	width: 38px;
+	height: 38px;
+}
+.login .nav dl{
+    /* background: var(--back-color); */
+    background-color: rgba(4, 4, 4, 0.7);
+	border: none;
+}
+.login .nav dd a{
+	height: 40px;
+    /* color: white; */
+    color: #B5B5B5;
+	display: flex;
+	justify-content: center;
+}
+.login .nav dd a:hover{
+	color:white;
+	background-color: rgba(255, 255, 255, 0.15);
+}
+/* 尾部 */
+.layui-footer{
+	background-color: var(--back-color);
+	padding-top: 2%;
+	padding-bottom: 1%;
+	box-sizing: border-box;
+}
+.inside-footer{
+	max-width: 1350px;
+	height: 100%;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+}
+/* 上部分 */
+.inside-footer .top{
+	display: flex;
+}
+.footer-logo{
+	width: 20%;
+	border-right: 1px solid #f0f0f0;
+}
+.footer-logo img{
+	 width: 80%;
+	 margin-top: 50px;
+}
+.footer-info{
+	width: 50%;
+    border-right: 1px solid #f0f0f0;
+	display: flex;
+}
+.footer-info>ul{
+	flex: 1;
+	 text-align: center;
+}
+.footer-info>ul>li{
+	  cursor: pointer;
+      line-height: 40px;
+	  list-style: none;
+}
+.footer-info>ul>li:hover{
+	 color: var(--text-color);
+}
+.footer-info>ul>li:nth-of-type(1){
+	font-size: 16px;
+	font-weight: 600 !important;
+	color: black;
+}
+.footer-qr{
+	 width: 30%;
+	display: flex;
+}
+.footer-qr div{
+	 flex: 1;
+	 text-align: center;
+}
+.footer-qr div img{
+    width: 60%;
+	 height: 60%;
+	 margin-top: 20px;
+}
+.footer-qr div p{
+	font-size: 16px;
+	font-weight: 600;
+	color: black;
+	margin-top: 7px;
+}
+
+/* 下部分 */
+.inside-footer .bottom{
+	width: 100%;
+	margin: auto;
+	margin-top: 20px;  
+     border-top: 1px solid #f0f0f0;
+}
+.inside-footer .bottom div{
+	 width: 100%;
+	  height: 60px;
+	  text-align: center;
+}
+.foot_ul{
+	text-align: center;
+	margin-top: 20px;
+}
+.foot_ul li{
+	display: inline-block !important;
+	margin-right:40px;
+	list-style: none;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+
+/* 弹窗样式 */
+.demo-class{
+	border-radius: 10px !important;
+}
+.demo-class .layui-layer-title{
+	padding: 0px 35px !important;
+	background-color: white !important;
+	 height: 50px;
+	 line-height: 52px;
+	 font-size: 16px;
+	 border-radius: 10px 10px 0px 0px !important;
+}
+
+/* 客服悬浮窗 */
+#kefu-con {
+	width: 140px;
+	background-color: #fff;
+	box-shadow: 0px 2px 12px #929087;
+	position: fixed;
+	right: -80px;
+	bottom: 122px;
+	z-index: 999999;
+	border-radius: 5px;
+	padding: 0 18px;
+	padding-bottom: 30px;
+	text-align: center;
+	box-sizing: border-box;
+}
+.kefu {
+	font-size: 15px;
+	border: 1px solid #daa520;
+	color: #daa520;
+	border-radius: 20px;
+	margin-top: 17px;
+}
+.kefu-box {
+	margin-top: 10px;
+	font-weight: 700 !important;
+	border-bottom: 1px solid #e0dcdc;
+}
+#kefu-con .kefu-box h3{
+	margin-bottom: 5px !important;
+}
+#kefu-con .kefu-box p{
+	margin-bottom: 5px !important;
+}
+
+/* 公用按钮样式 */
+.public-button{
+	background-color: transparent;
+	border: 1px solid var(--back-color);
+	color:var(--back-color) ;
+}
+.public-button:hover{
+	background-color: var(--back-color);
+	
+}

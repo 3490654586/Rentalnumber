@@ -1,0 +1,166 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+
+<style type="text/css">
+    #con {
+        background-color: white;
+    }
+
+    .layui-tab-content {
+        padding: 0px !important;
+    }
+
+    .layui-table-cell {
+        height: auto;
+    }
+
+    .layui-table-fixed-r table {
+        height: 100%;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <!-- 头部 -->
+    <div id="header"></div>
+    <!-- 内容 -->
+    <div class="layui-container">
+        <!-- 侧栏 -->
+        <div id="aside"></div>
+        <!-- 内容 -->
+        <div id="con">
+            <!-- 标题 -->
+            <h3>我的出租订单</h3>
+            <!-- 搜索框 -->
+            <!--<div class="search">-->
+                <!--<p>关键词/编号</p>-->
+                <!--<input name="search" placeholder="关键词 "/>-->
+                <!--<button type="button" class="layui-btn">搜索</button>-->
+            <!--</div>-->
+            <!-- 标签页 -->
+            <div class="layui-tab layui-tab-brief" lay-filter="test">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">全部订单</li>
+                    <!--<li>进行中</li>-->
+                    <!--<li>已完成</li>-->
+                    <!--<li>投诉中</li>-->
+                    <!--<li>已撤单</li>-->
+                </ul>
+                <div class="layui-tab-content">
+                    <!-- 全部订单 -->
+                    <div class="layui-tab-item layui-show con-inside">
+                        <table id="demo" lay-filter="test"></table>
+                    </div>
+                </div>
+                <!-- 分页 -->
+                <div id="page1"></div>
+            </div>
+
+        </div>
+    </div>
+    <!-- 尾部 -->
+    <div id="footer"></div>
+</div>
+
+<script type="text/javascript">
+    layui.use(['form', 'laytpl', 'element', 'table'], function () {
+        var form = layui.form;
+        var laytpl = layui.laytpl
+        var element = layui.element
+        var laypage = layui.laypage
+        var table = layui.table
+        var $ = layui.$;
+
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+            userIsActive()
+        })
+
+
+        $(".layui-tab-title").find("li").on("click", function () {
+            let textStatus = $(this).text()
+            if (textStatus == '全部订单') {
+                clickIndex = 0
+            } else if (textStatus == '进行中') {
+                clickIndex = 1
+            } else if (textStatus == '已完成') {
+                clickIndex = 2
+            } else if (textStatus == '投诉') {
+                clickIndex = 3
+            } else if (textStatus == '已申诉') {
+                clickIndex = 4
+            }
+            tableQ(clickIndex)
+        })
+
+        window.tableQ = function (clickIndex = 0) {
+            table.render({
+                elem: '#demo',
+                height: "auto",
+                url: "{:url('index/home/myRentGoodsList')}",
+                where: {type: clickIndex},
+                parseData: function (res) {
+                    console.log(res)
+                    return {
+                        "code": res.code, //解析接口状态
+                        "msg": res.msg, //解析提示文本
+                        "count": res.count, //解析数据长度
+                        "data": res.list //解析数据列表
+                    };
+                },
+                page: true, //开启分页
+                cols: [[ //表头
+                    {
+                        field: 'id', title: '订单信息', width: "27%", templet: function (d) {
+                            return "<p>编号：<em>" + d.orderNum + "</em></p>" +
+                                "<p><strong>" + d.account_title + "</strong></p>" +
+                                "<p>服务器：<em>" + 'xx' + "</em></p>"
+                        }
+                    },
+                    {field: 'username', title: '租号方', width: "17%"},
+                    {
+                        field: 'rent_hour', title: '租用时长', width: "10%", templet: function (d) {
+                            return d.rent_hour + '小时'
+                        }
+                    },
+                    {
+                        field: 'price', title: '订单价格', width: "12%", templet: function (d) {
+                            return d.price + '元/小时'
+                        }
+                    },
+                    {
+                        field: 'deposit', title: '租金', width: "10%", templet: function (d) {
+                            return d.deposit + '元'
+                        }
+                    },
+                    {field: 'payType', title: '状态', width: "10%",templet:function(d){
+                        let payType;
+                        if (d.payType == 1){
+                            payType = '未支付'
+                        } else if (d.payType == 2){
+                            payType = '已支付'
+                        } else if (d.payType == 3){
+                            payType = '已完成'
+                        } else if (d.payType == 4){
+                            payType = '已撤单'
+                        } else if (d.payType == 5){
+                            payType = '投诉中'
+                        }
+                        return payType
+                        }},
+                    {title: '操作', width: "15%", toolbar: '#barDemo'} //这里的toolbar值是模板元素的选择器
+                ]]
+            })
+        }
+        window.tableQ()
+    })
+</script>
+<!-- //表格模板 -->
+<script type="text/html" id="barDemo">
+    <div class="operation">
+        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger">上架</button>
+        <button type="button" class="layui-btn layui-btn-sm ayui-btn-normal">编辑</button>
+    </div>
+</script>
+{include file="pubview/footer" /}

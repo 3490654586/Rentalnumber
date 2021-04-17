@@ -1,0 +1,285 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+<style type="text/css">
+    #con {
+        background-color: white;
+        margin-top: 0px !important;
+    }
+
+    .input-wid {
+        width: 100%;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        color: #646464;
+    }
+
+    .input-wid div {
+        display: flex;
+        margin-right: 50px;
+        align-items: center;
+    }
+
+    .input-wid p {
+        margin-right: 15px;
+    }
+
+    .input-wid strong {
+        color: var(--text-color);
+        font-size: 25px;
+        margin-right: 4px;
+    }
+
+    .input-wid .shell-item {
+        padding: 0px 20px;
+        border: 2px solid #e7e7e7;
+        margin-right: 25px;
+        border-radius: 4px;
+    }
+
+    .shell-active {
+        border: 2px solid var(--back-color) !important;
+    }
+
+    /* 表单 */
+    .layui-form {
+        border-top: 1px solid #e7e7e7;
+        border-bottom: 1px solid #e7e7e7;
+        padding: 20px 0px;
+        padding-left: 100px;
+    }
+
+    .layui-input-inline {
+        width: 260px !important;
+    }
+
+    .form-info {
+        margin-bottom: 20px;
+        color: red;
+    }
+
+    /* 提现规则 */
+    .rule {
+        width: 100%;
+        margin-top: 40px;
+    }
+
+    .rule h4 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-color);
+    }
+
+    .rule ul {
+        margin-top: 15px;
+        list-style: none;
+        counter-reset: index 0;
+    }
+
+    .rule ul li {
+        font-size: 15px;
+        line-height: 28px;
+        color: #818181;
+    }
+
+    .rule ul li::before {
+        counter-increment: index;
+        content: counter(index) '.';
+        margin-right: 10px;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <!-- 头部 -->
+    <div id="header"></div>
+
+    <!-- 内容 -->
+    <div class="layui-container">
+        <!-- 侧栏 -->
+        <div id="aside"></div>
+        <div id="con">
+            <h3>账户提现</h3>
+            <div class="con-inside" style="padding: 0px 30px;">
+                <!-- 文字说明 -->
+                <div class="input-wid">
+                    <div>
+                        <p>账户余额：</p>
+                        <strong>{$userInfo.money}</strong>
+                        <sub>元</sub>
+                    </div>
+                    <div>
+                        <p>不可用余额：</p>
+                        <strong>{$userInfo.examine_money}</strong>
+                        <sub>元</sub>
+                    </div>
+                    <div>
+                        <p>提现次数</p>
+                        <strong>{$surplusTx}</strong>
+                    </div>
+                </div>
+                <div class="input-wid">
+                    <p>提现方式：</p>
+                    <div class="shell-item shell-active" data-select="0">
+                        <img src="/static/homeStatic/img/inco/zfb.png"/>
+                    </div>
+                    <div class="shell-item" data-select="1">
+                        <img src="/static/homeStatic/img/inco/wx.png"/>
+                    </div>
+                </div>
+                <!-- 表单 -->
+                <form class="layui-form">
+
+                </form>
+
+                <!-- 规则说明 -->
+                <div class="rule">
+                    <h4>提现规则说明</h4>
+                    <ul>
+                        <li>满20即可提现</li>
+                        <li>为了您的资金安全，每个月的提现次数为4次</li>
+                        <li>提现时间均为24小时内到账</li>
+                        <li>平台不收取提现手续费</li>
+                        <li>最终解释权归本公司所有</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 尾部 -->
+    <div id="footer"></div>
+</div>
+
+<script type="text/javascript">
+    var moneyData = {
+        zfType: 0,
+        account: '支付宝账户',
+        account2: '微信账户',
+        text: '*温馨提示：请提供已经实名过的支付宝账号以及真实姓名，并且仔细检查账号，否则汇款错人将无法追回',
+        text2: '*微信提现：请您添加微信 18173121347 并留言您在平台填写的提现手机号'
+    }
+    layui.use(['laytpl', 'element', 'layer', "form"], function () {
+        var laytpl = layui.laytpl;
+        var element = layui.element;
+        var layer = layui.layer
+        var form = layui.form
+
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+            userIsActive()
+        })
+
+        // 渲染表单
+        function from() {
+            let formModule2 = formModule.innerHTML
+            laytpl(formModule2).render(moneyData, function (html) {
+                $(".layui-form").html(html)
+                form.render('select')
+            })
+        }
+
+        from()
+        //标签页切换
+        $(".input-wid .shell-item").click(function () {
+            let type = $(this).attr('data-select')
+            moneyData.zfType = type
+            from()
+            $(".input-wid .shell-item").removeClass('shell-active')
+            $(this).addClass("shell-active")
+        })
+        // 提交
+        form.on('submit(*)', function (data) {
+            layer.confirm("确认提现吗", {
+                btn: ['确定', '取消']
+            }, function () {
+                let payType = $('.shell-active').attr('data-select')
+                if (payType == 0) {
+                    payType = 1
+                } else {
+                    payType = 2
+                }
+                data.field.payType = payType
+                $.ajax({
+                    url: "{:url('home/mycenter/doWithDrawal')}",
+                    data: data.field,
+                    type: "post",
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res.status == 0) {
+                            layer.msg(res.msg, {icon: 1})
+                            setTimeout(function () {
+                                location.reload()
+                            }, 1000)
+                        } else {
+                            layer.msg(res.msg, {icon: 2})
+                        }
+                    }
+                })
+
+            })
+            return false
+        })
+    })
+</script>
+
+<script type="text/html" id="formModule">
+    {{#  if(d.zfType == 0){ }}
+    <div class="form-info">
+        <span>{{d.text}}</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{{d.account}}</label>
+        <div class="layui-input-inline">
+            <input type="text" name="account" placeholder="请输入" lay-verify="required" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">收款人姓名</label>
+        <div class="layui-input-inline">
+            <input type="text" name="name" placeholder="请输入" lay-verify="required" autocomplete="off"
+                   class="layui-input">
+        </div>
+        <div class="layui-form-mid layui-word-aux">为支付宝实名的姓名</div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">提现方式</label>
+        <div class="layui-input-inline">
+            <select name="type" lay-verify="required">
+                <option value="0">24小时内到账</option>
+            </select>
+        </div>
+    </div>
+    {{#  } }}
+
+    <!-- 微信 -->
+    {{#  if(d.zfType == 1){ }}
+    <div class="form-info">
+        <span>{{d.text2}}</span>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">{{d.account2}}</label>
+        <div class="layui-input-inline">
+            <input type="text" name="account" placeholder="请输入" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    {{#  } }}
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">提现金额</label>
+        <div class="layui-input-inline">
+            <input type="text" name="money" placeholder="请输入" autocomplete="off" class="layui-input"
+                   lay-verify="number">
+        </div>
+        <div class="layui-form-mid layui-word-aux">满20元可提现</div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="*">立即提交</button>
+        </div>
+    </div>
+</script>
+</body>
+</html>

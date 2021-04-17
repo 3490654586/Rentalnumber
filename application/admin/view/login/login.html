@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>登入 - 飞讯租号后台管理系统</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/login.css" media="all">
+
+
+  <!-- new css login -->
+  <link rel="stylesheet" href="__STATIC__/common/login/css/normalize.css">
+  <link rel="stylesheet" href="__STATIC__/common/login/css/login.css">
+  <link rel="stylesheet" href="__STATIC__/common/login/css/sign-up-login.css">
+  <link rel="stylesheet" href="__STATIC__/common/login/css/inputEffect.css" />
+  <link rel="stylesheet" href="__STATIC__/common/login/css/verifyCode.css" />
+  <link rel="stylesheet" href="__STATIC__/common/login/css/tooltips.css" />
+  <link rel="stylesheet" href="__STATIC__/common/login/css/spop.min.css" />
+
+  <script src="__STATIC__/common/login/js/jquery-3.2.1.min.js"></script>
+  <script src="__STATIC__/common/login/js/snow.js"></script>
+  <script src="__STATIC__/common/login/js/jquery.pure.tooltips.js"></script>
+  <script src="__STATIC__/common/login/js/verifyCode.js"></script>
+  <script src="__STATIC__/common/login/js/spop.min.js"></script>
+  <style>
+    html {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+
+      background-repeat: no-repeat;
+
+      background-position: center center #2D0F0F;
+
+      background-color: #00BDDC;
+
+      background-image: url(__STATIC__/common/login/images/snow.jpg);
+
+      background-size: 100% 100%;
+
+    }
+
+    .snow-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100001;
+    }
+
+    .layui-icon {
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 雪花背景 -->
+  <div class="snow-container"></div>
+
+  <!-- 登录控件 -->
+  <div id="login">
+    <input id="tab-1" type="radio" name="tab" class="sign-in hidden" checked />
+    <input id="tab-2" type="radio" name="tab" class="sign-up hidden" />
+    <input id="tab-3" type="radio" name="tab" class="sign-out hidden" />
+    <div class="wrapper">
+      <!-- 登录页面 -->
+      <div class="login sign-in-htm">
+        <form class="container offset1 loginform layui-form">
+          <!-- 猫头鹰控件 -->
+          <div id="owl-login" class="login-owl">
+            <div class="hand"></div>
+            <div class="hand hand-r"></div>
+            <div class="arms">
+              <div class="arm"></div>
+              <div class="arm arm-r"></div>
+            </div>
+          </div>
+          <div class="pad input-container">
+            <section class="content">
+              <span class="input input--hideo">
+                <input class="input__field input__field--hideo layui-input" type="text" name="account_num"
+                  id="LAY-user-login-username" lay-verify="required" placeholder="账号" autocomplete="off" tabindex="1"
+                  maxlength="15" />
+                <label class="input__label input__label--hideo" for="login-username">
+                  <i class="layui-icon layui-icon-cellphone"></i>
+                  <span class="input__label-content input__label-content--hideo"></span>
+                </label>
+              </span>
+              <span class="input input--hideo">
+                <input class="input__field input__field--hideo" type="password" id="login-password" placeholder="密码"
+                  tabindex="2" maxlength="15" name="password" lay-verify="required" />
+                <label class="input__label input__label--hideo" for="login-password">
+                  <i class="layui-icon layui-icon-password"></i>
+                  <span class="input__label-content input__label-content--hideo"></span>
+                </label>
+              </span>
+              <!-- <span class="input input--hideo input--verify_code">
+                <input class="input__field input__field--hideo" type="text" id="login-verify-code" autocomplete="off"
+                  placeholder="请输入验证码" tabindex="3" maxlength="4" />
+                <label class="input__label input__label--hideo" for="login-verify-code">
+                  <i class="layui-icon layui-icon-password"></i>
+                  <span class="input__label-content input__label-content--hideo"></span>
+                </label>
+              </span>
+              <canvas class="verify-code-canvas" id="login-verify-code-canvas"></canvas> -->
+            </section>
+          </div>
+          <div class="form-actions">
+            <!-- <a tabindex="4" class="btn pull-left btn-link text-muted" onclick="goto_forget()">忘记密码?</a> -->
+            <!-- <a tabindex="5" class="btn btn-link text-muted" onclick="goto_register()">注册</a> -->
+            <input class="layui-btn layui-btn-normal" type="button" lay-submit lay-filter="LAY-user-login-submit"
+              id="dologin" value="登录" style="color:white;" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+
+  <script src="__STATIC__/common/common.js"></script>
+
+  <script>
+
+    layui.config({
+
+      base: '__STATIC__/layuiadmin/' //静态资源所在路径
+
+    }).extend({
+
+      index: 'lib/index' //主入口模块
+
+    }).use(['index', 'form'], function () {
+
+      var $ = layui.$
+
+        , form = layui.form
+
+      form.render();
+
+      // 提交登录
+      form.on('submit(LAY-user-login-submit)', function (obj) {
+
+        var data = {
+          'account_num': obj.field.account_num,
+          'password': obj.field.password
+        };
+        let dologin = asynchronousAjax('index/index/backstageSignin', 'post', data, 'json')
+          .done(function (data) {
+            var code = data.code,
+              msg = data.msg;
+            if (code == -1) {
+              layer.msg(msg, { icon: 5 });
+            } else {
+              window.localStorage.setItem('token', data.token);
+              layer.msg(msg, { icon: 6 })
+              setTimeout(() => {
+                location.href = "{:url('admin/index/index')}"
+              }, 1000)
+            }
+          })
+          .fail(function (err) {
+            layer.msg('异步错误', { icon: 5 });
+          })
+      });
+
+
+    });
+  </script>
+
+  <!-- jquery -->
+  <script>
+
+    $(document).keydown(function() {
+      if(event.keyCode == 13){
+        $('#dologin').click()
+      }
+    })
+    $(function () {
+      $('#login #login-password').focus(function () {
+        $('.login-owl').addClass('password');
+      }).blur(function () {
+        $('.login-owl').removeClass('password');
+      });
+      $('#login #register-password').focus(function () {
+        $('.register-owl').addClass('password');
+      }).blur(function () {
+        $('.register-owl').removeClass('password');
+      });
+      $('#login #register-repassword').focus(function () {
+        $('.register-owl').addClass('password');
+      }).blur(function () {
+        $('.register-owl').removeClass('password');
+      });
+      $('#login #forget-password').focus(function () {
+        $('.forget-owl').addClass('password');
+      }).blur(function () {
+        $('.forget-owl').removeClass('password');
+      });
+    });
+  </script>
+</body>
+
+</html>

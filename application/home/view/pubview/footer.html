@@ -1,0 +1,73 @@
+<!-- 尾部 -->
+<div id="footer">
+    <div class="layui-footer">
+        <div class="inside-footer">
+            <div class="top">
+                <div class="footer-logo">
+                    <img src=""/>
+                </div>
+                <div class="footer-info">
+                    <ul>
+                        <li>新手帮助</li>
+                        <li onclick="goHelp()">新手必读</li>
+                        <li onclick="goHelp()">注册及认证</li>
+                        <li onclick="goHelp()">如何发布商品</li>
+                        <li onclick="goHelp()">如何租用账号</li>
+                    </ul>
+                    <ul>
+                        <li onclick="goHelp()">安全中心</li>
+                        <li onclick="goHelp()">租号安全</li>
+                        <li onclick="goHelp()">资金安全</li>
+                        <li onclick="goHelp()">数据及信息</li>
+                    </ul>
+                    <ul>
+                        <li onclick="goHelp()">贴心服务</li>
+                        <li onclick="goHelp()">帮助中心</li>
+                        <li onclick="keFu()">在线客服</li>
+                        <li>平台服务协议</li>
+                        <li>隐私政策</li>
+                    </ul>
+                    <ul>
+                        <li>关于飞讯租号</li>
+                        <li>招贤纳士</li>
+                        <li>不可抗力及免责声明</li>
+                        <li>联系我们</li>
+                    </ul>
+                </div>
+                <div class="footer-qr">
+                    <div>
+                        <p>微信公众号二维码</p>
+                        <img src="__IMAGES__/wxPublicQrCode.jpg" style="width:130px;height:130px;"/>
+                    </div>
+                    <div>
+                        <p>QQ号商交流群</p>
+                        <img src="__IMAGES__/qqGroupQrCode.jpg" style="width:130px;height:130px;"/>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom">
+                <div>
+                    <ul class="foot_ul">
+                        <li>飞讯租号-国内游戏账号租用体验平台,账号出租,王者荣耀 英雄联盟 生死狙击 穿越火线等热门游戏均可租用体验,高端绝版稀有装备顶级账号等你来...</li>
+                    </ul>
+                </div>
+                <div> 网站备案号：<span class="keep-on-record"></span></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 在线客服
+    function keFu() {
+        window.open('http://mah.miketong.net/Web/im.aspx?_=t&accountid=121352', '飞讯租号-咨询', 'width=665,height=515,top=100, left=100,menubar=no,toolbar=no,status=no,scrollbars=yes')
+    }
+
+    //    去帮助页面
+    function goHelp() {
+        let url = "{:url('home/help/index')}"
+        location.href = url
+    }
+</script>
+</body>
+</html>

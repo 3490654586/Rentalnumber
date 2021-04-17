@@ -1,0 +1,288 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+
+<style type="text/css">
+    #con {
+        background-color: white;
+    }
+
+    .update {
+        width: 100%;
+        height: 400px;
+        padding: 0px 30px;
+        box-sizing: border-box;
+    }
+
+    .upd-item {
+        width: 100%;
+        height: 50px;
+        padding: 20px 0px;
+        border-bottom: solid 1px #EFF0EF;
+        margin-bottom: 20px;
+    }
+
+    /* 1 */
+    .upd-item .upd-icon {
+        width: 60px;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        float: left;
+    }
+
+    .upd-item .upd-icon i {
+        font-size: 35px;
+    }
+
+    /* 2 */
+    .upd-item .upd-info {
+        display: flex;
+        height: 100%;
+        margin-left: 15px;
+        flex-direction: column;
+        justify-content: space-around;
+        float: left;
+    }
+
+    .upd-item .upd-info p {
+        font-size: 14px;
+        color: #565656;
+    }
+
+    .upd-item .upd-info p span {
+        color: #8d8d8d;
+    }
+
+    .upd-item .upd-info p strong {
+        color: var(--text-color);
+    }
+
+    /* 3 */
+    .upd-item .upd-but {
+        float: right;
+    }
+
+    .upd-item .upd-but button {
+        width: 80px;
+    }
+
+    /* 弹窗样式 */
+    .art-box {
+        width: 100%;
+        height: 100%;
+        padding: 20px 40px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+</style>
+</head>
+<body>
+<div id="app">
+    <!-- 内容 -->
+    <div class="layui-container">
+        <div id="aside"></div>
+        <div id="con">
+            <h3>账号设置</h3>
+            <ul class="update">
+                <!-- <li class="upd-item">
+                    <div class="upd-icon">
+                        <i class="layui-icon layui-icon-cellphone"></i>
+                    </div>
+                    <div class="upd-info">
+                        <p>手机号绑定</p>
+                        <p><span>已绑定：</span><strong>133******54</strong></p>
+                    </div>
+                    <div class="upd-but">
+                        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="phone-upd">修改</button>
+                    </div>
+                </li> -->
+                <!-- <li class="upd-item">
+                    <div class="upd-icon">
+                        <i class="layui-icon layui-icon-rmb"></i>
+                    </div>
+                    <div class="upd-info">
+                        <p>密保设置</p>
+                        <p><span>已设置：</span><strong>用于账号安全</strong></p>
+                    </div>
+                    <div class="upd-but">
+                        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="money-upd">修改</button>
+                    </div>
+                </li> -->
+                <li class="upd-item">
+                    <div class="upd-icon">
+                        <i class="layui-icon layui-icon-password"></i>
+                    </div>
+                    <div class="upd-info">
+                        <p>登录密码</p>
+                        <p><span>已绑定：</span><strong>用于账号登录</strong></p>
+                    </div>
+                    <div class="upd-but">
+                        <button type="button" class="layui-btn layui-btn-normal layui-btn-sm" id="password-upd">修改
+                        </button>
+                    </div>
+                </li>
+                <p></p>
+            </ul>
+        </div>
+    </div>
+    <div id="footer"></div>
+</div>
+
+<script type="text/javascript">
+    layui.use(['laytpl', 'element', 'layer', 'form'], function () {
+        var laytpl = layui.laytpl;
+        var element = layui.element;
+        var layer = layui.layer
+        var form = layui.form;
+
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+            userIsActive()
+        })
+
+        //修改密码
+        $("#password-upd").click(function () {
+            let html = updatePassword.innerHTML
+            layer.open({
+                type: 1,
+                title: '修改密码',
+                skin: 'demo-class',
+                area: ['400px', '320px'],
+                content: html
+            })
+            form.on('submit(updateaPassword)', function (data) {
+                fetchPost({
+                    url: "{:url('home/Mycenter/changePassword')}",
+                    data: data.field
+                }).then(res => {
+                    if (res.status == 0) {
+                        layer.alert(res.msg, function () {
+                            setTimeout(() => {
+                                login()
+                            }, 1000)
+                        })
+                    } else {
+                        layer.alert(res.msg)
+                    }
+                })
+                return false
+            });
+        })
+
+        // 修改手机号
+        $("#phone-upd").click(function () { 
+            let html = updatePhone.innerHTML
+            layer.open({
+                type: 1,
+                title: '修改密码',
+                skin: 'demo-class',
+                area: ['400px', '320px'],
+                content: html
+            })
+        })
+
+        //表单验证
+        form.verify({
+            oldPassword: function (val) {
+                let chinaVerify = /[\u4E00-\u9FA5]/g; // 不许输入中文
+                if ($.trim(val) == "") {
+                    return "请输入您的旧密码"
+
+                } else if (chinaVerify.test(val)) {
+
+                    return "请不要输入汉字"
+                }
+            },
+            newPassword: function (val) {
+                let chinaVerify = /[\u4E00-\u9FA5]/g; // 不许输入中文
+                let pwdVerify = /^(\w){6,20}$/; // 校验密码：只能输入6-20个字母、数字、下划线
+                if ($.trim(val) == "") {
+                    return "请输入您的新密码"
+
+                } else if (chinaVerify.test(val)) {
+
+                    return "请不要输入汉字"
+
+                } else if (!pwdVerify.exec(val)) {
+
+                    return "密码至少输入6位"
+                }
+            },
+            reNewPassword: function (val) {
+                let chinaVerify = /[\u4E00-\u9FA5]/g; // 不许输入中文
+                if ($.trim(val) == "") {
+                    return "请再次输入您的新密码"
+
+                } else if (chinaVerify.test(val)) {
+
+                    return "请不要输入汉字"
+                }
+            }
+        })
+    })
+</script>
+<!-- 修改密码模板 -->
+<script type="text/html" id="updatePassword">
+    <div class="art-box">
+        <form class="layui-form" action="#" lay-filter="updatePassword">
+            <div class="layui-form-item">
+                <label class="layui-form-label">旧密码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="oldPassword" required lay-verify="oldPassword" placeholder="请输入旧密码"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">新密码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="newPassword" required lay-verify="newPassword" placeholder="请输入新密码"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">确认密码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="reNewPassword" required lay-verify="reNewPassword" placeholder="请输入确认密码"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="updateaPassword">立即提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script type="text/html" id="updatePhone">
+    <div class="art-box">
+        <form class="layui-form" action="" lay-filter="updatePhone">
+            <div class="layui-form-item">
+                <label class="layui-form-label">旧密码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="oldPassword" required lay-verify="oldPassword" placeholder="请输入旧密码"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">旧密码</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="oldPassword" required lay-verify="oldPassword" placeholder="请输入旧密码"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="updateaPassword">立即提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+{include file="pubview/footer"}

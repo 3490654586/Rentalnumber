@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录注册</title>
+    <link rel="stylesheet" href="__HOMESTATIC__/layui/css/layui.css">
+    <link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/bg/bg.css"/>
+    <script src="__HOMESTATIC__/until/jquery-3.4.1.min.js"></script>
+    <script src="__HOMESTATIC__/until/request.js"></script>
+    <style>
+        .layui-input-block {
+            margin-left: unset !important;
+            max-width: 320px;
+            display: block;
+            margin: auto !important;
+        }
+
+        .layui-input-inline {
+            margin-left: unset !important;
+            max-width: 320px;
+            display: block;
+            margin: auto !important;
+            left: unset !important;
+        }
+
+        .layui-form {
+            padding: 20px 0 10px;
+        }
+
+        .layui-btn {
+            width: 100% !important;
+            background-color: #1E9FFF;
+        }
+
+        #login {
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 18px;
+
+        }
+
+        #reg {
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        #forgetPwd {
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 18px;
+            text-align: left;
+            width:0;
+        }
+        .layui-tab-brief > .layui-tab-more li.layui-this:after,
+        .layui-tab-brief > .layui-tab-title .layui-this:after {
+            border-bottom: 2px solid #1E9FFF !important;
+        }
+
+        .layui-tab-title {
+            margin-left: 40px;
+            margin-right: 40px;
+        }
+
+        .button_base {
+            margin: 0;
+            border: 0;
+            font-size: 18px;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            margin-top: -25px;
+            margin-left: -100px;
+            width: 200px;
+            height: 50px;
+            text-align: center;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-user-select: none;
+            cursor: default;
+        }
+
+        .button_base:hover {
+            cursor: pointer;
+        }
+
+        .b07_3d_double_roll {
+            perspective: 500px;
+            -webkit-perspective: 500px;
+            -moz-perspective: 500px;
+            transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
+        }
+
+        .b07_3d_double_roll div {
+            position: absolute;
+            text-align: center;
+            padding: 10px;
+            border: #1E9FFF solid 1px;
+            pointer-events: none;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        .b07_3d_double_roll div:nth-child(1) {
+            color: #1E9FFF;
+            background-color: #ffffff;
+            z-index: 0;
+            width: 100%;
+            height: 50px;
+            clip: rect(0px, 100px, 50px, 0px);
+            position: absolute;
+            transition: all 0.2s ease;
+            -webkit-transition: all 0.2s ease;
+            -moz-transition: all 0.2s ease;
+            transform: rotateX(0deg);
+            -webkit-transform: rotateX(0deg);
+            -moz-transform: rotateX(0deg);
+            transform-origin: 50% 50% -25px;
+            -webkit-transform-origin: 50% 50% -25px;
+            -moz-transform-origin: 50% 50% -25px;
+        }
+
+        .b07_3d_double_roll div:nth-child(2) {
+            color: #1E9FFF;
+            background-color: #1E9FFF;
+            z-index: -1;
+            width: 100%;
+            height: 50px;
+            clip: rect(0px, 100px, 50px, 0px);
+            position: absolute;
+            transform: rotateX(90deg);
+            -webkit-transform: rotateX(90deg);
+            -moz-transform: rotateX(90deg);
+            transition: all 0.2s ease;
+            -webkit-transition: all 0.2s ease;
+            -moz-transition: all 0.2s ease;
+            transform-origin: 50% 50% -25px;
+            -webkit-transform-origin: 50% 50% -25px;
+            -moz-transform-origin: 50% 50% -25px;
+        }
+
+        .b07_3d_double_roll div:nth-child(3) {
+            color: #1E9FFF;
+            background-color: #ffffff;
+            z-index: 0;
+            width: 100%;
+            height: 50px;
+            clip: rect(0px, 200px, 50px, 100px);
+            position: absolute;
+            transition: all 0.2s ease 0.1s;
+            -webkit-transition: all 0.2s ease 0.1s;
+            -moz-transition: all 0.2s ease 0.1s;
+            transform: rotateX(0deg);
+            -webkit-transform: rotateX(0deg);
+            -moz-transform: rotateX(0deg);
+            transform-origin: 50% 50% -25px;
+            -webkit-transform-origin: 50% 50% -25px;
+            -moz-transform-origin: 50% 50% -25px;
+        }
+
+        .b07_3d_double_roll div:nth-child(4) {
+            color: #1E9FFF;
+            background-color: #1E9FFF;
+            z-index: -1;
+            width: 100%;
+            height: 50px;
+            clip: rect(0px, 200px, 50px, 100px);
+            position: absolute;
+            transform: rotateX(-90deg);
+            -webkit-transform: rotateX(-90deg);
+            -moz-transform: rotateX(-90deg);
+            transition: all 0.2s ease 0.1s;
+            -webkit-transition: all 0.2s ease 0.1s;
+            -moz-transition: all 0.2s ease 0.1s;
+            transform-origin: 50% 50% -25px;
+            -webkit-transform-origin: 50% 50% -25px;
+            -moz-transform-origin: 50% 50% -25px;
+        }
+
+        .b07_3d_double_roll:hover div:nth-child(1) {
+            background-color: #1E9FFF;
+            transition: all 0.2s ease;
+            -webkit-transition: all 0.2s ease;
+            -moz-transition: all 0.2s ease;
+            transform: rotateX(-90deg);
+            -webkit-transform: rotateX(-90deg);
+            -moz-transform: rotateX(-90deg);
+        }
+
+        .b07_3d_double_roll:hover div:nth-child(2) {
+            color: #ffffff;
+            transition: all 0.2s ease;
+            -webkit-transition: all 0.2s ease;
+            -moz-transition: all 0.2s ease;
+            transform: rotateX(0deg);
+            -webkit-transform: rotateX(0deg);
+            -moz-transform: rotateX(0deg);
+        }
+
+        .b07_3d_double_roll:hover div:nth-child(3) {
+            background-color: #1E9FFF;
+            transition: all 0.2s ease 0.1s;
+            -webkit-transition: all 0.2s ease 0.1s;
+            -moz-transition: all 0.2s ease 0.1s;
+            transform: rotateX(90deg);
+            -webkit-transform: rotateX(90deg);
+            -moz-transform: rotateX(90deg);
+        }
+
+        .b07_3d_double_roll:hover div:nth-child(4) {
+            color: #ffffff;
+            transition: all 0.2s ease 0.1s;
+            -webkit-transition: all 0.2s ease 0.1s;
+            -moz-transition: all 0.2s ease 0.1s;
+            transform: rotateX(0deg);
+            -webkit-transform: rotateX(0deg);
+            -moz-transform: rotateX(0deg);
+        }
+        .for-pass{
+            font-size: 14px;
+            color: #bbbbbb;
+            cursor: pointer;
+            text-align: right;
+            margin-right: 28px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <ul class="layui-tab-title">
+        <li class="layui-this" id="login" data-type="no">登录</li>
+        <li id="reg">注册</li>
+        <li id="forgetPwd" style="display: none"></li>
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show" id="login_content">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="phone" id="ent_number" required lay-verify="phone"
+                               placeholder="请输入手机号码"
+                               autocomplete="off" class="layui-input" maxlength="11">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-inline">
+                        <input type="password" name="password" required lay-verify="required" placeholder="请输入你的密码"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-top: 70px !important;">
+                        <div class="button_base b07_3d_double_roll" lay-submit lay-filter="entry" id="entry">
+                            <div>立即登录</div>
+                            <div>立即登录</div>
+                            <div>立即登录</div>
+                            <div>立即登录</div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="for-pass" id="for-pass" onclick="forPassFun()">
+                忘记密码?
+            </div>
+        </div>
+        <!-- 注册 -->
+        <div class="layui-tab-item" id="reg_content">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="phone" id="reg_number" required lay-verify="phone"
+                               placeholder="请输入手机号码"
+                               autocomplete="off" class="layui-input" maxlength="11">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="display: flex;">
+                        <input type="text" name="code" required lay-verify="required" placeholder="请输入手机验证码"
+                               autocomplete="off" class="layui-input">
+                        <input class="layui-btn" id="code" type="button" value="获取验证码">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-inline">
+                        <input type="password" name="password" required lay-verify="required"
+                               placeholder="6-20位密码。字母/数字/符号至少两种"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-top: 70px !important;">
+                        <div class="button_base b07_3d_double_roll" lay-submit lay-filter="enroll" id="enroll">
+                            <div>立即注册</div>
+                            <div>立即注册</div>
+                            <div>立即注册</div>
+                            <div>立即注册</div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!--忘记密码-->
+        <div class="layui-tab-item" id="forget_content">
+            <form class="layui-form" action="">
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <input type="text" name="phone" id="phone" required lay-verify="phone"
+                               placeholder="请输入手机号码"
+                               autocomplete="off" class="layui-input" maxlength="11">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="display: flex;">
+                        <input type="text" name="code" required lay-verify="required" placeholder="请输入手机验证码"
+                               autocomplete="off" class="layui-input">
+                        <input class="layui-btn" id="getCode" type="button" value="获取验证码">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-inline">
+                        <input type="password" name="password" required lay-verify="required"
+                               placeholder="请输入你的新密码"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-top: 70px !important;">
+                        <div class="button_base b07_3d_double_roll" lay-submit lay-filter="forget" id="forget">
+                            <div>确认修改</div>
+                            <div>确认修改</div>
+                            <div>确认修改</div>
+                            <div>确认修改</div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="__HOMESTATIC__/layui/layui.js"></script>
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use(['element', 'form', 'layer'], function () {
+        var form = layui.form
+        var layer = layui.layer
+        var $ = layui.$;
+        $("#code").click(function () {
+            let that = $(this)
+            //发送验证码
+            let phone = $("#reg_number").val()
+            if ($.trim(phone) == "") {
+                return layer.msg("请输入手机号")
+            }
+            fetchPost({
+                url: "{:url('home/login/VerificationCode')}",
+                data: {
+                    "phone": phone
+                },
+            }).then(res => {
+                if (res.status == -1) {
+                    layer.msg(res.msg)
+                } else {
+                    that.attr("disabled", "disabled")
+                    let time = 60
+                    let countDown = setInterval(() => {
+                        time--
+                        that.val("重新发送" + "(" + time + ")")
+                        if (time == 0) {
+                            clearInterval(countDown)
+                            that.val("重新发送")
+                            that.removeAttr("disabled")
+                        }
+                    }, 1000)
+                }
+            })
+        })
+        // 注册
+        form.on('submit(enroll)', function (data) {
+            let field = data.field
+            fetchPost({
+                url: "{:url('home/login/FrontDeskRegistrationUserInterface')}",
+                data: {
+                    "phone": field.phone,
+                    "code": field.code,
+                    "password": field.password
+                },
+            }).then(res => {
+                let status = res.status
+                if (status == 0) {
+                    layer.alert(res.msg)
+                    doLogin(field.phone, field.password)
+                } else {
+                    layer.msg(res.msg)
+                }
+            })
+        })
+        // 登录
+        form.on('submit(entry)', function (data) {
+            doLogin(data.field.phone, data.field.password)
+        })
+        //忘记密码
+        form.on('submit(forget)',function (data) { 
+            let field = data.field
+            fetchPost({
+                url: "{:url('home/login/retrievePassword')}",
+                data: {
+                    "phone": field.phone,
+                    "code": field.code,
+                    "password": field.password
+                },
+            }).then(res => {
+                let status = res.status
+                if (status == 0) {
+                    layer.alert(res.msg)
+                } else {
+                    layer.msg(res.msg)
+                }
+            })
+         })
+    });
+    // 按回车登录
+    $(document).keydown(function (event) {
+        if (event.keyCode == 13) {
+            $("#entry").click();
+        }
+    });
+
+    // 封装登录
+    function doLogin(phone, password) {
+        fetchPost({
+            url: "{:url('home/login/FrontDeskUserLoginInterface')}",
+            data: {
+                "phone": phone,
+                "password": password
+            },
+        }).then(res => {
+            let status = res.status
+            if (status == 0) {
+                layer.alert(res.msg,
+                    {
+                        "title": "温馨提示"
+                    },
+                    function () {
+                        parent.location.reload();
+                    })
+            } else {
+                layer.msg(res.msg)
+            }
+        })
+    }
+
+    // 点击忘记密码
+    function forPassFun(){
+        if ($('#login').attr('data-type') == 'no'){
+            $('#forgetPwd').click()
+            $('#reg').css('display','none')
+            $('#login').text('忘记密码')
+            $('#login').attr('data-type','yes')
+            $('#login').addClass('layui-this')
+        }
+    }
+
+    $('#login').click(function(){
+        $('#login').text('登录')
+        $('#login').attr('data-type','no')
+        $('#reg').css('display','inline-block')
+    })
+
+    $('#getCode').click(function(){
+        let phone = $('#phone').val()
+        if (!phone) {
+            layer.msg('请输入手机号')
+            return false
+        }
+        fetchPost({
+            url: "{:url('home/login/sendBackPassword')}",
+            data: {
+                "phone": phone
+            },
+        }).then(res => {
+            let status = res.status
+            layer.msg(res.msg)
+            if (status == 0){
+                let num = 5
+                let interNum = setInterval(()=>{
+                    num--
+                    $(this).val('已发送 ' + num)
+                    $(this).attr('disabled','disabled')
+                    if (num == 0){
+                        clearInterval(interNum)
+                        $(this).val('获取验证码')
+                        $(this).removeAttr('disabled')
+                    }
+                },1000)
+            }
+        })
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+.title {
+    width: 100%;
+    position: relative;
+    height: 50px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title h3 {
+    padding-left: 20px;
+    font-size: 30px;
+
+}
+
+.title u {
+    font-size: 17px;
+    color: #FF5722;
+    float: right;
+    margin-right: 40px;
+    text-decoration: none;
+
+}
+
+#area {
+    display: flex;
+    justify-content: space-between;
+}
+
+.port-4 .layui-btn-normal {
+    position: absolute;
+    bottom: 30px;
+    left: 50px;
+}
+
+.title::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 10px;
+    height: 80%;
+    background-color: #FF5722;
+    border-radius: 8px;
+}
+
+/* 活动列表 */
+.grid {
+    display: flex;
+    justify-content: space-between;
+}
+
+.grid-item {
+    width: 31%;
+    transition: all 0.2s;
+}
+
+.grid img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.grid a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 活动 */
+.activity-item {
+    height: 145px;
+}
+
+.activity-item:hover {
+    transform: scale(1.05, 1.05);
+}
+
+section {
+    margin-bottom: 52px;
+}
+
+/* 推荐游戏 */
+.hot-game-list {
+    width: 500px;
+    height: 300px;
+    transition: all 0.5s;
+}
+
+.hot-game-list a {
+    display: flex;
+    transition: all 0.5s;
+    position: relative;
+}
+
+.hot-game-list .cover {
+    width: 250px;
+    height: 100%;
+    position: absolute;
+    z-index: 3;
+    transition: all 0.5s;
+    left: 0px;
+}
+
+.hot-game-list .game-info {
+    position: absolute;
+    width: 250px;
+    height: 100%;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px 15px;
+    box-sizing: border-box;
+    left: 0px;
+    z-index: 1;
+    transition: all 0.5s;
+    box-shadow: 0px 0px 2px var(--back-color);
+}
+
+/* .hot-game-list:hover {
+        width: 76%;
+    }
+
+    .hot-game-list:hover .game-info {
+        left: 250px;
+    } */
+
+.game-info-title {
+    font-size: 16px;
+    color: #009E94;
+    margin-bottom: 20px;
+}
+
+.game-list-button {
+    margin-top: 20px;
+}
+
+.game-list-button button {
+    border: none;
+    padding: 7px 20px;
+    border-radius: 5px;
+    background-color: rgba(126, 187, 200, 1.0);
+    color: white;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.game-list-button button:hover {
+
+    background-color: #009E94;
+}
+
+#recom-account {
+    display: flex;
+    justify-content: space-between;
+}
+
+#recom-account::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#area::after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+/* 精彩推荐 */
+.recom-list {
+    width: 22%;
+    transition: all 0.4s;
+}
+
+.recom-list:hover {
+    transform: translateY(-10px);
+}
+
+#news {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.news-list {
+    width: 20%;
+    height: 367px;
+    background-color: white;
+    position: relative;
+    overflow: hidden;
+    perspective: 300px;
+    transform-style: preserve-3d;
+    box-shadow: 0px 0px 7px rgb(134, 133, 133);
+    border-radius: 8px;
+}
+
+.news-list .left-on {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 50%;
+    height: 100%;
+    background-color: rgb(137, 143, 142);
+    transition: all 0.5s;
+    transform-origin: 0% 100%;
+}
+
+.news-list .right-on {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 50%;
+    height: 100%;
+    background-color: rgb(51, 117, 192);
+    transition: all 0.5s;
+    transform-origin: 100% 0%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.news-list .right-on p {
+    writing-mode: vertical-lr;
+    padding: 7px 4px;
+    border: 1px solid var(--back-color);
+    color: white;
+}
+
+.news-list:hover .left-on {
+    transform: rotateY(80deg);
+    box-shadow: 0px 4px 10px rgb(159, 163, 163);
+    opacity: 0;
+}
+
+.news-list:hover .right-on {
+    transform: rotateY(-90deg);
+    box-shadow: 0px 4px 10px rgb(159, 163, 163);
+    opacity: 0;
+}
+
+.news-list-con {
+    width: 100%;
+    height: 100%;
+    padding: 37px 26px;
+}
+
+.news-list-con h4 {
+    font-size: 18px;
+    margin-bottom: 18px;
+    text-align: center;
+    color: var(--text-color);
+    font-weight: 700;
+}
+
+.news-list-con p {
+    line-height: 26px;
+    font-size: 15px;
+    color: rgb(78, 78, 78);
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 9;
+    overflow: hidden;
+}
+
+.news-list-con time {
+    display: block;
+    text-align: right;
+    margin-bottom: 30px;
+    font-size: 12px;
+    color: rgb(107, 105, 105);
+}
+
+.news-list-con>a {
+    display: block;
+    margin: 0 auto;
+    width: 54%;
+}
+
+/* 热门游戏 */
+#hot-games {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    height: 380px;
+    padding-bottom: 10px;
+    box-sizing: content-box;
+    padding-top: 3px;
+}
+
+#hot-games>ul {
+    position: absolute;
+    width: 3200px;
+}
+
+.hot-games-item {
+    width: 280px;
+    height: 100%;
+    float: left;
+    margin-right: 66.6px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 0px 5px rgb(194, 191, 191);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.hot-games-item>img {
+    width: 100%;
+    object-fit: cover;
+    height: 160px;
+    border-radius: 0px;
+}
+
+.hot-games-item-title {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 12px;
+    box-sizing: border-box;
+    color: var(--text-color);
+}
+
+.hot-games-info-list {
+    width: 100%;
+    padding: 0px 14px;
+    padding-bottom: 30px;
+    overflow: hidden;
+    box-sizing: border-box;
+    height: 170px;
+    position: relative;
+}
+
+.hot-games-item>div>ul {
+    position: absolute;
+    top: 0px;
+    width: calc(100% - 20px);
+}
+
+.hot-games-item-info {
+    display: flex;
+    height: 32px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.hot-games-item-info strong {
+    color: #ed6d34;
+}
+
+.hot-games-item-info em {
+    font-style: normal;
+}
+
+/* swiper 轮播图*/
+#banner {
+    width: 100%;
+    height: 523px;
+    overflow: hidden;
+    position: relative;
+}
+
+.swiper-container {
+    width: 100%;
+    height: 523px;
+    position: absolute;
+    /* left: -875px;
+    margin-left: 57%; */
+}
+
+.swiper-slide .detail {
+    height: 90px;
+    background: rgba(0, 0, 0, .7);
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    color: #fff;
+    opacity: 0;
+    transition: opacity .3s .3s;
+}
+
+.swiper-slide-active .detail {
+    opacity: 1;
+}
+
+.swiper-slide .detail h3 {
+    width: 950px;
+    margin: 15px auto 0;
+}
+
+.swiper-slide .detail p {
+    width: 950px;
+    margin: 5px auto 0;
+}
+
+.swiper-slide .detail p span {
+    width: 650px;
+    display: block;
+}
+
+/**/
+.effect1 img {
+    transform: scale(1.25, 1.25) translate(10%, 10%);
+    transform: scale(1.1, 1.1) translate(4.545%, 4.545%);
+    /*tr     =    (sc-1)/2sc*100%              */
+    /* --1.25       0.25/2.5*100%=10%          */
+
+}
+
+.leftUp img {
+    -webkit-animation-name: leftUp;
+    animation-name: leftUp;
+}
+
+@-webkit-keyframes leftUp {
+    0% {
+        transform: scale(1.1, 1.1) translate(4.545%, 4.545%);
+    }
+
+    100% {
+        transform: scale(1.1, 1.1) translate(-4.545%, -4.545%);
+    }
+}
+
+@keyframes leftUp {
+    0% {
+        transform: scale(1.1, 1.1) translate(4.545%, 4.545%);
+    }
+
+    100% {
+        transform: scale(1.1, 1.1) translate(-4.545%, -4.545%);
+    }
+}
+
+.moveRight img {
+    -webkit-animation-name: moveRight;
+    animation-name: moveRight;
+}
+
+@-webkit-keyframes moveRight {
+    0% {
+        transform: scale(1.1, 1.1) translate(-4.545%, 0);
+    }
+
+    100% {
+        transform: scale(1.1, 1.1) translate(4.545%, 0);
+    }
+}
+
+@keyframes moveRight {
+    0% {
+        transform: scale(1.1, 1.1) translate(-4.545%, 0);
+    }
+
+    100% {
+        transform: scale(1.1, 1.1) translate(4.545%, 0);
+    }
+}
+
+.moveDown img {
+    -webkit-animation-name: moveDown;
+    animation-name: moveDown;
+}
+
+@-webkit-keyframes moveDown {
+    0% {
+        transform: scale(1.1, 1.1) translate(0, -4.545%);
+    }
+
+    100% {
+        transform: scale(1.1, 1.1) translate(0, 4.545%);
+    }
+}
+
+@keyframes moveDown {
+    0% {
+        transform: scale(1.1, 1.1) translate(0, -4.545%);
+    }
+
+    100% {
+        transform: scale(1.1, 1.1) translate(0, 4.545%);
+    }
+}
+
+.centerBig img {
+    -webkit-animation-name: centerBig;
+    animation-name: centerBig;
+}
+
+@-webkit-keyframes centerBig {
+    100% {
+        transform: scale(1.1, 1.1);
+    }
+}
+
+@keyframes centerBig {
+    100% {
+        transform: scale(1.1, 1.1);
+    }
+}
+
+.rightDownBig img {
+    -webkit-animation-name: rightDownBig;
+    animation-name: rightDownBig;
+}
+
+@-webkit-keyframes rightDownBig {
+    100% {
+        transform: scale(1.1, 1.1) translate(4%, 4%);
+    }
+}
+
+@keyframes rightDownBig {
+    100% {
+        transform: scale(1.1, 1.1) translate(4%, 4%);
+    }
+}
+
+.swiper-container .swiper-slide img {
+    width:100%;
+    height:523px;
+    animation-duration: 5s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-fill-mode: forwards;
+}
+
+.swiper-pagination {
+    bottom: 35px;
+    right: 250px;
+}
+
+.swiper-pagination-bullet {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    margin: 0 5px;
+}
+
+.game-info h3 {
+    margin: 5px 0 10px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #555;
+}
+
+.game-info p {
+    margin: 5px 0 10px;
+}

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>用户充值申请列表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="__STATIC__/layuiadmin/style/admin.css" media="all">
+  <script src="__STATIC__/common/common.js"></script>
+  <script>
+    var islogin = this.IsLogin(); // 未登录用户无法进入后台
+    if (islogin == 1) {
+      location.href = "{:url('login/index')}"
+    } else {
+
+    }
+  </script>
+</head>
+
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-card-body">
+        <table id="UserApplication" lay-filter="UserApplication"></table>
+        <script type="text/html" id="UserApplicationBar">
+          
+          	{{# if(d.status == "申请充值中"){ }}
+				<div class="layui-btn-container">
+		            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="collection">确认收款</button>
+		            <button class="layui-btn layui-btn-sm" lay-event="received">未收到款</button>
+	            </div>
+            {{# }else{ }}
+
+            	{{# if(d.status == "申请充值成功"){ }}
+            		<font color="#FF1493">已充值</font>
+            	{{# }else{ }}
+            		<font color="#FF8247">已拒绝</font>
+            	{{# } }}
+            {{# } }}
+          
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <script src="__STATIC__/layuiadmin/layui/layui.js"></script>
+  <script>
+    layui.config({
+      base: '__STATIC__/layuiadmin/' //静态资源所在路径
+    }).extend({
+      index: 'lib/index' //主入口模块
+    }).use(['index', 'useradmin', 'table', 'laydate','form'], function () {
+      var $ = layui.$
+        , form = layui.form
+        , table = layui.table;
+      var laydate = layui.laydate;
+
+      //第一个实例
+      table.render({
+        elem: '#UserApplication'
+        , height: 'auto'
+        , url: url + 'index/index/UserApplicationRechargeList' //数据接口
+        , page: true //开启分页
+        , limit: 10
+        , parseData: function (res) { //res 即为原始返回的数据
+          return {
+            "code": res.code, //解析接口状态
+            "msg": res.msg, //解析提示文本
+            "count": res.count, //解析数据长度
+            "data": res.list //解析数据列表
+          };
+        }
+        , cols: [[ //表头
+          { field: 'id', title: 'ID', width: '5%', fixed: 'left' }
+          , { field: 'phone', title: '账号', width: '20%' }
+          , { field: 'money', title: '申请充值金额', width: '10%' }
+          , { field: 'status', title: '状态', width: '10%' ,templet:function(d){
+
+          	if(d.status == '申请充值中'){
+
+          		return '<button class="layui-btn layui-btn-sm" style="background-color:#CDAA7D !important">'+d.status+'</button>'
+
+          	}else if(d.status == '申请充值被拒绝'){
+
+          		return '<button class="layui-btn layui-btn-sm" style="background-color:#CD6889 !important">'+d.status+'</button>'
+
+          	}else if(d.status == '申请充值成功'){
+
+          		return '<button class="layui-btn layui-btn-sm" style="background-color:#CD5C5C !important">'+d.status+'</button>'
+
+          	}else{
+
+				return '<button class="layui-btn layui-btn-sm" style="background-color:#CD661D !important">'+d.status+'</button>'
+          	}
+          }}
+          , { field: 'add_time', title: '申请时间', width: '10%' }
+          , { field: 'end_time', title: '结束时间(用户15分钟之内未联系系统自动删除)', width: '20%' }
+          , { field: 'payType', title: '付款应用', width: '10%' }
+          , { fixed: 'right', title: '操作', width: '20%', toolbar: '#UserApplicationBar' }
+        ]]
+      });
+
+      // 监听事件
+      table.on('tool(UserApplication)', function (obj) {
+    
+        switch (obj.event) {
+          case 'collection':
+            layer.confirm('确认已收款ID为'+obj.data.id+'的充值?', { icon: 3, title: '提示' }, function (index) {
+              var data = {
+                'id': obj.data.id,
+                'type': 3
+              };
+              let dologin = asynchronousAjax('index/index/ApplicationRechargeAudit', 'post', data, 'json')
+                .done(function (data) {
+                  var code = data.code,
+                    msg = data.msg;
+                  if (code == -1) {
+                    layer.msg(msg, { icon: 5 });
+                  } else {
+
+                    layer.msg(msg, { icon: 6 })
+                    table.reload('UserApplication'); //数据刷新
+                  }
+                })
+                .fail(function (err) {
+                  layer.msg('异步错误', { icon: 5 });
+                })
+              layer.close(index);
+            });
+
+            break;
+          case 'received':
+            layer.confirm('确认未收款ID为'+obj.data.id+'的充值?', { icon: 3, title: '提示' }, function (index) {
+              var data = {
+                'id': obj.data.id,
+                'type': 2
+              };
+              let dologin = asynchronousAjax('index/index/ApplicationRechargeAudit', 'post', data, 'json')
+                .done(function (data) {
+                  var code = data.code,
+                    msg = data.msg;
+                  if (code == -1) {
+                    layer.msg(msg, { icon: 5 });
+                  } else {
+
+                    layer.msg(msg, { icon: 6 })
+                    table.reload('UserApplication'); //数据刷新
+                  }
+                })
+                .fail(function (err) {
+                  layer.msg('异步错误', { icon: 5 });
+                })
+              layer.close(index);
+            });
+
+            break;
+        };
+      });
+      //执行一个laydate实例
+      laydate.render({
+        elem: '#test1' //指定元素
+      });
+      //监听搜索
+      form.on('submit(LAY-user-back-search)', function (data) {
+        var field = data.field;
+        console.log(field)
+        //执行重载
+        table.reload('UserApplication', {
+          where: field
+        });
+      });
+
+      //事件
+      var active = {
+        batchdel: function () {
+          var checkStatus = table.checkStatus('LAY-user-back-manage')
+            , checkData = checkStatus.data; //得到选中的数据
+
+          if (checkData.length === 0) {
+            return layer.msg('请选择数据');
+          }
+
+          layer.prompt({
+            formType: 1
+            , title: '敏感操作，请验证口令'
+          }, function (value, index) {
+            layer.close(index);
+
+            layer.confirm('确定删除吗？', function (index) {
+
+              //执行 Ajax 后重载
+              /*
+              admin.req({
+                url: 'xxx'
+                //,……
+              });
+              */
+              table.reload('LAY-user-back-manage');
+              layer.msg('已删除');
+            });
+          });
+        }
+        , add: function () {
+          layer.open({
+            type: 2
+            , title: '添加管理员'
+            , content: 'admin_add.html'
+            , area: ['578px', '389px']
+            , btn: ['确定', '取消']
+            , end: function(){
+              $(".layui-laypage-btn").click(); // 刷新表格数据
+            }
+            , yes: function (index, layero) {
+
+              var iframeWindow = window['layui-layer-iframe' + index]
+                , submitID = 'LAY-user-back-submit'
+                , submit = layero.find('iframe').contents().find('#' + submitID);
+           
+              //监听提交
+              iframeWindow.layui.form.on('submit(' + submitID + ')', function (data) {
+                var field = data.field; //获取提交的字段
+ 
+                var data = {
+                  'nickname': field.nickname,
+                  'account_num': field.account_num,
+                  'password': field.password,
+                  'mobile_number': field.mobile_number,
+                  'mailbox' : field.mailbox
+                };
+                let dologin = asynchronousAjax('index/index/addAdmin', 'post', data, 'json')
+                  .done(function (data) {
+                    var code = data.code,
+                      msg = data.msg;
+                    if (code == -1) {
+                      layer.msg(msg, { icon: 5 });
+                    } else {
+
+                      layer.msg(msg, { icon: 6 })
+                    }
+                  })
+                  .fail(function (err) {
+                    layer.msg('异步错误', { icon: 5 });
+                  })
+
+                layer.close(index); //关闭弹层
+              });
+
+              submit.trigger('click');
+            }
+          });
+        }
+      }
+      $('.layui-btn.layuiadmin-btn-admin').on('click', function () {
+        var type = $(this).data('type');
+        active[type] ? active[type].call(this) : '';
+      });
+
+    });
+  </script>
+
+  <!-- jquery -->
+  <script>
+    //显示大图片
+    function show_img(t) {
+        var t = $(t).find("img");
+        //页面层
+        layer.open({
+            type: 1,
+            skin: 'layui-layer-rim', //加上边框
+            area: ['80%', '80%'], //宽高
+            shadeClose: true, //开启遮罩关闭
+            title:'查看图片',
+            end: function (index, layero) {
+                return false;
+            },
+            content: '<div style="text-align:center"><img src="' + $(t).attr('src') + '" /></div>'
+        });
+    }
+  </script>
+</body>
+</html>

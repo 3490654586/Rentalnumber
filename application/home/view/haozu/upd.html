@@ -1,0 +1,650 @@
+{include file="pubview/head" /}
+<link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/aside.css"/>
+<style type="text/css">
+    .push-title {
+        width: 100%;
+        line-height: 56px;
+        background: white;
+        padding-left: 40px;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+    }
+
+    .push-span {
+        font-size: 18px;
+    }
+
+    .push-form {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        padding: 40px 40px;
+        box-sizing: border-box;
+    }
+
+    .push-form-item {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 24px;
+    }
+
+    .push-form-item h2 {
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+    }
+
+    .push-form-item h2 span:nth-of-type(1) {
+        height: 17px;
+        width: 17px;
+        color: white;
+        background-color: var(--back-color);
+        font-size: 12px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+    }
+
+    /* 上传截图 */
+    .upload-list-item {
+        margin-right: 20px;
+        position: relative;
+        width: 75px;
+        height: 75px;
+        border: 1px solid #e7e7e7;
+    }
+
+    .layui-upload-img {
+        width: 75px;
+        height: 75px;
+        z-index: 5;
+        position: absolute;
+        border: none;
+        opacity: 0;
+
+    }
+
+    .upload-list-item > em {
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        font-size: 20px;
+        z-index: 10;
+    }
+
+    .icon {
+        position: absolute;
+        margin: 0 auto;
+        width: 100%;
+        left: 0%;
+        top: 30%;
+        text-align: center;
+        font-size: 20px !important;
+        color: #b6b6b6;
+        z-index: 1;
+    }
+
+    .layui-input-inline {
+        position: relative;
+    }
+
+    /* 提示 */
+    .layui-input-inline > em {
+        font-style: normal;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: #bbbbbb;
+        z-index: 10;
+    }
+
+    .layui-input-inline > span {
+        position: absolute;
+        top: 10px;
+        right: -150px;
+        color: #BBBBBB;
+    }
+
+    .pr {
+        margin-right: 5px;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="header"></div>
+
+    <div class="layui-container">
+        <!-- 侧栏 -->
+        <div id="aside">
+
+        </div>
+
+        <!-- 内容 -->
+        <div id="con" class=" layui-form" lay-filter="forms">
+            <div class="push-title">
+                <span class="push-span">编辑账号信息</span>
+            </div>
+            <div class="push-form">
+                <!-- 游戏区服 -->
+                <input type="hidden" name="id" value="{if $id}{$id}{/if}">
+                <div class="push-form-item layui-form" lay-filter="select-game">
+                    <h2><span>1</span><span>选择游戏区服</span></h2>
+                    <hr>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>选择游戏</div>
+                        <div class="layui-input-inline" id="game_id">
+
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>选择大区</div>
+                        <div class="layui-input-inline" id="dis_service2">
+                            <select name="dis_service" id="dis_service" lay-search lay-filter="dis_service" lay-search
+                                    lay-verify="required">
+                                <option value="">选择大区</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>服务器名</div>
+                        <div class="layui-input-inline" id="the_server">
+                            <select name="the_server" id="the_server2" lay-search lay-verify="required">
+                                <option value="">选择服务器</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2 账号信息 -->
+                <div class="push-form-item layui-form">
+                    <h2><span>2</span><span>账号信息</span></h2>
+                    <hr>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>游戏账号</div>
+                        <div class="layui-input-inline" style="width: 280px;">
+                            <input type="text" name="account" required="" lay-vertype="tips" placeholder="请输入账号"
+                                   autocomplete="off" class="layui-input" lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>游戏密码</div>
+                        <div class="layui-input-inline" style="width: 280px;">
+                            <input type="password" name="pwd" required="" lay-vertype="tips" placeholder="请输入密码"
+                                   autocomplete="off" class="layui-input" lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>角色名称</div>
+                        <div class="layui-input-inline" style="width: 280px;">
+                            <input type="text" name="game_nickname" required="" lay-vertype="tips" placeholder="请输入角色名称"
+                                   autocomplete="off" class="layui-input" lay-verify="required">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">账号等级</div>
+                        <div class="layui-input-inline" style="width: 280px;">
+                            <input type="text" name="level" required="" lay-vertype="tips" placeholder="请输入账号等级|段位等级"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">VIP等级</div>
+                        <div class="layui-input-inline" style="width: 280px;">
+                            <input type="text" name="vip_level" required="" lay-vertype="tips"
+                                   placeholder="请输入账号VIP等级|贵族等级" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 账号描述 -->
+                <div class="push-form-item layui-form">
+                    <h2><span>3</span><span>账号详情 </span></h2>
+                    <br>
+                    <font color="red"> 温馨提示：账号详情越详细，出租率就越高哟！为了您的账号安全，填写账号详情时，请勿填写带有微信号，QQ号，手机等安全隐私的信息！</font>
+                    <hr>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>账号标题</div>
+                        <div class="layui-input-inline" style="width: 450px;">
+                            <input type="text" name="account_title" required="" lay-vertype="tips" placeholder="请输入账号标题"
+                                   autocomplete="off" class="layui-input" lay-verify="required">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>账号描述</div>
+                        <div class="layui-input-inline" style="width: 450px;">
+                            <textarea name="account_intro" placeholder="请输入账号描述" class="layui-textarea"
+                                      lay-verify="required"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">账号封面</div>
+                        <div class="upload-list" style="display: flex;">
+                            <div class="upload-list-item">
+                                <img class="layui-upload-img" data-src="" data-name="screenshotsone">
+                                <i class="layui-icon layui-icon-upload-circle icon"></i>
+                                <input type="hidden" name="screenshotsone" id="screenshotsone"/>
+                            </div>
+                            <div class="upload-list-item">
+                                <img class="layui-upload-img" data-src="" data-name="screenshotstwo">
+                                <i class="layui-icon layui-icon-upload-circle icon"></i>
+                                <input type="hidden" name="screenshotstwo" id="screenshotstwo"/>
+                            </div>
+                            <div class="upload-list-item">
+                                <img class="layui-upload-img" data-src="" data-name="screenshotsthree">
+                                <i class="layui-icon layui-icon-upload-circle icon"></i>
+                                <input type="hidden" name="screenshotsthree" id="screenshotsthree"/>
+                            </div>
+                            <div class="upload-list-item">
+                                <img class="layui-upload-img" data-src="" data-name="screenshotsfour">
+                                <i class="layui-icon layui-icon-upload-circle icon"></i>
+                                <input type="hidden" name="screenshotsfour" id="screenshotsfour"/>
+                            </div>
+                            <div class="upload-list-item">
+                                <img class="layui-upload-img" data-src="" data-name="screenshotsfive">
+                                <i class="layui-icon layui-icon-upload-circle icon"></i>
+                                <input type="hidden" name="screenshotsfive" id="screenshotsfive"/>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <span style="padding-left: 110px;color:#999">上传说明：每张图片大小不超过5M，格式为jpg、jpeg、png</span>
+                </div>
+
+                <!-- 出租信息 -->
+                <div class="push-form-item layui-form">
+                    <h2><span>4</span><span>出租信息</span></h2>
+                    <hr>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">0元体验</div>
+                        <div class="layui-input-block">
+                            <input type="radio" name="experience" value="1" title="参与">
+                            <input type="radio" name="experience" value="2" title="不参与" checked>
+                        </div>
+                        <span style="color:#999">* 参与0元免费体验，起租时长须为1小时。参与后能极快的提升账号出租时长、出租次数</span>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">排位</div>
+                        <div class="layui-input-block">
+                            <input type="radio" name="rank" value="1" title="允许">
+                            <input type="radio" name="rank" value="2" title="不允许" checked>
+
+                        </div>
+                        <span style="color:#999">* 是否允许打排位</span>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">登录方式</div>
+                        <div class="layui-input-block">
+                            <input type="radio" name="reg_type" value="1" title="明文登录">
+                            <input type="radio" name="reg_type" value="2" title="远程登录" checked>
+                        </div>
+                        <span style="color:#999">* 用户使用的登录方式</span>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">设置押金</div>
+                        <div class="layui-input-inline" style="width: 250px;">
+                            <input type="tel" name="deposit" autocomplete="off" class="layui-input" value="0"
+                                   onkeyup="inputIntRegEx(this)">
+                            <em>元</em>
+                        </div>
+                        <span style="color:#999;line-height: 38px;">* 押金是指用户租用此账号需缴纳的金额，保障交易安全</span>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>出租单价</div>
+                        <div class="layui-input-inline" style="width: 250px;">
+                            <input type="tel" name="price" autocomplete="off" class="layui-input" value=""
+                                   placeholder="出租单价" lay-verify="required" onkeydown="clearMoney()"
+                                   onkeyup="inputIntRegEx(this)">
+                            <em>元/小时</em>
+                        </div>
+                        <button class="layui-btn layui-btn-danger" style="margin-right: 20px;"
+                                onclick="computedMoney()">计算
+                        </button>
+                        <span style="color:#999;line-height: 38px;">* 出租按小时计算</span>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>日租价</div>
+                        <div class="layui-input-inline" style="width: 250px;">
+                            <input type="tel" name="day_price" autocomplete="off" class="layui-input" value=""
+                                   placeholder="日租价" lay-verify="required" onkeyup="inputIntRegEx(this)">
+                            <em>元</em>
+                        </div>
+                        <span style="color:#999;line-height: 38px;">* 日租时长为24小时</span>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>包夜价</div>
+                        <div class="layui-input-inline" style="width: 250px;">
+                            <input type="tel" name="pack_night_price" autocomplete="off" class="layui-input" value=""
+                                   placeholder="包夜价格" lay-verify="required" onkeyup="inputIntRegEx(this)">
+                            <em>元</em>
+                        </div>
+                        <span style="color:#999;line-height: 38px;">* 包夜时长为每日的22:00-08:00,单位支持到分</span>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-form-label"><font color="red">* </font>最短租时</div>
+                        <div class="layui-input-inline" style="width: 250px;">
+                            <input type="tel" name="shortest_time" autocomplete="off" class="layui-input"
+                                   placeholder="最短租用时间" value="1" lay-verify="required" onkeyup="inputIntRegEx(this)">
+                            <em>小时</em>
+                        </div>
+                        <span style="color:#999;line-height: 38px;">* 用户进行租用时，最少的租用时长，只可设置整数（不包含日租、包夜）</span>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <div class="layui-form-label">账号标签</div>
+                        <div class="layui-input-block" style="display:flex">
+                            <input type="tel" name="labelone" autocomplete="off" class="layui-input pr"
+                                   placeholder="请输入标签" value="">
+                            <input type="tel" name="labeltwo" autocomplete="off" class="layui-input pr"
+                                   placeholder="请输入标签" value="">
+                            <input type="tel" name="labelthree" autocomplete="off" class="layui-input pr"
+                                   placeholder="请输入标签" value="">
+                            <input type="tel" name="labelfour" autocomplete="off" class="layui-input pr"
+                                   placeholder="请输入标签" value="">
+
+                            <i class="layui-icon layui-icon-about" style="line-height: 38px;padding-left: 5px;"
+                               id="icons"></i>
+                        </div>
+
+                    </div>
+                </div>
+
+                <button class="layui-btn layui-btn-normal" lay-filter="push" lay-submit>立即发布</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);//search,查询？后面的参数，并匹配正则
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    var goodsId = $('input[name="id"]').val()  //商品id
+
+    //清空日租价
+    function clearMoney() {
+        $("input[name='day_price']").val('')
+        $("input[name='pack_night_price']").val('')
+    }
+
+    // 计算日租价
+    function computedMoney() {
+        let price = $("input[name='price']").val()
+        if (price) {
+            layer.alert("请先填写单价再计算", {
+                "title": "温馨提示"
+            })
+            return false
+        }
+        let dayPrice = Math.round(((price * 0.8) * 24) * 100) / 100
+        let evenPrice = Math.round(((price * 0.8) * 10) * 100) / 100
+        $("input[name='day_price']").val(dayPrice)
+        $("input[name='pack_night_price']").val(evenPrice)
+    }
+
+    window.inputIntRegEx = function (obj) {
+        obj.value = (obj.value.match(/\d+(\.\d{0,2})?/) || [''])[0] // 正
+    }
+
+    layui.use(['form', 'upload', 'laytpl', 'element'], function () {
+        var form = layui.form;
+        var upload = layui.upload;
+        var laytpl = layui.laytpl
+        var element = layui.element
+        var $ = layui.$;
+        $("#icons").hover(function () {
+
+            openiconsMsgs();
+
+        }, function () {
+
+            layer.close(subtips);
+
+        });
+
+        function openiconsMsgs() {
+
+            subtips = layer.tips('个性化标签将直接对租客显示，并帮助您的账号更容易被搜索', '#icons', {
+                tips: [1, 'black'],
+                area: 'auto',
+                time: 30000
+            });
+
+        }
+
+        let gameList = []   //游戏
+        let serverList = []  //服务器
+        let areaList = []  //区
+
+        //获取游戏，服务器，区
+        fetchPost({
+            url: "{:url('index/index/gameServerArea')}"
+        }).then(res1 => {
+            //赋值
+            gameList = res1.game;
+            serverList = res1.server
+            areaList = res1.area
+            // 渲染游戏
+            console.log(res1)
+            let SelectGame2 = SelectGame.innerHTML
+            laytpl(SelectGame2).render(gameList, function (html) {
+                $("#game_id").html(html)
+                form.render('select');
+            })
+            //获取个人账号的数据，完成初始化
+            fetchPost({
+                url: "index/home/EditAndPublishAccountToViewDetails",
+                data: {id: goodsId}
+            }).then(res2 => {
+                console.log(res2)
+
+                let gameId = res2.data.game_id   //游戏id，作为筛选
+                let serverId = res2.data.servers   //服务器id
+                //渲染服务器
+                let selectServerList = serverList.filter((value) => {
+                    if (value.game_id == gameId) {
+                        return value
+                    }
+                })
+                let SelectServer2 = SelectServer.innerHTML
+                laytpl(SelectServer2).render(selectServerList, function (html) {
+                    $("#dis_service2").html(html)
+                    form.render('select');
+                })
+
+                //渲染大区
+                let selectAreaList = areaList.filter((value) => {
+                    if (value.rid == serverId) {
+                        return value
+                    }
+                })
+                let SelectArea2 = SelectArea.innerHTML
+                laytpl(SelectArea2).render(selectAreaList, function (html) {
+                    $("#the_server").html(html)
+                    form.render('select');
+                })
+                //渲染其他数据
+                form.val('forms', res2.data)
+                //获取图片
+                $('#screenshotsone').siblings('img').attr('src', res2.data.screenshotsone)
+                $('#screenshotstwo').siblings('img').attr('src', res2.data.screenshotstwo)
+                $('#screenshotsthree').siblings('img').attr('src', res2.data.screenshotsthree)
+                $('#screenshotsfour').siblings('img').attr('src', res2.data.screenshotsfour)
+                $('#screenshotsfive').siblings('img').attr('src', res2.data.screenshotsfive)
+                let imgArr = ['#screenshotsone', '#screenshotstwo', '#screenshotsthree', '#screenshotsfour', '#screenshotsfive']
+                imgArr.forEach((value) => {
+                    let obj = $(value).siblings('img')
+                    if (obj.attr('src') != '') {
+                        obj.css('opacity', 1)
+                        obj.after('<em class="layui-icon layui-icon-close-fill remove-image"></em>')
+                    }
+                })
+
+            })
+
+        })
+
+
+        //选择服务器
+        form.on('select(game_id)', function (data) {
+            let id = data.value  //获取id
+            //过滤指定数据
+            let selectServerList = serverList.filter((value) => {
+                if (value.game_id == id) {
+                    return value
+                }
+            })
+            let SelectServer2 = SelectServer.innerHTML
+            laytpl(SelectServer2).render(selectServerList, function (html) {
+                $("#dis_service2").html(html)
+                form.render('select');
+            })
+            layui.form.render('select');
+            //清除大区
+            let SelectArea2 = SelectArea.innerHTML
+            laytpl(SelectArea2).render({}, function (html) {
+                $("#the_server").html(html)
+                form.render('select');
+            })
+        })
+
+        //获取大区
+        form.on('select(server_id)', function (data) {
+            let id = data.value
+            //过滤
+            let selectAreaList = areaList.filter((value) => {
+                if (value.rid == id) {
+                    return value
+                }
+            })
+            let SelectArea2 = SelectArea.innerHTML
+            laytpl(SelectArea2).render(selectAreaList, function (html) {
+                $("#the_server").html(html)
+                form.render('select');
+            })
+            layui.form.render('select');
+        })
+
+        //引入公共侧栏
+        laytpl(user_aside_module).render({}, function (html) {
+            aside.innerHTML = html
+            userIsActive()
+        })
+
+        upload.render({
+            elem: '.layui-upload-img',
+            url: httpStr + 'index/home/uploadImage',
+            before: function (obj) {
+                let item = this.item   //获取点击的对象
+                obj.preview(function (index, file, result) {
+                    item[0].src = result
+                })
+            },
+            done: function (res, index) {
+                let code = res.code
+                let url = res.url
+                let msg = res.msg
+                //获取对象，将src赋值上去，方便移除时的操作
+                let item = this.item
+                let names = $(item).attr("data-name")
+                $('#' + names).val(url)
+                item[0].style.opacity = 1
+                //动态生成移除按钮
+                item.after('<em class="layui-icon layui-icon-close-fill remove-image"></em>')
+                // item[0].setAttribute('data-src',url)
+                if (code == 0) {
+                    layer.msg(msg)
+                }
+            }
+        })
+        //移除按钮
+        $(document).on('click', '.remove-image', function () {
+            let imgObj = $(this).siblings('img')[0]
+            let names = $(imgObj).attr("data-name")
+            $('#' + names).val('')  //清空
+            imgObj.removeAttribute('src')
+            $(imgObj).css('opacity', 0)
+            $(this).remove()
+        })
+        // $("input[name='account']").val()
+        form.on('submit(push)', function (data) {
+            let tokens = window.localStorage.getItem('tokens')
+            let result = data.field;
+            result.token = tokens
+            result.screenshotsone = result.screenshotsone.replace(httpStr, '')
+            result.screenshotstwo = result.screenshotstwo.replace(httpStr, '')
+            result.screenshotsthree = result.screenshotsthree.replace(httpStr, '')
+            result.screenshotsfour = result.screenshotsfour.replace(httpStr, '')
+            result.screenshotsfive = result.screenshotsfive.replace(httpStr, '')
+            result.id = $('input[name="id"]').val()
+            fetchPost({
+                url: 'index/home/pubGameAccount',
+                data: result
+            }).then(res => {
+                console.log(result);
+                let code = res.code
+                let msg = res.msg
+                if (code == 0) {
+                    layer.msg(msg)
+                    setTimeout(() => {
+                        window.location.href = "{:url('home/mycenter/accountList')}"
+                    }, 2500)
+
+                }
+            })
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+    })
+</script>
+
+
+<script type="text/html" id="SelectGame">
+    <select name="game_id" lay-filter="game_id" lay-search lay-verify="required">
+        <option value="">选择游戏</option>
+        {{# layui.each(d, function(index, item){ }}
+        <option value="{{item.id}}">{{item.game_name}}</option>
+        {{# }); }}
+    </select>
+</script>
+
+
+<script type="text/html" id="SelectServer">
+    <select name="servers" lay-filter="server_id" lay-search lay-verify="required">
+        <option value="">选择服务器</option>
+        {{# layui.each(d, function(index, item){ }}
+        <option value="{{item.id}}">{{item.server_name}}</option>
+        {{# }); }}
+    </select>
+</script>
+
+<script type="text/html" id="SelectArea">
+    <select name="area" id="the_area" lay-search lay-verify="required">
+        <option value="">选择大区</option>
+        {{# layui.each(d, function(index, item){ }}
+        <option value="{{item.id}}">{{item.area_name}}</option>
+        {{# }); }}
+    </select>
+</script>
+
+{include file="pubview/footer" /}

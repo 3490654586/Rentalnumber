@@ -1,0 +1,957 @@
+{include file="pubview/head" /}
+<script src="__HOMESTATIC__/common/pinyin-match/pinyin.js"></script>
+
+<style type="text/css">
+    .hall-game-select {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        padding-bottom: 50px;
+        margin-bottom: 20px;
+    }
+
+    .hall-game-select h3 {
+        line-height: 48px;
+        font-size: 14px;
+        padding-left: 20px;
+        font-weight: 700;
+        color: #4c4c4c;
+    }
+
+    .clear-select {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 30px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.4s;
+    }
+
+    .clear-select i {
+        margin-right: 9px;
+    }
+
+    .clear-select:hover {
+        color: var(--back-color);
+    }
+
+    /* 游戏推荐 */
+    .hall-game-search {
+        width: 100%;
+        height: 78px;
+        margin-top: 30px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+    }
+
+    .hall-game-search p {
+        width: 100px;
+        line-height: 60px;
+        text-align: center;
+        color: #bbb;
+    }
+
+    .hall-game-search-ul {
+        width: calc(100% - 100px);
+        display: flex;
+        height: 100%;
+        align-items: center;
+    }
+
+    .hall-game-search-item {
+        height: 100%;
+        width: 152.5px;
+        display: flex;
+    }
+
+    .hall-game-search-item a {
+        width: 80%;
+        display: block;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hall-game-search-item a img {
+        width: 100%;
+        height: 100%;
+        border: 1px solid #9f9f9f;
+        transition: all 0.5s;
+        box-sizing: border-box;
+    }
+
+    .hall-game-search-item .info {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 1px;
+        box-sizing: border-box;
+        display: block;
+        text-align: center;
+        line-height: 80px;
+        border: 1px solid #b5b5b5;
+        background-color: rgba(255, 255, 255, 0.7);
+        color: red;
+        font-weight: 700;
+        transform: translateY(100%);
+        transition: all 0.5s;
+    }
+
+    /* 动画效果 */
+    .hall-game-search-item a:hover .info {
+        border: 1px solid red;
+        transform: translateY(0);
+    }
+
+    /* 账号排序 */
+    .account-con {
+        width: 100%;
+        margin-top: 30px;
+    }
+
+    .account-sorting {
+        width: 100%;
+        height: 60px;
+        background-color: white;
+        display: flex;
+    }
+
+    .account-sorting li {
+        width: 120px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 0px 5px;
+        transition: all 0.6s;
+    }
+
+    .account-sorting li i {
+        margin-left: 5px !important;
+    }
+
+    .account-sorting li:hover {
+        background-color: var(--back-color);
+        color: white;
+        transform: rotate(360deg);
+    }
+
+    /* 账号列表 */
+    .account-list {
+        width: 100%;
+        height: 100%;
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .account-list > ul {
+        width: 76%;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+    }
+
+    .account-list .account-list-item {
+        width: 100%;
+        height: 150px;
+        border-bottom: 1px solid #bbbb;
+        transition: all 0.5s;
+    }
+
+    .account-list .account-list-item:last-of-type {
+        border-bottom: none;
+    }
+
+    .account-list .account-list-item:hover {
+        background-color: #f4f4f4;
+    }
+
+    .account-list .account-list-item > a {
+        /* display: flex; */
+        display: block;
+        width: 100%;
+        height: 100%;
+        padding: 14px 24px;
+        text-decoration: none;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .account-list .account-list-item .goods-cover {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        float: left;
+        margin-top: 11px;
+    }
+
+    .account-list .account-list-item a img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .account-list .account-list-item a:hover {
+        color: black;
+    }
+
+    .account-list-item .goods-title {
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+        height: 100%;
+        justify-content: center;
+        align-items: flex-start;
+        float: left;
+    }
+
+    .account-list-item .goods-title p {
+        line-height: 24px;
+    }
+
+    .account-list-item .goods-title p:nth-of-type(2)::before {
+        content: '价格：';
+    }
+
+    .account-list .account-list-item .goods-title h2 {
+        width: 358px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 30px;
+    }
+
+    .account-list .goods-title > ul {
+        display: flex;
+        margin-top: 5px;
+    }
+
+    .account-list .goods-title > ul li {
+        margin-right: 20px;
+        font-size: 12px;
+        padding: 2px 7px;
+        border: 1px solid #aaaa7f;
+        border-radius: 5px;
+        color: #fc3737;
+        background-color: #ffefef;
+        transition: all 0.5s;
+    }
+
+    .account-list .goods-title > ul li:hover {
+        background-color: #eb9d00;
+        color: white;
+    }
+
+    .account-list-item .goods-info {
+        font-size: 16px;
+        color: #8b8b8b;
+        margin-left: 50px;
+        line-height: 22px;
+        float: right;
+        margin-top: 22px;
+    }
+
+    .account-list-item .goods-info p:nth-of-type(2)::before {
+        content: '押金：';
+        color: #8b8b8b;
+        margin-right: 8px;
+    }
+
+    .account-list-item .goods-button {
+        width: 120px;
+        height: 40px;
+        margin-left: 110px;
+        border: 1px solid #fc3737;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fc3737;
+        float: right;
+        margin-top: 40px;
+    }
+
+    .account-list-item .goods-button:hover {
+        background-color: #fc3737;
+        color: white;
+    }
+
+    /* 推荐账号 */
+    .account-list .account-hot {
+        width: 22%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .account-hot .account-hot-tit {
+        width: 100%;
+        height: 500px;
+        background-color: white;
+        padding: 20px 15px;
+        box-sizing: border-box;
+    }
+
+    .account-hot-tit h3 {
+        font-size: 20px;
+        color: #505050;
+    }
+
+    .account-hot-tit-ul {
+        display: flex;
+        flex-direction: column;
+        list-style: none;
+    }
+
+    .account-hot-tit-ul li {
+        width: 100%;
+        height: 105px;
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #BBB;
+    }
+
+    .account-hot-tit-ul li:last-of-type {
+        border: none;
+    }
+
+    .account-hot-tit-ul li a {
+        display: flex;
+        padding: 20px 0px;
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .account-hot-tit-ul li img {
+        width: 65px;
+        object-fit: cover;
+    }
+
+    .account-hot-tit-ul li a p {
+        width: 100%;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        word-break: break-all;
+        margin-bottom: 10px;
+    }
+
+    /* 选择游戏 */
+    .hall-game-search-input {
+        /* width: 118px; */
+        padding: 0px 25px;
+        height: 35px;
+        border: 1px solid;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        color: #9e9e9e;
+        margin-right: 31px;
+        cursor: pointer;
+    }
+
+    .hall-game-search-input i {
+        margin-left: 7px !important;
+    }
+
+    /* 搜索栏 */
+    .search-button {
+        position: absolute;
+        right: 20px;
+        top: 0px;
+        height: 40px;
+        margin-top: 16px;
+    }
+
+    .search-button > input {
+        padding: 8px 10px;
+        width: 190px;
+        border-radius: 8px;
+        margin-right: 10px;
+        border: 1px solid #ddd;
+    }
+
+    /* 下拉样式 */
+    .down-public {
+        position: absolute;
+        width: 950px;
+        box-shadow: 0px 0px 5px #d4d4d4;
+        overflow: auto;
+        background-color: white;
+        border-radius: 8px;
+        top: 55px;
+        min-height: 100px;
+        max-height: 287px;
+        display: none;
+    }
+
+    .down-public::-webkit-scrollbar {
+        width: 7px;
+    }
+
+    /*定义滚动条轨道 内阴影+圆角*/
+    .down-public::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: white;
+    }
+
+    /*定义滑块 内阴影+圆角*/
+    .down-public::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        /* background-color: #755638; */
+        background-color: rgba(144, 147, 153, .3);
+    }
+
+    #down-select > ul {
+        padding: 0px 30px;
+        padding-top: 10px;
+    }
+
+    .pinyin {
+        border-bottom: 1px solid #c3c3c3;
+        padding: 0px;
+        width: 100% !important;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .pinyin li {
+        width: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 32px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .pinyin-active {
+        color: white;
+        background: rgba(241, 73, 6, 0.932);
+        border-radius: 50%;
+    }
+
+    .layui-tab-brief > .layui-tab-title .layui-this {
+        color: rgba(241, 73, 6, 0.932) !important;
+    }
+
+    .layui-tab-brief > .layui-tab-more li.layui-this:after, .layui-tab-brief > .layui-tab-title .layui-this:after {
+        border-bottom: 2px solid rgba(241, 73, 6, 0.932) !important;
+    }
+
+    .select-list {
+        display: flex;
+        flex-wrap: wrap;
+        margin-left: 20px;
+        min-height: 50px;
+    }
+
+    .select-list li {
+        width: 14.2%;
+        font-size: 13px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        margin-right: 20px;
+        height: 30px;
+        color: #7a5a21;
+        border-bottom: dashed 1px #ccc;
+        text-align: center;
+    }
+
+    .select-list li:hover {
+        color: var(--text-color);
+    }
+</style>
+</head>
+
+<body>
+<div id="app">
+    <div id="main">
+        <div class="layui-container">
+            <!-- 热门游戏选择 -->
+            <div class="hall-game-select">
+                <div style="display: flex;justify-content:space-between;border-bottom: 1px solid #f5f5f5;">
+                    <h3>租号大厅</h3>
+                    <div class="clear-select" onclick="clears()">
+                        <i class="layui-icon layui-icon-delete"></i>
+                        <span>清除筛选条件</span>
+                    </div>
+                </div>
+
+                <!-- 端游 -->
+                {foreach $recomGameCate as $k => $v}
+                <div class="hall-game-search">
+                    <p>推荐{$v.cate_name}</p>
+                    <ul class="hall-game-search-ul">
+                        {foreach name="$v->Game" item="v1" key="k1"}
+                        <li class="hall-game-search-item"
+                            onclick="StandardPost('{:url('home/renthall/index')}',{'Gameid':'{$v1.id}'})">
+                            <a href="javascript:void(0)">
+                                <img src='{$v1.thumb}'/>
+                                <div class="info">
+                                    <span>{$v1.game_name}</span>
+                                </div>
+                            </a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                </div>
+                {/foreach}
+
+                <!-- 选择游戏 -区服 -->
+                <div class="hall-game-search">
+                    <p>选择游戏</p>
+                    <ul style="position: relative;" class="hall-game-search-ul">
+                        <li class="hall-game-search-input">
+                            <span>{if isset($hallGameId)}{$hallGameId}{else}选择游戏{/if}</span>
+                            <i class="layui-icon layui-icon-triangle-d"></i>
+                        </li>
+                        <li class="hall-game-search-input">
+                            <span>{if isset($hallServers)}{$hallServers}{else}选择服务器{/if}</span>
+                            <i class="layui-icon layui-icon-triangle-d"></i>
+                        </li>
+                        <li class="hall-game-search-input">
+                            <span>{if isset($hallArea)}{$hallArea}{else}选择大区{/if}</span>
+                            <i class="layui-icon layui-icon-triangle-d"></i>
+                        </li>
+                        <!-- 搜索栏 -->
+                        <div class="search-button">
+                            <input type="text" placeholder="请输入账号标题" id="accountTitle"
+                                   value="{if isset($accountTitle)}{$accountTitle}{/if}">
+                            <button type="button" class="layui-btn layui-btn-danger" onclick="search()">搜索</button>
+                        </div>
+                        <!-- 游戏选择框 -->
+                        <div id="down-select" class="layui-tab layui-tab-brief down-public" lay-filter="downSelect">
+                            <ul class="layui-tab-title" style="background-color:#fbfbfb">
+                                <li class="layui-this" data-gameKind="全部">全部游戏</li>
+                                <li data-gameKind="">端游专区</li>
+                                <li data-gameKind="">手游专区</li>
+                                <li data-gameKind="">STEAM游戏</li>
+                            </ul>
+                            <div style="padding: 0px 30px;box-sizing: border-box;">
+                                <ul class="pinyin">
+                                    <li>全部</li>
+                                </ul>
+                            </div>
+                            <ul class="select-list">
+
+                            </ul>
+                        </div>
+                        <!-- 服务器选择框 -->
+                        <div id="down-select2" class="layui-tab layui-tab-brief down-public" style="left: 150px;">
+                            <ul class="select-list" style="padding-top:20px">
+                                <li>原神1</li>
+                                <li>原神2</li>
+                                <li>原神3</li>
+                            </ul>
+                        </div>
+                        <!-- 区选择框 -->
+                        <div id="down-select3" class="layui-tab layui-tab-brief down-public" style="left: 150px;">
+                            <ul class="select-list" style="padding-top:20px">
+                                <li>区1</li>
+                                <li>区2</li>
+                            </ul>
+                        </div>
+
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 出租账号列表 -->
+            <div class="account-con">
+                <!-- 账号排序 -->
+                <ul class="account-sorting">
+                    <li onclick="StandardPost('{:url('home/renthall/index')}',{'sort':1})" {if
+                        $sort==1}style="background-color:var(--back-color);color:white" {
+                    /if}>综合排序</li>
+                    <li onclick="StandardPost('{:url('home/renthall/index')}',{'sort':2})" {if
+                        $sort==2}style="background-color:var(--back-color);color:white" {
+                    /if}>最新上架</li>
+                    <li onclick="Sales('{$sort}')" {if
+                        $sort==3}style="background-color:var(--back-color);color:white" {
+                    /if}>销量
+                    <i class="layui-icon layui-icon-down" {if $sort=='3a' }style="transform:rotate(180deg)"
+                       {/if}></i></li>
+                    <li onclick="Price('{$sort}')" {if
+                        $sort==4}style="background-color:var(--back-color);color:white" {
+                    /if}>价格<i
+                        class="layui-icon layui-icon-down" {if $sort=='4a' }style="transform:rotate(180deg)"
+                        {/if}></i></li>
+                </ul>
+                <!-- 账号列表 -->
+                <div class="account-list">
+                    {if $rentHall->total() == 0}
+                    <ul style="justify-content: center; align-items: center;">
+                        <img src="/static/homeStatic/img/inco/hallkong.png"/>
+                        <p>暂无数据</p>
+                    </ul>
+                    {else}
+                    <ul>
+                        {foreach $rentHall as $k => $v}
+                        <li class="account-list-item">
+                            <a
+                                    href="javascript:StandardPost('{:url('home/renthall/lookaccount')}',{'id':'{$v.id}'})">
+                                <div class="goods-cover">
+                                    <img src="{$v.screenshotsone}"/>
+                                </div>
+                                <div class="goods-title">
+                                    <h2>{$v.account_title}</h2>
+
+                                    <p style="color: #d44600;">
+                                        {$v.game.game_name}/{$v.game_server.server_name}/{$v.areas.area_name}</p>
+
+                                    <p style="color: red;font-weight: 700;">{$v.price}元/小时起</p>
+                                    <ul>
+                                        {if $v.labelone}
+                                        <li>{$v.labelone}</li>
+                                        {/if}
+                                        {if $v.labeltwo}
+                                        <li>{$v.labeltwo}</li>
+                                        {/if}
+                                        {if $v.labelthree}
+                                        <li>{$v.labelthree}</li>
+                                        {/if}
+                                        {if $v.labelfour}
+                                        <li>{$v.labelfour}</li>
+                                        {/if}
+                                    </ul>
+                                </div>
+                                <div class="goods-button"
+                                     onclick="StandardPost('{:url('home/renthall/lookaccount')}',{'id':'{$v.id}'})">
+                                    {if $v.lease_type == 1}出租中{else}立即租用{/if}
+                                </div>
+                                <div class="goods-info">
+                                    <p style="color: red;font-weight: 700;">{$v.price}/小时</p>
+
+                                    <p style="color: red;">{$v.deposit}元</p>
+                                    <p>{$v.shortest_time}小时起租</p>
+                                </div>
+
+                            </a>
+                        </li>
+                        {/foreach}
+                    </ul>
+                    {/if}
+
+                    <!-- 推荐账号 -->
+                    <div class="account-hot">
+                        <div class="account-hot-tit">
+                            <h3>大家都在租</h3>
+                            <ul class="account-hot-tit-ul">
+                                {foreach name="everyRent" key="k" item="v"}
+                                <li>
+                                    <a
+                                            href="javascript:StandardPost('{:url('home/renthall/lookaccount')}',{'id':'{$v.id}'})">
+                                        <img src="{$v.screenshotsone}"/>
+                                        <div style="margin-left: 10px;width: 185px;">
+                                            <p>{$v.account_title}</p>
+                                            <span
+                                                    style="color: red;font-weight: 700;margin-top: 8px;">{$v.price}元/小时</span>
+                                        </div>
+                                    </a>
+                                </li>
+                                {/foreach}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div>{$rentHall->render()}</div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+    window.onload = function () {
+
+        var pingyings = ['全部', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+        layui.use(['laytpl', 'element', 'laypage', 'layer'], function () {
+            var $ = layui.$
+            var laytpl = layui.laytpl;
+            var element = layui.element
+            var laypage = layui.laypage
+            var layer = layui.layer
+
+
+            // 字母渲染
+            var zimu2 = zimu.innerHTML
+            laytpl(zimu2).render(pingyings, function (html) {
+                $(".pinyin").html(html)
+                $(".pinyin li").eq(0).addClass("pinyin-active");  //第一按钮高亮
+            })
+
+            //渲染所有游戏上去
+            var selectGameList2 = selectGameList.innerHTML
+            var selectServerList2 = selectServerList.innerHTML
+            var selectAreaList2 = selectAreaList.innerHTML
+
+            var screenData = [];  //存储所有游戏
+            let serverData = []   //存储服务器
+            let areaData = []   //存储大区
+
+
+            //获取全部数据，也就是获取全部游戏和服务器和区
+            fetchPost({
+                url: "{:url('index/index/gameServerArea')}"
+            }).then(res => {
+                console.log(res)
+                // 将每个分类都绑定好对应的uid
+                let gameKIndList = document.querySelectorAll("#down-select .layui-tab-title li")
+                gameKIndList.forEach(value => {
+                    let txt = $(value).text()
+                    // 双重for循环一一绑定
+                    res.cate.forEach(value2 => {
+                        let txt2 = value2.cate_name
+                        if (txt.match(txt2)) {
+                            $(value).attr("data-gameKind", value2.id)
+                        }
+                    })
+                })
+                // 获取游戏,存储起来，方便筛选时过滤出需要的，顺便初始化是渲染
+                screenData = res.game   //游戏
+                serverData = res.server //服务器
+                areaData = res.area   //大区
+
+                laytpl(selectGameList2).render(screenData, function (html) {
+                    $("#down-select .select-list").html(html)
+                })
+            })
+
+
+            let whereKind = '全部'  //筛选游戏类型的条件
+            let whereLetter = '全部'   //首字母匹配的条件
+
+            //筛选指定的游戏
+            function selectWhereGame() {
+                let screenData2 = []   //字母筛选完后的数据
+                let screenData3 = []   //字母、专区筛选完
+                //第一步，删选指定字母
+                if (whereLetter != '全部') {
+                    screenData2 = screenData.filter(value => {
+                        let is = PinyinMatch.match(value.game_name, whereLetter);
+                        if (is[0] == 0) {
+                            return value
+                        }
+                    })
+                } else {
+                    screenData2 = screenData
+                }
+                //第二步，选择游戏专区
+                if (whereKind != '全部') {
+                    screenData3 = screenData2.filter(value => {
+                        if (value.cid == whereKind) {
+                            return value
+                        }
+                    })
+                } else {
+                    screenData3 = screenData2
+                }
+                laytpl(selectGameList2).render(screenData3, function (html) {
+                    $("#down-select .select-list").html(html)
+                })
+            }
+
+            //点击专区筛选游戏
+            $("#down-select .layui-tab-title li").click(function () {
+                let id = $(this).attr("data-gamekind")
+                whereKind = id
+                selectWhereGame()
+            })
+            //当拼音筛选游戏的时候
+            $(".pinyin").on('click', 'li', function () {
+                //获取li绑定的首字母,添加样式
+                let letter = $(this).attr('data-zimu')
+                $(".pinyin li").removeClass("pinyin-active")
+                $(this).addClass("pinyin-active")
+
+                whereLetter = letter
+                selectWhereGame()
+            })
+
+
+            //游戏，服务器，区，用来从数组中取出对应的数据
+            let selectGame = "{:isset($gameID) ? $gameID : ''}"
+            let selectServer = "{:isset($serversID) ? $serversID: ''}"
+            let selectArea = "{:isset($areaID) ? $areaID: ''}"
+
+            //当选择游戏的时候
+            $("#down-select .select-list").on("click", "li", function () {
+                let text = $(this).text()
+                $(".hall-game-search-input").eq(0).children("span").text(text)  //选中游戏
+                selectGame = $(this).attr('data-id')   //获取游戏id
+                //展开选择服务器
+                $("#down-select").slideUp("fast")
+                $("#down-select2").slideDown("fast")
+                $(".hall-game-search-input").eq(0).css('border-color', '#9e9e9e')
+                $(".hall-game-search-input").eq(1).css('border-color', 'red')
+                //渲染数据
+                let data = serverData.filter(value => {
+                    if (value.game_id == selectGame) {
+                        return value
+                    }
+                })
+                laytpl(selectServerList2).render(data, function (html) {
+                    $("#down-select2 .select-list").html(html)
+                })
+            })
+            //当选择服务器的时候
+            $("#down-select2 .select-list").on("click", "li", function () {
+                let text = $(this).text()
+                $(".hall-game-search-input").eq(1).children("span").text(text)  //选中游戏
+                selectServer = $(this).attr("data-id")   //获取服务器id
+                //展开选择大区
+                $("#down-select2").slideUp("fast")
+                $("#down-select3").slideDown("fast")
+                $(".hall-game-search-input").eq(1).css('border-color', '#9e9e9e')
+                $(".hall-game-search-input").eq(2).css('border-color', 'red')
+                // 渲染数据
+                let data = areaData.filter(value => {
+                    if (value.rid == selectServer) {
+                        return value
+                    }
+                })
+                laytpl(selectAreaList2).render(data, function (html) {
+                    $("#down-select3 .select-list").html(html)
+                })
+            })
+            //当选择大区的时候
+            $("#down-select3 .select-list").on("click", "li", function () {
+                let text = $(this).text()
+                $(".hall-game-search-input").eq(2).children("span").text(text)  //选中游戏
+                selectArea = $(this).attr('data-id')
+                //展开选择大区
+                $("#down-select3").slideUp("fast")
+                $(".hall-game-search-input").eq(2).css('border-color', '#9e9e9e')
+                StandardPost("{:url('home/renthall/index')}", {
+                    "game_id": selectGame,
+                    "servers": selectServer,
+                    "area": selectArea
+                })
+            })
+
+            //默认第一次一定展开选择游戏
+            $(".hall-game-search-input").click(function () {
+                let index = $(this).index()
+                if (selectGame == "") {
+                    $("#down-select").slideDown("fast")
+                    $(".hall-game-search-input").eq(0).css('border-color', 'red')
+                } else if (selectArea == "" && index == 2) {
+                    $(".down-public").slideUp("fast")
+                    $("#down-select2").slideDown("fast")
+                    $(".hall-game-search-input").eq(0).css('border-color', '#9e9e9e')
+                    $(".hall-game-search-input").eq(1).css('border-color', 'red')
+
+                } else {
+                    if (index == 1) {
+                        //渲染数据
+                        let data = serverData.filter(value => {
+                            if (value.game_id == selectGame) {
+                                return value
+                            }
+                        })
+                        laytpl(selectServerList2).render(data, function (html) {
+                            $("#down-select2 .select-list").html(html)
+                        })
+                    }
+                    if (index == 2) {
+                        // 渲染数据,大区
+                        let data = areaData.filter(value => {
+                            if (value.rid == selectServer) {
+                                return value
+                            }
+                        })
+                        laytpl(selectAreaList2).render(data, function (html) {
+                            $("#down-select3 .select-list").html(html)
+                        })
+                    }
+                    $(".down-public").slideUp("fast")
+                    $(".down-public").eq(index).slideDown("fast")
+                }
+            })
+
+            //点击下拉屏幕其他地方，隐藏下拉
+            $(document).on("click", function (e) {
+                let target = $(e.target)
+                if (target.closest(".hall-game-search-ul").length == 0) {
+                    $(".down-public").slideUp("fast")
+                }
+            })
+        })
+    }
+
+    function Sales(e) {
+        if (e == '3d') {
+            StandardPost("{:url('home/renthall/index')}", {'sort': '3a'})
+        } else {
+            StandardPost("{:url('home/renthall/index')}", {'sort': '3d'})
+        }
+    }
+
+    function Price(e) {
+        if (e == '4d') {
+            StandardPost("{:url('home/renthall/index')}", {'sort': '4a'})
+        } else {
+            StandardPost("{:url('home/renthall/index')}", {'sort': '4d'})
+        }
+    }
+
+    function clears() {
+        StandardPost("{:url('home/renthall/index')}", {'clear': true})
+    }
+
+    function search() {
+        let accountTitle = $('#accountTitle').val()
+        StandardPost("{:url('home/renthall/index')}", {'accountTitle': accountTitle})
+    }
+</script>
+
+<!-- 字母的模板 -->
+<script id="zimu" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <li data-zimu="{{item}}">{{item}}</li>
+    {{#  }); }}
+</script>
+
+<!-- 下拉选项的模板 -->
+<script id="selectGameList" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <li data-id="{{item.id}}">{{item.game_name}}</li>
+    {{#  }); }}
+</script>
+
+<!-- 下拉服务器模板 -->
+<script id="selectServerList" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <li data-id="{{item.id}}">{{item.server_name}}</li>
+    {{#  }); }}
+</script>
+
+<!-- 下拉大区模板 -->
+<script id="selectAreaList" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    <li data-id="{{item.id}}">{{item.area_name}}</li>
+    {{#  }); }}
+</script>
+
+
+{include file="pubview/footer"}

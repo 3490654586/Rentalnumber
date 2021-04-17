@@ -1,0 +1,841 @@
+{include file="pubview/head" /}
+
+<style type="text/css">
+    /* 上部分 */
+    .layui-container {
+        background-color: white;
+        padding: 30px 40px;
+        box-sizing: border-box;
+        border-radius: 8px;
+    }
+
+    .title {
+        font-size: 20px;
+        color: var(--text-color);
+        border-bottom: 1px solid #cccccc;
+        font-weight: 700;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+
+    .con {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 商品信息 */
+    .con-1 {
+        width: 100%;
+        height: 180px;
+        display: flex;
+        border: 1px solid #c8c8c8;
+        padding-bottom: 20px;
+    }
+
+    .con-1-child {
+        height: 100%;
+        box-sizing: border-box;
+    }
+
+    .con-1-title {
+        width: 100%;
+        text-align: center;
+        font-size: 16px;
+        padding: 10px 0px;
+        background-color: #acacac;
+        color: white;
+    }
+
+    .con-1-child-info {
+        height: calc(100% - 41px);
+        width: 100%;
+        padding: 20px 20px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        color: #838383;
+    }
+
+    .con-1-child:first-of-type .con-1-child-info {
+        justify-content: end;
+    }
+
+    .con-1-child-info img {
+        width: 200px;
+        height: 100%;
+        margin-right: 20px;
+    }
+
+    .goods-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .goods-info h4 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: black;
+    }
+
+    .goods-info .goods-data {
+        font-size: 15px;
+        color: #7a7a7a;
+        margin-bottom: 7px;
+    }
+
+    /* 租号类型 */
+    .con-2 {
+        width: calc(100% + 2px);
+        background-color: #ffffff;
+        border: 1px solid #c8c8c8;
+        border-top: 0px;
+        padding: 20px 20px;
+        box-sizing: border-box;
+    }
+
+    .con-2-item {
+        display: flex;
+        align-items: end;
+        margin-bottom: 25px;
+        align-items: center;
+    }
+
+    .con-2-item > span {
+        color: #919191;
+        line-height: 32px;
+        margin-left: 61px;
+    }
+
+    .con-2-item > p {
+        color: #939393;
+        margin-right: 10px;
+    }
+
+    /* 租号类型 */
+    .goods-price {
+        display: flex;
+        height: 115px;
+    }
+
+    .goods-price-item {
+        width: 120px;
+        height: 100%;
+        border: 1px solid #cdcdcd;
+        margin-right: 20px;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .goods-price-item-1 {
+        box-sizing: border-box;
+        padding: 14px 20px 0px 20px;
+        color: red;
+    }
+
+    .goods-price-item-1 strong {
+        font-size: 23px;
+    }
+
+    .goods-price-item-2 {
+        height: 39px;
+        line-height: 32px;
+        color: #838383;
+    }
+
+    .goods-price-item-3 {
+        width: 100%;
+        height: 35px;
+        background-color: #e6e6e6;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .this-active, .this-active-type {
+        border: 1px solid red !important;
+        position: relative;
+        color: red;
+    }
+
+    .this-active .goods-price-item-3 {
+        color: red;
+    }
+
+    /* 租号方式 */
+    .goods-type, .goods-time {
+        display: flex;
+        height: 30px;
+        align-items: center;
+    }
+
+    .goods-type li, .goods-time li {
+        width: 95px;
+        height: 100%;
+        border: 1px solid #cdcdcd;
+        margin-right: 25px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .goods-time p {
+        line-height: 30px;
+    }
+
+    /* 自定义时间 */
+    .goods-zd-time {
+        height: 30px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .goods-zd-time span {
+        width: 40px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        border: 1px solid #cdcdcd;
+        font-size: 18px;
+        line-height: 30px;
+        cursor: pointer;
+    }
+
+    .goods-zd-time input {
+        width: 40px;
+        height: 100%;
+        background-color: white;
+        border: 1px solid #cdcdcd;
+        margin: 0px 10px;
+        padding: 0px 14px;
+        text-align: center;
+    }
+
+    .gou {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        width: 0px;
+        height: 0px;
+        border-left: 13px solid transparent;
+        border-right: 13px solid var(--back-color);
+        border-top: 13px solid var(--back-color);
+        border-bottom: 13px solid transparent;
+        display: none;
+    }
+
+    .gou2 {
+        border-left: 13px solid transparent;
+        border-right: 13px solid var(--back-color);
+        border-top: 13px solid transparent;
+        border-bottom: 13px solid var(--back-color);
+        top: initial;
+        bottom: 0px;
+    }
+
+    .gou2 img {
+        margin-top: -11px !important;
+    }
+
+    .gou img {
+        width: 17px;
+        height: 17px;
+        margin-left: -3px;
+        margin-top: -25px;
+    }
+
+    /* 押金 */
+    .deposit {
+        margin-left: 20px;
+        font-weight: 700;
+        color: red;
+        font-size: 25px;
+    }
+
+    /* 红包 */
+    .hongbao {
+        display: flex;
+        font-size: 16px;
+    }
+
+    .layui-badge {
+        height: 100% !important;
+        margin: 0 20px;
+    }
+
+    /* 结账 */
+    .con-3 {
+        width: 100%;
+        margin-top: 50px;
+        height: 80px;
+        background-color: #f0f0f0;
+        border: #eee 1px solid;
+        line-height: 73px;
+        box-sizing: border-box;
+        padding: 0px 20px;
+    }
+
+    .bill strong {
+        font-size: 22px;
+        color: red;
+    }
+
+    .agreement {
+        float: right;
+    }
+
+    .agreement a {
+        margin-left: -19px;
+        color: #e69900;
+    }
+
+    .con-3 button {
+        float: right;
+        margin-top: 18px;
+        margin-left: 50px;
+        width: 120px;
+    }
+
+    /* 支付确定 */
+    #goods-confirm {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        padding: 30px 33px;
+    }
+
+    .confirm-item {
+        display: flex;
+        align-items: center;
+        height: 38px;
+        font-size: 18px;
+        color: #888;
+    }
+
+    .confirm-item strong {
+        color: red;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="header"></div>
+    <div id="main">
+        <div class="layui-container">
+            <div class="title">
+                核对订单信息
+            </div>
+            <div class="con">
+                <!-- 商品信息 -->
+                <div class="con-1">
+                    <div class="con-1-child" style="width: 60%;">
+                        <div class="con-1-title">商品信息</div>
+                        <div class="con-1-child-info">
+                            <img src="{$resList.screenshotsone}"/>
+                            <div class="goods-info">
+                                <h4>{$resList.account_title}</h4>
+                                <div class="goods-data">
+                                    <strong>区 服：</strong>{$resList.server}
+                                </div>
+                                <div class="goods-data">
+                                    <strong>角色名：</strong>{$resList.game_nickname}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="con-1-child" style="width: 20%;">
+                        <div class="con-1-title">起租时长</div>
+                        <div class="con-1-child-info">
+                            {$resList.shortest_time}小时
+                        </div>
+                    </div>
+                    <div class="con-1-child" style="width: 20%;">
+                        <div class="con-1-title">单价</div>
+                        <div class="con-1-child-info">
+                            {$resList.price}元/小时
+                        </div>
+                    </div>
+
+                </div>
+                <!-- 租号等信息-->
+                <div class="con-2">
+                    <!-- 租号类型 -->
+                    <div class="con-2-item">
+                        <p>租号类型：</p>
+                        <ul class="goods-price">
+                            <li class="goods-price-item {if $orderType == 0}this-active{/if}" data-type="0">
+                                <div class="goods-price-item-1">
+                                    ￥<strong>{$resList.price}</strong>
+                                </div>
+                                <div class="goods-price-item-2">最低{$resList.shortest_time}小时起</div>
+                                <div class="goods-price-item-3">时租</div>
+                                <div class="gou" {if $orderType== 0}style="display: block;" {
+                                /if}>
+                                <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+                    </div>
+                    </li>
+                    <li class="goods-price-item {if $orderType == 1}this-active{/if}" data-type="1">
+                        <div class="goods-price-item-1">
+                            ￥<strong>{$resList.day_price}</strong>
+                        </div>
+                        <div class="goods-price-item-2">24小时</div>
+                        <div class="goods-price-item-3">日租</div>
+                        <div class="gou" {if $orderType== 1}style="display: block;" {
+                        /if}>
+                        <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+                </div>
+                </li>
+                <!-- 								<li class="goods-price-item" data-type="2">
+                                                    <div class="goods-price-item-1">
+                                                        ￥<strong>30</strong>
+                                                    </div>
+                                                    <div class="goods-price-item-2">7:00-12:00</div>
+                                                    <div class="goods-price-item-3">包早</div>
+                                                    <div class="gou">
+                                                        <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+                                                    </div>
+                                                </li> -->
+                <li class="goods-price-item {if $orderType == 2}this-active{/if}" data-type="3">
+                    <div class="goods-price-item-1">
+                        ￥<strong>{$resList.pack_night_price}</strong>
+                    </div>
+                    <div class="goods-price-item-2">21:00-7:00</div>
+                    <div class="goods-price-item-3">包夜</div>
+                    <div class="gou" {if $orderType== 2}style="display: block;" {
+                    /if}>
+                    <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+            </div>
+            </li>
+            <!-- <li class="goods-price-item" data-type="4">
+                <div class="goods-price-item-1">
+                    ￥<strong>34.50</strong>
+                </div>
+                <div class="goods-price-item-2">7天</div>
+                <div class="goods-price-item-3">周租</div>
+                <div class="gou">
+                    <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+                </div>
+            </li> -->
+            </ul>
+        </div>
+        <!-- 租号方式 -->
+        <div class="con-2-item">
+            <p>租号方式：</p>
+            <ul class="goods-type">
+                <li class="this-active-type">
+                    现在租
+                    <div class="gou gou2" style="display: block;">
+                        <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+                    </div>
+                </li>
+                <!-- <li>预约租</li> -->
+            </ul>
+            <span><i class="layui-icon layui-icon-tips"></i> 提示：“现在租”是从当前时间开始，与预约时间冲突则不可租赁</span>
+        </div>
+        <!-- 租号时间 -->
+        <div class="con-2-item rentTimes">
+            <p>租号时间：</p>
+            <ul class="goods-time">
+                <li data-time="1" class="this-active-type">
+                    1小时
+                    <div class="gou gou2" style="display: block;">
+                        <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+                    </div>
+                </li>
+                <li data-time="2">
+                    2小时
+                    <div class="gou gou2">
+                        <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+                    </div>
+                </li>
+                <li data-time="3">
+                    3小时
+                    <div class="gou gou2">
+                        <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+                    </div>
+                </li>
+                <li data-time="5">
+                    5小时
+                    <div class="gou gou2">
+                        <img src="__HOMESTATIC__/img/inco/gou2.png"/>
+                    </div>
+                </li>
+                <div class="goods-zd-time">
+                    <span>-</span>
+                    <input type="text" placeholder="1" disabled="disabled" value="1"/>
+                    <span>+</span>
+                </div>
+            </ul>
+            <ul class="goods-time"></ul>
+            <span><i class="layui-icon layui-icon-tips"></i> 提示：可租时间段 0:00-24:00</span>
+        </div>
+        <!-- 押金 -->
+        <div class="con-2-item" style="align-items: center;">
+            <p>押金：</p>
+            <div class="deposit">￥<strong>{$resList.deposit}</strong></div>
+        </div>
+        <!-- 红包 -->
+        <!-- <div class="con-2-item">
+            <p>红包抵扣：</p>
+            <div class="hongbao">
+                <span style="color: red;">￥-0.5</span>
+                <span class="layui-badge"> 0.1元无门槛优惠券</span>
+                <span style="color: red;">选择<i class="layui-icon layui-icon-right"></i></span>
+            </div>
+        </div> -->
+    </div>
+    <!-- 结账 -->
+    <div class="con-3">
+        <div class="bill" style="float: left;">
+            <span style="font-size: 16px;">应付总额：</span>
+            <strong>￥{$resList.amount}</strong>
+        </div>
+        <button type="button" class="layui-btn layui-btn-danger" id="submit">去支付</button>
+        <div class="layui-form agreement">
+            <input type="checkbox" lay-filter="test" lay-skin="primary" title="我已阅读并同意" checked="">
+            <a href="#">《平台服务协议》</a>
+        </div>
+
+    </div>
+</div>
+</div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+    layui.use(['laytpl', 'element', 'layer', 'form'], function () {
+        var $ = layui.$
+        var laytpl = layui.laytpl;
+        var element = layui.element
+        var form = layui.form;
+        var layer = layui.layer
+
+
+        //选择租号类型
+        var goodsPriceKind = 0  //租号类型
+
+        var goodsTime = '{$resList.hours}'  //租号时间
+        function ChooseTime() {
+            if ($('.this-active').attr('data-type') != 0) {
+                $('.rentTimes').hide()
+            } else {
+                $('.rentTimes').show()
+            }
+        }
+
+        ChooseTime()
+        var goodsMoney = 0  //时间金额
+        var goodsResMoney = '{$resList.amount}' //时间金额 + 押金
+        var goodsPrice = '{$resList.price}'
+        $(".goods-price .goods-price-item").click(function () {
+            $(".goods-price .goods-price-item").removeClass('this-active')
+            $(this).addClass('this-active')
+            $('.goods-price-item .gou').css('display', 'none')
+            $(this).find('.gou').css('display', 'block')
+
+            //判断租号类型，渲染不同的租号时间
+            goodsPriceKind = parseInt($(this).attr('data-type'))
+            switch (goodsPriceKind) {
+                case 0:
+                    $(".goods-time").eq(0).css('display', 'flex');
+                    $(".goods-time").eq(1).css('display', 'none');
+                    goodsTime = $(".goods-zd-time input").val()  //获取自定义时间值
+                    goodsMoney = goodsTime * goodsPrice  //获取时间金额
+                    goodsResMoney = parseFloat(goodsMoney) + parseFloat($(".deposit strong").text())
+                    $(".bill strong").text('￥' + goodsResMoney)
+                    break;
+                case 1:
+                    $(".goods-time").eq(0).css('display', 'none');
+                    $(".goods-time").eq(1).css('display', 'block');
+                    $(".goods-time").eq(1).html('<p>24小时</p>');
+                    goodsTime = 24  //获取时间
+                    goodsMoney = $(this).find('strong').text()  //获取金额
+                    goodsResMoney = parseFloat(goodsMoney) + parseFloat($(".deposit strong").text())
+                    $(".bill strong").text('￥' + goodsResMoney)
+                    break;
+                case 2:
+                    $(".goods-time").eq(0).css('display', 'none');
+                    $(".goods-time").eq(1).css('display', 'block');
+                    $(".goods-time").eq(1).html('<p>5小时</p>');
+                    goodsTime = 5
+                    goodsMoney = $(this).find('strong').text()  //获取金额
+                    goodsResMoney = parseFloat(goodsMoney) + parseFloat($(".deposit strong").text())
+                    $(".bill strong").text('￥' + goodsResMoney)
+                    break;
+                case 3:
+                    $(".goods-time").eq(0).css('display', 'none');
+                    $(".goods-time").eq(1).css('display', 'block');
+                    $(".goods-time").eq(1).html('<p>10小时</p>');
+                    goodsTime = 10
+                    goodsMoney = $(this).find('strong').text()  //获取金额
+                    goodsResMoney = parseFloat(goodsMoney) + parseFloat($(".deposit strong").text())
+                    $(".bill strong").text('￥' + goodsResMoney)
+                    break;
+                case 4:
+                    $(".goods-time").eq(0).css('display', 'none');
+                    $(".goods-time").eq(1).css('display', 'block');
+                    $(".goods-time").eq(1).html('<p>7天</p>');
+                    goodsTime = 24 * 7
+                    goodsMoney = $(this).find('strong').text()  //获取金额
+                    goodsResMoney = parseFloat(goodsMoney) + parseFloat($(".deposit strong").text())
+                    $(".bill strong").text('￥' + goodsResMoney)
+                    break;
+            }
+
+
+            ChooseTime()
+        })
+        //租号方式
+        $(".goods-type li").click(function () {
+            $(".goods-type li").removeClass('this-active-type')
+            $(this).addClass('this-active-type')
+        })
+        // 租号时间
+        $(".goods-time li").click(function () {
+            $(".goods-time li").removeClass('this-active-type')
+            $(this).addClass('this-active-type')
+            let hours = $(this).attr('data-time');
+
+            $(".goods-zd-time input").val(hours)  //赋值给自定义空中
+            goodsMoney = hours * goodsPrice
+            goodsResMoney = parseFloat(goodsMoney) + parseFloat($(".deposit strong").text())
+            $(".bill strong").text('￥' + goodsResMoney)
+
+            $(".goods-time li .gou").css('display', 'none');
+            $(this).find('.gou').css('display', 'block');
+            goodsTime = hours
+        })
+        // 自定义金额
+        $(".goods-zd-time span:eq(0)").click(function () {
+            let hours = $(".goods-zd-time input").val()
+            if (hours > 1) {
+                hours--
+                $(".goods-zd-time input").val(hours)
+                goodsTime = $(".goods-zd-time input").val()
+                goodsMoney = Math.round((hours * goodsPrice) * 100) / 100
+                goodsResMoney = parseFloat(goodsMoney) + parseFloat($(".deposit strong").text())
+                $(".bill strong").text('￥' + goodsResMoney)
+
+                if (hours == 1) {
+                    $(".goods-time li").removeClass('this-active-type')
+                    $(".goods-time li").eq(0).addClass('this-active-type')
+                    $(".goods-time li .gou").css('display', 'none');
+                    $(".goods-time li").eq(0).find('.gou').css('display', 'block');
+                }
+
+                if (hours == 2) {
+                    $(".goods-time li").removeClass('this-active-type')
+                    $(".goods-time li").eq(1).addClass('this-active-type')
+                    $(".goods-time li .gou").css('display', 'none');
+                    $(".goods-time li").eq(1).find('.gou').css('display', 'block');
+                }
+
+                if (hours == 3) {
+                    $(".goods-time li").removeClass('this-active-type')
+                    $(".goods-time li").eq(2).addClass('this-active-type')
+                    $(".goods-time li .gou").css('display', 'none');
+                    $(".goods-time li").eq(2).find('.gou').css('display', 'block');
+                }
+
+                if (hours == 5) {
+                    $(".goods-time li").removeClass('this-active-type')
+                    $(".goods-time li").eq(3).addClass('this-active-type')
+                    $(".goods-time li .gou").css('display', 'none');
+                    $(".goods-time li").eq(3).find('.gou').css('display', 'block');
+                }
+            }
+            if (hours == 1) {
+                layer.msg('租借时间不能小于0')
+            }
+        })
+
+        $(".goods-zd-time span:eq(1)").click(function () {
+
+            let hours = parseInt($(".goods-zd-time input").val())
+            hours++
+
+            $(".goods-zd-time input").val(hours)
+            goodsTime = $(".goods-zd-time input").val()
+            goodsMoney = Math.round((hours * goodsPrice) * 100) / 100
+            goodsResMoney = parseFloat(goodsMoney) + parseFloat($(".deposit strong").text())
+            $(".bill strong").text('￥' + goodsResMoney)
+
+            if (hours == 2) {
+                $(".goods-time li").removeClass('this-active-type')
+                $(".goods-time li").eq(1).addClass('this-active-type')
+                $(".goods-time li .gou").css('display', 'none');
+                $(".goods-time li").eq(1).find('.gou').css('display', 'block');
+            }
+
+            if (hours == 3) {
+                $(".goods-time li").removeClass('this-active-type')
+                $(".goods-time li").eq(2).addClass('this-active-type')
+                $(".goods-time li .gou").css('display', 'none');
+                $(".goods-time li").eq(2).find('.gou').css('display', 'block');
+            }
+
+            if (hours == 5) {
+                $(".goods-time li").removeClass('this-active-type')
+                $(".goods-time li").eq(3).addClass('this-active-type')
+                $(".goods-time li .gou").css('display', 'none');
+                $(".goods-time li").eq(3).find('.gou').css('display', 'block');
+            }
+
+            if (hours > 5) {
+                $(".goods-time li").removeClass('this-active-type')
+                $(".goods-time li .gou").css('display', 'none');
+            }
+        })
+
+        //是否阅读协议
+        let isRead = true
+        form.on('checkbox(test)', function (data) {
+            isRead = data.elem.checked
+        });
+
+        //支付页面
+        $("#submit").click(function () {
+            let loading = layer.load(2, {shade: [0.15, '#ccc']});
+            if (isRead) {
+                let goodsConfirm2 = goodsConfirm.innerHTML
+                let data = {
+                    name: '{$resList.game_nickname}',
+                    deposit: 100,
+                    time: goodsTime,
+                    money: goodsResMoney
+                }
+                laytpl(goodsConfirm2).render(data, function (html) {
+                    layer.open({
+                        type: 1,
+                        title: '确认订单',
+                        skin: 'demo-class',
+                        area: ['400px', '400px'],
+                        content: html,
+                        btn: ['确认支付', '取消'],
+                        yes: function (index, layero) {
+                            layer.close(index)
+                            fetchPost({
+                                url: "{:url('home/order/dopay')}",
+                                data: {
+                                    'price': '{$resList.price}',
+                                    'goodsTime': goodsTime,
+                                    'deposit': '{$resList.deposit}',
+                                    'goodsId': '{$resList.id}'
+                                }
+                            }).then(res => {
+                                let status = res.status
+                                let bigTime;
+                                // 倒计时充值页面
+                                function times(layero, downTime, hour = 3) {
+                                    // 取消
+                                    if (downTime == false) {
+                                        clearInterval(bigTime)
+                                        hour = 3
+                                        return false
+                                    }
+                                    // 即将跳转
+                                    var time = setInterval(() => {
+                                        hour--
+                                        $(layero[0].children[3]).html('<a class="layui-layer-btn0">去充值(' + hour + 's即将跳转)</a>')
+                                        if (hour == 0) {
+                                            clearInterval(time)
+                                            $(layero[0].children[3]).html('<a class="layui-layer-btn0">去充值</a>')
+                                            window.location = "{:url('home/mycenter/recharge')}"
+                                        }
+                                    }, 1000)
+                                    bigTime = time
+                                }
+
+                                if (status == 101) {
+                                    layer.alert('<p>' + res.msg + '</p>', {
+                                        icon: 2,
+                                        skin: 'layer-ext-moon demo-class',
+                                        title: '温馨提示',
+                                        btn: ['去充值'],
+                                        success: function (layero) {
+                                            let openTime = true  //开启倒计时
+                                            times(layero, openTime)
+                                        },
+                                        cancel: function (index, layero) {
+                                            let closeTime = false  //关闭时间
+                                            times(layero, closeTime)
+                                            layer.close(index)
+                                        },
+                                        btn1: function () {
+                                            window.location = "{:url('home/mycenter/recharge')}"
+                                        }
+
+                                    })
+                                } else if (status == 0) {
+                                    layer.msg(res.msg);
+                                    layer.close(loading)
+                                    setTimeout(() => {
+                                        StandardPost("{:url('home/order/succ')}",{'orderId':res.data})
+                                    }, 1000)
+                                } else {
+                                    layer.msg(res.msg);
+                                    layer.close(loading)
+                                }
+                            })
+                        },
+                        btn2: function (index, layero) {
+                            layer.close(loading)
+                        }
+                    })
+                })
+            } else {
+                layer.alert('<p>请阅读并同意《平台服务协议》</p>', {
+                    icon: 2,
+                    skin: 'layer-ext-moon demo-class',
+                    title: '温馨提示'
+                })
+            }
+        })
+
+    })
+</script>
+
+
+<script type="text/html" id="goodsConfirm">
+    <div id="goods-confirm">
+        <div class="confirm-item">
+            <p>角色名称：</p>
+            <span>{{d.name}}</span>
+        </div>
+        <div class="confirm-item">
+            <p>游戏名称：</p>
+            <span>{$resList.game.game_name}</span>
+        </div>
+        <div class="confirm-item">
+            <p>排位赛：</p>
+            <span>{$resList.rank}</span>
+        </div>
+        <div class="confirm-item">
+            <p>押金：</p>
+            <strong>{$resList.deposit}</strong>
+        </div>
+        <div class="confirm-item">
+            <p>租用时间：</p>
+            <strong>{{d.time}}小时</strong>
+        </div>
+        <div class="confirm-item">
+            <p>应付总额：</p>
+            <strong>{{d.money}}</strong>
+        </div>
+    </div>
+</script>
+<!-- 阅读模板 -->
+<!-- <script type="text/html" id="NoRead">
+
+</script> -->
+
+{include file="pubview/footer" /}

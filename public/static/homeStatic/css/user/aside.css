@@ -1,0 +1,78 @@
+#con{
+	width: 1080px;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding-bottom: 20px;
+}
+#con >h3{
+	border-bottom: 1px solid #d9d9d9;
+	padding: 20px 30px;
+	margin-bottom: 20px;
+	font-weight: 700;
+	font-size: 20px;
+	color: var(--text-color);
+}
+#con >.layui-tab{
+	padding: 0px 30px !important;
+}
+#con > .layui-tab .layui-tab-content{
+	padding: 0px !important;
+	margin-top: 20px !important;
+}
+.layui-container{
+	display: flex;
+	justify-content: space-between; 
+}
+/* 侧栏 */
+#aside{
+	width: 210px;
+	height: 100%;
+	padding-bottom: 48px;
+	background-color: white;
+}
+.aside-meun{
+	width: 100%;
+	height: 100%;
+	padding-top: 30px;
+	list-style: none;
+	box-sizing: border-box;
+}
+.aside-meun-item{
+	width: 100%;
+	margin-bottom: 30px;
+	font-size: 18px;
+	line-height: 23px;
+}
+.aside-meun-item a{
+	display: inline-block;
+	width: 100%;
+	padding-left: 40px;
+	box-sizing: border-box;
+	color: black;
+	text-decoration: none;
+}
+.aside-meun-item:nth-of-type(1) a{
+	border-left: 3px solid #c3c392;
+}
+/* 子元素 */
+.children{
+	margin-top: 20px;
+	
+}
+.children a{
+	font-size: 15px;
+	line-height: 25px;
+	color: #666;
+	padding: 6px 0px 6px 40px;
+	transition: all 0.5s;
+}
+
+.children a:hover{
+	color:var(--text-color);
+	background-color: #eee;
+}
+.this-user{
+	font-weight: 700;
+	color:var(--text-color) !important;
+}

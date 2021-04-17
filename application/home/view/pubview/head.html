@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>飞讯租号首页</title>
+    <link rel="stylesheet" type="text/css" href="__HOMESTATIC__/layui/css/layui.css" />
+    <link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/bg/bg.css" />
+
+    <link rel="stylesheet" href="__HOMESTATIC__/common/banner/css/banner.css">
+    <link rel="stylesheet" type="text/css" href="__HOMESTATIC__/css/user/table.css" />
+
+    <script src="__HOMESTATIC__/until/jquery-3.4.1.min.js"></script>
+    <script src="__HOMESTATIC__/until/request.js"></script>
+    <script>
+        var loginUrl = "{:url('home/login/index')}" // 登录
+        var regUrl = "{:url('home/login/index')}" // 注册
+        var forPass =  "{:url('home/login/index')}"  //忘记密码
+
+        // 路径常量
+        var pushAccountUrl = "{:url('home/mycenter/pushAccount')}" // 发布账号
+        var myAccountUrl = "{:url('home/mycenter/accountList')}" // 我的账号
+        var myCenter = "{:url('home/mycenter/index')}" // 个人中心
+        var tranRec = "{:url('home/mycenter/tranRec')}"  //充值记录
+        var accounting = "{:url('home/mycenter/accounting')}"  //账户明细
+        var like = "{:url('home/mycenter/like')}"   //收藏
+        var zuhao = "{:url('home/mycenter/zuhao')}"  //我租的订单
+        var goods = "{:url('home/mycenter/rentGoodsList')}"  //我的出租订单
+        var userSet = "{:url('home/mycenter/accountSet')}"   //账号设置
+    </script>
+    <script src="__HOMESTATIC__/common/common.js"></script>
+    <script src="__HOMESTATIC__/layui/layui.js" type="text/javascript"></script>
+    <script type="text/javascript" src="__HOMESTATIC__/common/banner/js/jssor.slider.mini.js"></script>
+    <script src="__HOMESTATIC__/common/user/user_com.js"></script>
+    <script src="__HOMESTATIC__/component/user/aside/aside.js"></script>
+    <!-- 分页样式 -->
+    <link rel="stylesheet" href="__HOMESTATIC__/css/page.css">
+</head>
+
+<body>
+    <!-- 导航栏分类游戏 -->
+    <?php
+	$list = GameTypeGame();
+?>
+    <img class="right_bot_img" src="/static/homeStatic/img/bg1.png" />
+    <!-- 头部 -->
+    <div class="layui-header header">
+        <div class="layui-fluid">
+            <div class="layui-row ">
+                <!-- logo -->
+                <div class="layui-col-md2 grid-demo">
+                    <a>
+                        <img src="" class="logo" />
+                    </a>
+                    <div class="game-list">
+                        <div class="game_1">
+                            <i class="layui-icon layui-icon-spread-left"
+                                style="font-size: 30px;margin-bottom: 5px; "></i>
+                            <span>游戏分类</span>
+                        </div>
+
+
+                        <div class="game_2">
+                            <ul>
+                                {foreach $list as $vo}
+                                <li>
+                                    <span>{$vo.cate_name}</span>
+                                    {foreach $vo.game as $vs}
+                                    <a
+                                        href="javascript:StandardPost('{:url('home/renthall/index')}',{'Gameid':'{$vs.id}'})">{$vs.game_name}</a>
+                                    {/foreach}
+                                </li>
+                                {/foreach}
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 导航栏 -->
+                <div class="layui-col-md5 grid-demo layui-col-md-offset1 ">
+                    <ul class="layui-nav nav" lay-filter="nav">
+                        <li class="layui-nav-item "><a href="{:url('home/index/index')}">首页</a></li>
+                        <li class="layui-nav-item "><a href="{:url('home/renthall/index')}">租号大厅</a></li>
+                        <li class="layui-nav-item "><a href="{:url('home/news/detail')}">公告活动</a></li>
+                    </ul>
+                </div>
+
+                <!-- 登录 -->
+
+                <div class="layui-col-md2 grid-demo "
+                    style="float: right; min-width:min-content;width: auto;margin-right: 50px;">
+
+                    <div class="login">
+
+                        {if $Think.session.userData}
+                        <ul class="layui-nav nav">
+                            <li class="layui-nav-item" style="cursor: pointer;">
+                                <a><img src="{$Think.session.userData.avatar ? $Think.session.userData.avatar : '/images/default.png'}"
+                                        class="layui-nav-img"><span>{$Think.session.userData.nickname}</span></a>
+                                <dl class="layui-nav-child">
+
+                                    <dd><a href="{:url('home/mycenter/index')}">个人中心</a></dd>
+                                    <dd><a href="javascript:loginOut()">退出登录</a></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                        {else}
+
+                        <div style="display: flex;justify-content: center; align-items: center;">
+                            <i class="layui-icon layui-icon-user" style="font-size: 30px;margin-right:10px"></i>
+                            <span id="login" style="cursor: pointer;margin-right: 30px;" onclick="login()">登录</span>
+                        </div>
+                        <span id="reg" style="cursor: pointer;" onclick="registered()">注册</span>
+
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 客服 -->
+    <div id="kefu-con">
+        <div style="margin-top:-64px"><img
+                src="/static/homeStatic/img/inco/cd4ef3198618367a8efa786d2e738bd4b31ce52a.gif" alt=""
+                style="width:100%;height:100%;" /></div>
+        <div onclick="window.open('http://mah.miketong.net/Web/im.aspx?_=t&accountid=121352','飞讯租号-咨询','width=665,height=515,top=100, left=100,menubar=no,toolbar=no,status=no,scrollbars=yes')"
+            class="kefu" style="cursor: pointer">在线客服
+        </div>
+        <!-- <div class="kefu-box">
+        <h3 style="color:#a9a9a9">QQ交流群</h3>
+        <p style="color:orangered;font-size:17px">11111111</p>
+    </div> -->
+        <div class="kefu-box">
+            <h3 style="color:#a9a9a9">QQ号商群</h3>
+            <p style="color:orangered;font-size:17px">398601545</p>
+        </div>
+        <!-- <div class="kefu-box" id="telephone">
+        <h3 style="color:#a9a9a9">客服电话</h3>
+        <p style="color:orangered;font-size:17px">121212112</p>
+    </div> -->
+        <div style="width: 100%;padding-top: 10px;">
+            <img src="__IMAGES__/wxPublicQrCode.jpg" style="width: 100%;" />
+            <h3 style="font-size: 13px;">关注微信公众号</h3>
+        </div>
+        <div style="width: 100%;padding-top: 10px;overflow: hidden;height: 50px;display: none;">
+            <a href="javacript:void(0)" class="layui-btn layui-btn-normal public-button" onclick="backTop()">返回顶部</a>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            let isShowNav = true
+            $(".game_1").hover(function () {
+                if (isShowNav) {
+                    $(".game_2").slideDown(200, function () {
+                        isShowNav = false
+                    });
+                }
+            })
+            $(".game-list").mouseleave(function () {
+                if (!isShowNav) {
+                    $(".game_2").slideUp(200, function () {
+                        isShowNav = true
+                    });
+                }
+
+            })
+        })
+
+        /*
+         * 退出登录
+         * @res.status 状态码
+         * @res.msg 状态信息
+         */
+        function loginOut() {
+            fetchPost({
+                url: "{:url('home/Login/loginOut')}",
+            }).then(res => {
+                layer.msg(res.msg)
+                if (res.status == 0) {
+                    window.location.reload()
+                }
+            })
+        }
+
+        /*
+         * 客服动画效果
+        */
+        let addNum = 0
+        $('#kefu-con').hover(function () {
+            addNum = 10
+            $(this).stop().animate({ 'right': addNum })
+        }, function () {
+            addNum = -80
+            $(this).stop().animate({ 'right': addNum })
+        })
+
+    </script>

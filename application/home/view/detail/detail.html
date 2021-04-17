@@ -1,0 +1,1045 @@
+{include file="pubview/head" /}
+
+<style type="text/css">
+    /* 上部分 */
+    .acc-main-top {
+        width: 100%;
+        height: 580px;
+        background-color: white;
+        margin-bottom: 20px;
+        padding: 30px 30px;
+        display: flex;
+        justify-content: space-between;
+        box-sizing: border-box;
+    }
+
+    /* 上部分的轮播 */
+    .top-swiper {
+        width: 410px;
+        height: 100%;
+    }
+
+    .top-swiper .big-swiper {
+        width: 100%;
+        height: 410px;
+        /* background-color: #f5f5f5; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    .top-swiper .big-swiper > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* 放大镜 */
+    .big-mirror {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        right: -103%;
+        z-index: 5;
+        overflow: hidden;
+        display: none;
+    }
+
+    .big-mirror img {
+        width: 820px;
+        height: 840px;
+        position: absolute;
+    }
+
+    /* 鼠标选中的小盒子 */
+    .big-mirror-block {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0px;
+        z-index: 10;
+    }
+
+    .big-mirror-block2 {
+        width: 150px;
+        height: 150px;
+        position: absolute;
+        background: rgba(255, 255, 255, 0.7);
+        left: 0px;
+        display: none;
+    }
+
+    /* 轮播小图 */
+    .top-swiper .small-swiper {
+        width: 100%;
+        height: 75px;
+        position: relative;
+    }
+
+    .top-swiper .small-swiper-move {
+        width: 30px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        background-color: rgba(216, 216, 216, 1.0);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+
+    .top-swiper .small-swiper-move:hover {
+        background-color: var(--back-color);
+        color: white;
+    }
+
+    .top-swiper .small-swiper-list {
+        width: 330px;
+        height: 100%;
+        margin: 0px 40px;
+        display: flex;
+        overflow: auto;
+        overflow-y: hidden;
+        overflow-x: hidden;
+    }
+
+    .top-swiper .small-swiper-list img {
+        width: 70px;
+        height: 100%;
+        margin-right: 10px;
+        border: 2px solid transparent;
+        box-sizing: border-box;
+    }
+
+    /* 上部分数据 */
+    .top-info {
+        width: 820px;
+        height: 100%;
+    }
+
+    .top-info > h3 {
+        font-size: 30px;
+    }
+
+    .top-info .top-info-tit1 {
+        display: flex;
+        margin: 20px 0px;
+        font-size: 16px;
+    }
+
+    .top-info .top-info-tit1 p {
+        margin-right: 30px;
+    }
+
+    /* 下载游戏 */
+    .upload-img {
+        position: absolute;
+        right: 31px;
+        top: 24px;
+    }
+
+    .top-info .top-info-tit2 {
+        width: 100%;
+        padding: 20px 15px;
+        box-sizing: border-box;
+        background-color: #f3f3f3;
+        font-size: 16px;
+        position: relative;
+    }
+
+    .top-info .top-info-tit2 p {
+        line-height: 35px;
+    }
+
+    .top-info .top-info-tit2 p span {
+        margin-right: 8px;
+    }
+
+    .top-info .top-info-tit2 p strong {
+        color: red;
+        margin-right: 10px;
+        font-size: 20px;
+    }
+
+    .top-info .top-info-tit2 p sub {
+        color: #c8c8c8;
+    }
+
+    .top-info .top-info-tit3 {
+        width: 100%;
+        height: 120px;
+        margin-top: 15px;
+        display: flex;
+    }
+
+    .top-info .top-info-tit3 .price {
+        width: 130px;
+        height: 100%;
+        margin-right: 10px;
+        text-align: center;
+        font-size: 16px;
+        line-height: 30px;
+        cursor: pointer;
+    }
+
+    .price-this {
+        border-color: var(--back-color) !important;
+    }
+
+    .top-info .top-info-tit3 .price h3 {
+        width: 100%;
+        height: 50px;
+        background-color: var(--back-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: 700;
+        font-size: 17px;
+    }
+
+    .top-info .top-info-tit3 .price > div {
+        height: 70px;
+        border: 2px solid #e5e5e5;
+        border-top: none;
+        padding-top: 10px;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+    .top-info .top-info-tit3 .price .gou {
+        position: absolute;
+        bottom: 0px;
+        display: none;
+        right: 0px;
+        border-left: 13px solid transparent;
+        border-right: 13px solid var(--back-color);
+        border-top: 13px solid transparent;
+        border-bottom: 13px solid var(--back-color);
+        width: 0px;
+        height: 0px;
+    }
+
+    .top-info .top-info-tit3 .price .gou img {
+        width: 20px;
+        height: 20px;
+        margin-left: -6px;
+        margin-top: -20px;
+    }
+
+    .top-info .top-info-tit3 .price p {
+        font-size: 22px;
+        color: red;
+        font-weight: 700;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .top-info .top-info-tit3 .price sub {
+        display: block;
+        color: #B2B2B2;
+        margin-top: -5px;
+    }
+
+    .top-info .top-info-tit4 {
+        width: 100%;
+        display: flex;
+        height: 100px;
+        margin-top: 10px;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .top-info .top-info-tit4 button {
+        border: none;
+        padding: 10px 20px;
+        width: 200px;
+        height: 50px;
+        color: white;
+        background-color: var(--back-color);
+        font-size: 22px;
+        margin-top: 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.4s;
+    }
+
+    .top-info .top-info-tit4 button:hover {
+        box-shadow: 0px 0px 14px var(--back-color);
+    }
+
+    .top-info .top-info-tit4 p {
+        font-size: 22px;
+        margin-right: 50px;
+    }
+
+    /* 下部分 */
+    .acc-main-bottom {
+        width: 100%;
+        background-color: white;
+        box-sizing: border-box;
+        padding: 30px 30px;
+    }
+
+    /* 标签页 */
+    .layui-this {
+        font-weight: 700;
+        color: var(--text-color) !important;
+    }
+
+    /* 账号信息 */
+    .bot-acc-data {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 20px 0px;
+        padding: 0px 30px;
+        box-sizing: border-box;
+        justify-content: space-between;
+        color: #787878;
+    }
+
+    .bot-acc-data li {
+        width: 23%;
+        display: flex;
+        height: 35px;
+        font-size: 18px;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .bot-acc-data li p {
+        white-space: nowrap;
+    }
+
+    .bot-acc-data li span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .acc-data-box {
+        width: 100%;
+        height: 100%;
+        margin-bottom: 20px;
+    }
+
+    .acc-data-box > h3 {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-color);
+        margin-bottom: 20px;
+    }
+
+    .acc-data-box > p {
+        font-size: 16px;
+        line-height: 30px;
+        padding: 0px 20px;
+        color: #666;
+    }
+
+    /* 下部分轮播图 */
+    .bottom-swiper {
+        width: 100%;
+        height: 500px;
+    }
+
+    .bottom-swiper2 {
+        width: 70%;
+        height: 100%;
+        margin: 0 auto;
+    }
+
+    .bottom-swiper-tit1 {
+        width: 100%;
+        height: 360px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* 下面轮播图列表 */
+    .bottom-swiper-list {
+        height: 100%;
+        float: left;
+        display: flex;
+        transition: all 0.5s;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .bottom-swiper-list img {
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .bottom-swiper-move {
+        position: absolute;
+        width: 50px;
+        height: 90px;
+        background-color: rgba(148, 148, 148, 0.7);
+        top: 120px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .bottom-swiper-move:hover {
+        background-color: rgba(148, 148, 148, 0.9);
+        color: white;
+    }
+
+    .bottom-swiper-move i {
+        font-size: 24px !important;
+    }
+
+    .bottom-swiper-tit2 {
+        width: 60%;
+        height: 140px;
+        margin: 0 auto;
+        padding: 10px 0px;
+        box-sizing: border-box;
+        overflow: auto;
+        display: flex;
+        overflow-x: hidden;
+    }
+
+    .bottom-swiper-tit2 img {
+        min-width: 100px;
+        height: 100px;
+        margin-right: 20px;
+        box-sizing: border-box;
+        border: 2px solid transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* 账号须知 */
+    .acc-know {
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    .acc-know > h3 {
+        color: var(--text-color);
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .acc-know ul {
+        counter-reset: item 0;
+    }
+
+    .acc-know > ul li {
+        line-height: 30px;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .acc-know > ul > li::before {
+        counter-increment: item;
+        content: counter(item) '.';
+        display: inline-block;
+    }
+
+    .acc-know .ul_2 {
+        margin-left: 20px;
+        counter-reset: item 0;
+    }
+
+    .acc-know .ul_2 li {
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        color: #737373;
+    }
+
+    .acc-know .ul_2 li::before {
+        counter-increment: item;
+        content: counter(item);
+        display: flex;
+        width: 14px;
+        height: 14px;
+        text-align: center;
+        border-radius: 50%;
+        border: 1px solid;
+        font-size: 12px;
+        margin-right: 10px;
+        justify-content: center;
+        align-items: center;
+        color: var(--text-color);
+    }
+
+    .acc-know p {
+        color: red;
+        font-weight: 700;
+        font-size: 17px;
+    }
+
+    .fonStyle {
+        font-size: 14px !important;
+    }
+
+    .layui-tab-title li {
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+<div id="app">
+    <div id="main">
+        <div class="layui-container">
+            <!-- 上部分 -->
+            <div class="acc-main-top">
+                <!-- 轮播 -->
+                <div class="top-swiper">
+                    <div class="big-swiper">
+                        <img src="{$data.screenshotsone}"/>
+                        <!-- 放大镜 -->
+                        <div class="big-mirror">
+                            <img src="{$data.screenshotsone}"/>
+                        </div>
+                        <!-- 鼠标放大盒子 -->
+                        <div class="big-mirror-block"></div>
+                        <div class="big-mirror-block2"></div>
+                    </div>
+                    <div class="small-swiper ">
+                        <div class="small-swiper-move" style="left: 0;">
+                            <i class="layui-icon-prev layui-icon"></i>
+                        </div>
+                        <div class="small-swiper-move" style="right: 0;">
+                            <i class="layui-icon-next layui-icon"></i>
+                        </div>
+                        <div class="small-swiper-list">
+                            {if $data.screenshotsone}
+                            <img src="{$data.screenshotsone}">
+                            {/if}
+                            {if $data.screenshotstwo}
+                            <img src="{$data.screenshotstwo}">
+                            {/if}
+                            {if $data.screenshotsthree}
+                            <img src="{$data.screenshotsthree}">
+                            {/if}
+                            {if $data.screenshotsfour}
+                            <img src="{$data.screenshotsfour}">
+                            {/if}
+                            {if $data.screenshotsfive}
+                            <img src="{$data.screenshotsfive}">
+                            {/if}
+                        </div>
+                    </div>
+
+                    <div onclick="collect(this)" style="display: flex;align-items: center;margin-top: 7px;">
+                        {if $collectStatus == 1}
+                        <p style="color:#666;cursor: pointer;"><b><i class="layui-icon layui-icon-rate-solid"
+                                                                     style="color:var(--back-color)"></i>已收藏</b></p>
+                        {else}
+                        <p style="color:#666;cursor: pointer;"><b><i class="layui-icon layui-icon-rate"></i>收藏账号</b></p>
+                        {/if}
+                        <span>({$popularity}人气)</span>
+                    </div>
+                </div>
+                <!-- 账号资料 -->
+                <div class="top-info">
+                    <h3 style="font-size: 16px;font-weight: bold;color: #333;">{$data.account_title}</h3>
+                    <div class="top-info-tit1">
+                        <p style="color: var(--text-color);" class="fonStyle">
+                            {$data.game.game_name}/{$data.game_server.server_name}/{$data.areas.area_name}</p>
+                        <p class="fonStyle">商品编号：<font style="color:var(--text-color)">{$data.id}</font></p>
+                        <p class="fonStyle">上号方式：<font style="color:var(--text-color)">{$data.reg_type}</font></p>
+                    </div>
+                    <div class="top-info-tit2">
+                        <!-- <p>
+                            卖家等级：
+                            <font>
+                                <i class="layui-icon layui-icon-cellphone"></i>
+                                手机号已验证
+                            </font>
+                        </p> -->
+                        <a href="#" class="upload-img">
+                            <img src="/static/homeStatic/img/inco/gxz.png" alt="">
+                        </a>
+
+                        <p style="display: flex;align-items: center;">
+                            <span class="fonStyle" style="color: #7a7a7a;">服务承诺：</span>
+                            <span style="color:#4880b8" class="fonStyle">到时不下线</span>
+                        </p>
+                        <p style="display: flex;align-items: center;">
+                            <span class="fonStyle" style="color: #7a7a7a;">租号说明：</span>
+                            {if $data.labelone}
+                            <span class="layui-badge" id="topPro1">{$data.labelone}</span>
+                            {/if}
+                            {if $data.labeltwo}
+                            <span class="layui-badge" id="topPro2">{$data.labeltwo}</span>
+                            {/if}
+                            {if $data.labelthree}
+                            <span class="layui-badge layui-bg-green" id="topPro3">{$data.labelthree}</span>
+                            {/if}
+                            {if $data.labelfour}
+                            <span class="layui-badge layui-bg-green" id="topPro3">{$data.labelfour}</span>
+                            {/if}
+                        </p>
+
+                        <p style="display: flex;align-items: center;">
+                            <span class="fonStyle" style="color: #7a7a7a;">租号限制：</span>
+                            <span class="fonStyle">{$data.shortest_time}小时起租</span>
+                        </p>
+
+                    </div>
+                    <ul class="top-info-tit3">
+
+                        <li class="price" data-price="0">
+                            <h3>时租</h3>
+                            <div class="price-this">
+                                <p>￥{$data.price}</p>
+                                <sub>最低{$data.shortest_time}小时</sub>
+                                <div class="gou" style="display: block;">
+                                    <img src="/static/homeStatic/img/inco/gou2.png"/>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="price" data-price="1">
+                            <h3>日租</h3>
+                            <div>
+                                <p>￥{$data.day_price}</p>
+                                <sub>{$data.day_prices}元/小时</sub>
+                                <div class="gou">
+                                    <img src="/static/homeStatic/img/inco/gou2.png"/>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="price" data-price="2">
+                            <h3>包夜</h3>
+                            <div>
+                                <p>￥{$data.pack_night_price}</p>
+                                <sub>{$data.pack_night_prices}元/小时</sub>
+                                <div class="gou">
+                                    <img src="/static/homeStatic/img/inco/gou2.png"/>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+
+                    <p style="margin-top:15px;">
+                        <span style="color:#818181">温馨提示： 非账号问题无法撤单!</span>
+                    </p>
+
+                    <p>
+                        <span class="fonStyle" style="color:#818181">押金 </span>
+                        <strong class="fonStyle" style="margin-right: 0;color:red"> {$data.deposit} </strong><font
+                            class="fonStyle" style="color:#818181">元</font>
+                    </p>
+                    <div class="top-info-tit4">
+                        {if $Think.session.userData}
+                        {if $data.lease_type == 1}
+                        <button type="button" onclick="return layer.alert('此账号正在出租中')">出租中</button>
+                        {elseif $Think.session.userData.id == $data.uid}
+                        <button type="button" onclick="return layer.alert('不能租用自己的账号')">立即租用</button>
+                        {else}
+                        <button type="button"
+                                onclick="StandardPost('{:url('home/order/index')}',{id:'{$data.id}','orderType':$('.price-this').parent().attr('data-price')})">
+                            立即租用
+                        </button>
+                        {/if}
+                        {else}
+                        <button type="button" onclick="login()">立即租用</button>
+                        {/if}
+
+                        <!-- 下载游戏 -->
+                        <div class="upload-game">
+
+                        </div>
+                        <!-- <div style="display: flex;align-items: center;">
+                            <font>是否收藏：</font>
+                            <div id="goods-like"></div>
+                        </div> -->
+                        <!-- <p>商品热度：<strong style="color:red">{$data.lease_num}</strong></p> -->
+                    </div>
+                </div>
+            </div>
+            <!-- 下部分 -->
+            <div class="acc-main-bottom">
+                <div class="layui-tab">
+                    <ul class="layui-tab-title">
+                        <li class="layui-this">商品信息</li>
+                        <li>租号须知</li>
+                    </ul>
+                    <div class="layui-tab-content">
+                        <!-- 账号信息 -->
+                        <div class="layui-tab-item layui-show">
+                            <ul class="bot-acc-data">
+                                <li id="acc-name-title">
+                                    <p>角色：</p>
+                                    <span>{$data.game_nickname}</span>
+                                </li>
+                                <li>
+                                    <p>账号等级：</p>
+                                    <span>{$data.level}</span>
+                                </li>
+                                <li>
+                                    <p>是否排位：</p>
+                                    <span>{$data.rank}</span>
+                                </li>
+                                <li>
+                                    <p>押金：</p>
+                                    <span>{$data.deposit}元</span>
+                                </li>
+                                <li>
+                                    <p>最短租时：</p>
+                                    <span>{$data.shortest_time}小时</span>
+                                </li>
+                            </ul>
+                            <div class="acc-data-box">
+                                <h3>
+                                    <i class="layui-icon layui-icon-circle-dot"
+                                       style="font-size: 12px;margin-right: 15px;"></i>
+                                    账号描述
+                                </h3>
+                                <p>
+                                    {$data.account_intro}
+                                </p>
+                            </div>
+                            <div class="acc-data-box">
+                                <h3>
+                                    <i class="layui-icon layui-icon-circle-dot"
+                                       style="font-size: 12px;margin-right: 15px;"></i>
+                                    账号截图
+                                </h3>
+                                <div class="bottom-swiper">
+                                    <div class="bottom-swiper2">
+                                        <div class="bottom-swiper-tit1">
+                                            <div class="bottom-swiper-list">
+                                                {if $data.screenshotsone}
+                                                <img src="{$data.screenshotsone}">
+                                                {/if}
+                                                {if $data.screenshotstwo}
+                                                <img src="{$data.screenshotstwo}">
+                                                {/if}
+                                                {if $data.screenshotsthree}
+                                                <img src="{$data.screenshotsthree}">
+                                                {/if}
+                                                {if $data.screenshotsfour}
+                                                <img src="{$data.screenshotsfour}">
+                                                {/if}
+                                                {if $data.screenshotsfive}
+                                                <img src="{$data.screenshotsfive}">
+                                                {/if}
+                                            </div>
+
+                                            <div class="bottom-swiper-move" style="left: 0;">
+                                                <i class="layui-icon-prev layui-icon"></i>
+                                            </div>
+                                            <div class="bottom-swiper-move" style="right: 0;">
+                                                <i class="layui-icon-next layui-icon"></i>
+                                            </div>
+                                        </div>
+                                        <div class="bottom-swiper-tit2">
+                                            {if $data.screenshotsone}
+                                            <img src="{$data.screenshotsone}">
+                                            {/if}
+                                            {if $data.screenshotstwo}
+                                            <img src="{$data.screenshotstwo}">
+                                            {/if}
+                                            {if $data.screenshotsthree}
+                                            <img src="{$data.screenshotsthree}">
+                                            {/if}
+                                            {if $data.screenshotsfour}
+                                            <img src="{$data.screenshotsfour}">
+                                            {/if}
+                                            {if $data.screenshotsfive}
+                                            <img src="{$data.screenshotsfive}">
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 租号须知 -->
+                        <div class="layui-tab-item ">
+                            <div class="acc-know">
+                                <h3>为了更多的玩家能够享受游戏带来的游戏乐趣，我们期望您能遵守以下约定：</h3>
+                                <ul>
+                                    <li>给密码出租的游戏，非账号密码错误，将不予撤单，订单将会继续进行。</li>
+                                    <li>
+                                        若订单超过15分钟发生投诉，以下情况会给您全额退款
+                                        <ul class="ul_2">
+                                            <li>号主改密码未更新到平台</li>
+                                            <li>账号发生挤人情况且联系不上号主。如果号主于3分钟内改密码，订单继续进行</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        远程上号和上号器上号的游戏，下单后15分钟内如您租错了、没时间玩了，平台会通过您的投诉，全款退款。但若触犯以下情况，撤单后追缴您的租金
+                                        <ul class="ul_2">
+                                            <li>恶意蹭号、在租赁时间之外继续使用账号</li>
+                                            <li>挂机逃跑导致账号信誉分降低、辱骂队友。账号被禁言、限制发言</li>
+                                            <li>未经号主允许而恶意使用号内金币、点劵等消费性货币、点数、喇叭</li>
+                                            <li>未经号主允许打排位</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        在您租用账号期间如发生以下情况，平台酌情封禁您的平台账号，冻结号内全部租金
+                                        <ul class="ul_2">
+                                            <li>恶意分解、删除有价值武器。摧毁、合成、删除账号内有价值的道具</li>
+                                            <li>使用辅助软件、外挂</li>
+                                            <li>未经号主允许而恶意使用号内金币、点劵等消费性货币、点数、喇叭</li>
+                                        </ul>
+                                    </li>
+                                    <li>手游租号禁止出现刷广告，如遇封号平台将协助号主进行报警，并发起上诉书</li>
+                                </ul>
+                                <p>如账号被封或价值过高的武器装备因租客原因丢失，造成损失数额较大，平台将协助号主进行报警，为号主提供关键性技术证据。最终解释权归我司所有</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    //上面大图是小图的第几张
+    var topSwiperImageIndex = 0
+    var bottomSwiperImageIndex = 0
+    //所选套餐分类
+
+    var gamePackage = null
+    layui.use(['laytpl', 'element', 'laypage', 'layer', 'rate'], function () {
+        var $ = layui.$
+        var laytpl = layui.laytpl;
+        var element = layui.element
+        var laypage = layui.laypage
+        var layer = layui.layer
+        var rate = layui.rate
+
+        // 徽章的提示
+
+        $("#acc-name-title").hover(function () {
+            let text = $(this).find('span').text()
+            if (text.length > 10) {
+                subtips1 = layer.tips(text, '#acc-name-title', {tips: [3, 'black'], area: 'auto', time: 30000});
+            }
+        }, function () {
+            layer.close(subtips1);
+        });
+
+        $("#topPro1").hover(function () {
+            subtips1 = layer.tips('个性化标签将直接对租客显示', '#topPro1', {tips: [1, 'black'], area: 'auto', time: 30000});
+        }, function () {
+            layer.close(subtips1);
+        });
+        $("#topPro2").hover(function () {
+            subtips2 = layer.tips('测试', '#topPro2', {tips: [1, 'black'], area: 'auto', time: 30000});
+        }, function () {
+            layer.close(subtips2);
+        });
+        $("#topPro3").hover(function () {
+            subtips3 = layer.tips('测试', '#topPro3', {tips: [1, 'black'], area: 'auto', time: 30000});
+        }, function () {
+            layer.close(subtips3);
+        });
+        //收藏
+        rate.render({
+            elem: "#goods-like",
+            length: 1,
+
+        })
+    })
+
+    // 放大镜
+    $(".big-mirror-block").mousemove(function () {
+
+        //显示方块
+        let obj = $(this).siblings(".big-mirror-block2")
+        //放大镜的图
+        let bigObj = $(this).siblings(".big-mirror")
+        let bigObjImg = bigObj.find("img")
+        // 显示盒子
+        bigObj.css('display', 'block')
+        obj.css('display', 'block')
+        //方块跟着盒子
+        let leaveX = $(this).offset().left //距离屏幕左
+        let leaveY = $(this).offset().top  //距离屏幕上
+        //盒子宽高
+        let boxX = $(this).width()
+        let boxY = $(this).height()
+        // //鼠标在图片的位置
+        let event = window.event
+        let blockX = event.clientX - leaveX
+        let blockY = event.clientY - leaveY
+        //移动
+        obj.css({"left": blockX - 75})
+        obj.css({"top": blockY - 75})
+
+        bigObjImg.css({"top": -(blockY - 75)})
+        bigObjImg.css({"left": -(blockX - 75)})
+        //限制x轴，保证滚动最边缘
+        if (blockX - 75 < 0) {
+            obj.css({"left": 0})
+            bigObjImg.css({"left": 0})
+        }
+        if (blockX > boxX - 75) {
+            obj.css({"left": boxX - 150})
+        }
+        //限制Y轴
+        if (blockY - 75 < 0) {
+            obj.css({"top": 0})
+            bigObjImg.css({"top": 0})
+        }
+        if (blockY > boxY - 75) {
+            obj.css({"top": boxY - 150})
+        }
+    })
+
+    $(".big-mirror-block").mouseleave(function () {
+        let obj = $(this).siblings(".big-mirror-block2")
+        let bigObj = $(this).siblings(".big-mirror")
+        obj.css('display', 'none')
+        bigObj.css('display', 'none')
+    })
+
+
+    //套餐选择
+    $(".top-info .top-info-tit3 .price").click(function () {
+        let select = $(this).attr('data-price')
+        gamePackage = select
+        let obj = $(this).find('div').eq(0)
+
+        $(".top-info .top-info-tit3 .price .gou").css('display', 'none')
+        $(this).find('div').eq(1).css('display', 'block')
+        //添加样式
+        $(".top-info .top-info-tit3 .price div").removeClass('price-this')
+        obj.addClass("price-this")
+        console.log(gamePackage)  //获取所选套餐编号
+
+    })
+    //轮播小图按钮左右拉动
+    $(".small-swiper-move").eq(0).click(function () {
+        $(".small-swiper-list").animate({scrollLeft: '-=150'}, 200)
+    })
+    $(".small-swiper-move").eq(1).click(function () {
+        $(".small-swiper-list").animate({scrollLeft: '+=150'}, 200)
+    })
+    //小图换大图
+    $(".small-swiper-list img").click(function () {
+        let imgSrc = $(this).attr('src')
+        $(".small-swiper-list img").css("border", '2px solid transparent')
+        $(this).css('border', '2px solid red')
+        let index = $(this).index()
+        $(".big-swiper img").attr('src', function () {
+            return imgSrc
+        })
+        if (index > topSwiperImageIndex) {
+            topSwiperImageIndex = index
+            $(".small-swiper-list").animate({scrollLeft: '+=150'}, 200)
+        } else {
+            topSwiperImageIndex = index
+            $(".small-swiper-list").animate({scrollLeft: '-=150'}, 200)
+        }
+    })
+
+
+    let bottomSwiperImgWidth = $(document).width() * 0.7  //单张图大小
+    let bottomSwiperImgLength = $(".bottom-swiper-list img").length
+    //设置下面轮播图总长
+    $(".bottom-swiper-list img").css("width", bottomSwiperImgWidth)
+    $(".bottom-swiper-list").css("width", bottomSwiperImgWidth * bottomSwiperImgLength)
+
+    // 轮播图移动动画
+    function bottomImgChange() {
+        let obj = $(".bottom-swiper-list")
+        obj.css("transform", "translateX(" + -bottomSwiperImageIndex * bottomSwiperImgWidth + "px)")
+        obj.css("transition", "all 0.5s")
+    }
+
+    // 小图换大图
+    $(".bottom-swiper-tit2 img").click(function () {
+        let index = $(this).index()
+        bottomSwiperImageIndex = index
+        bottomImgChange()
+        $(".bottom-swiper-tit2 img").css("border", "2px solid transparent")
+        $(this).css("border", "2px solid red")
+    })
+    //  左右移动
+    $(".bottom-swiper-move").eq(0).click(function () {
+        if (bottomSwiperImageIndex > 0) {
+            bottomSwiperImageIndex -= 1
+            bottomImgChange()
+            $(".bottom-swiper-tit2 img").css("border", "2px solid transparent")
+            $(".bottom-swiper-tit2 img").eq(bottomSwiperImageIndex).css("border", "2px solid red")
+            $(".bottom-swiper-tit2").animate({scrollLeft: '-=100'}, 200)
+        }
+    })
+    $(".bottom-swiper-move").eq(1).click(function () {
+
+        if (bottomSwiperImageIndex < bottomSwiperImgLength - 1) {
+            bottomSwiperImageIndex += 1
+            bottomImgChange()
+            $(".bottom-swiper-tit2 img").css("border", "2px solid transparent")
+            $(".bottom-swiper-tit2 img").eq(bottomSwiperImageIndex).css("border", "2px solid red")
+            $(".bottom-swiper-tit2").animate({scrollLeft: '+=100'}, 200)
+        }
+    })
+
+
+    function collect(that) {
+        let goodsId = "{$data.id}"
+        $.ajax({
+            url: "{:url('home/renthall/collectAccount')}",
+            data: {
+                "goodsId": goodsId
+            },
+            type: "POST",
+            dataType: "JSON",
+            success: function (res) {
+                let code = res.code
+                let popularity = res.popularity
+                if (code == 1) {
+                    $(that).html('<p style="color:#666;cursor: pointer;"><b><i class="layui-icon layui-icon-rate-solid" style="color:var(--back-color)"></i>已收藏</b></p><span>(' + popularity + '人气)</span>')
+                    layer.alert('收藏成功', {
+                        'title': '温馨提示',
+                        'icon': 1
+                    })
+                }
+
+                if (code == 2) {
+                    $(that).html('<p style="color:#666;cursor: pointer;"><b><i class="layui-icon layui-icon-rate" ></i>收藏账号</b></p><span>(' + popularity + '人气)</span>')
+                    layer.alert('已取消收藏', {
+                        'title': '温馨提示',
+                        'icon': 1
+                    })
+                }
+
+                if (code == 3) {
+                    login()
+                }
+
+            }
+        })
+    }
+</script>
+{include file="pubview/footer" /}
